@@ -1977,6 +1977,397 @@ z-index: 10;
 .facility-popup-total .facility-popup-count {
     color: #0d47a1;
 }
+/* =========================================================
+   TESTING TAB — HMIS vs PLANNING
+   ========================================================= */
+
+.testing-compare-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    margin-top: 14px;
+}
+
+.testing-data-side {
+    min-width: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    border: 1px solid #dfe7f0;
+}
+
+.testing-side-header {
+    color: white;
+    padding: 10px 14px;
+}
+
+.testing-side-header h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.testing-side-header p {
+    margin: 2px 0 0;
+    font-size: 11px;
+    opacity: 0.95;
+}
+
+.testing-hmis-header {
+    background: linear-gradient(90deg,#0758b7,#2196f3);
+}
+
+.testing-planning-header {
+    background: linear-gradient(90deg,#138a45,#63d47e);
+}
+
+.testing-side-body {
+    padding: 10px;
+}
+
+/* Smaller KPI cards because each dashboard now uses 50% width */
+
+.testing-data-side .district-kpi-row {
+    grid-template-columns: repeat(7, minmax(0,1fr));
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.testing-data-side .population-kpi {
+    display: none;
+}
+
+.testing-data-side .district-summary-kpi {
+    min-width: 0;
+    padding: 8px 5px;
+    border-radius: 7px;
+}
+
+.testing-data-side .district-summary-label {
+    font-size: 10px;
+    text-align: center;
+}
+
+.testing-data-side .district-summary-value {
+    font-size: 20px;
+    text-align: center;
+}
+
+.testing-data-side .district-summary-small {
+    display: none;
+}
+
+.testing-data-side .facility-kpi-section {
+    margin-top: 8px;
+    border-radius: 8px;
+}
+
+.testing-data-side .facility-kpi-header {
+    font-size: 12px;
+    padding: 8px;
+}
+
+.testing-data-side .facility-kpi-grid {
+    grid-template-columns: repeat(5, minmax(0,1fr));
+}
+
+.testing-data-side .facility-kpi-card {
+    min-height: 68px;
+    padding: 6px 3px;
+}
+
+.testing-data-side .facility-kpi-name {
+    font-size: 9px;
+    min-height: 27px;
+}
+
+.testing-data-side .facility-kpi-value {
+    font-size: 18px;
+    margin-top: 3px;
+}
+
+/* Planning side green accent */
+
+.testing-planning-side {
+    border-top: 3px solid #28a745;
+}
+
+.testing-hmis-side {
+    border-top: 3px solid #1976d2;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1000px) {
+
+    .testing-compare-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================================================
+   PLANNING KPI — MATCH HMIS APPEARANCE
+   ========================================================= */
+
+.testing-planning-side .facility-kpi-card {
+    overflow: hidden;
+}
+
+.testing-planning-side .facility-kpi-card.family-highlight {
+    box-shadow: none;
+}
+/* =========================================================
+   HMIS vs PLANNING — FACILITY RECONCILIATION
+   ========================================================= */
+
+#facilityReconciliationSection {
+    margin-top: 18px;
+    background: #ffffff;
+    border: 1px solid #dce5ef;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+}
+
+.recon-main-header {
+    padding: 13px 18px;
+    background: linear-gradient(90deg,#163d68,#245f8c);
+    color: white;
+}
+
+.recon-title {
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.recon-subtitle {
+    margin-top: 3px;
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+
+/* SUMMARY */
+
+.recon-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 10px;
+    padding: 12px;
+    background: #f7f9fc;
+}
+
+.recon-summary-card {
+    min-height: 78px;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e2e8f0;
+}
+
+.recon-summary-label {
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.recon-summary-value {
+    margin-top: 5px;
+    font-size: 27px;
+    font-weight: 900;
+}
+
+.recon-blue {
+    background: #eaf3ff;
+    color: #0758b7;
+}
+
+.recon-green {
+    background: #eaf8ef;
+    color: #138a45;
+}
+
+.recon-purple {
+    background: #f1edff;
+    color: #6842b8;
+}
+
+.recon-orange {
+    background: #fff3e4;
+    color: #c45b00;
+}
+
+
+/* CATEGORY TABLE */
+.recon-table-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.recon-view-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.recon-view-btn {
+    border: 1px solid #b8c9dc;
+    background: #ffffff;
+    color: #245f8c;
+    padding: 6px 13px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.recon-view-btn:hover {
+    background: #e7f0fa;
+}
+
+.recon-view-btn.active {
+    background: #245f8c;
+    color: #ffffff;
+    border-color: #245f8c;
+}
+
+.recon-table-section {
+    padding: 0 12px 12px;
+}
+
+.recon-table-title {
+    background: #eef3f8;
+    color: #17365d;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 900;
+    border-radius: 8px 8px 0 0;
+}
+
+.recon-table-wrap {
+    width: 100%;
+    overflow: auto;
+    border: 1px solid #e1e7ef;
+}
+
+.recon-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.recon-table th {
+    background: #245f8c;
+    color: white;
+    padding: 9px 10px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.recon-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e7ebf0;
+}
+
+.recon-table tbody tr:hover {
+    background: #f2f7fc;
+}
+
+.recon-empty {
+    text-align: center;
+    color: #64748b;
+    padding: 18px !important;
+}
+
+
+/* FACILITY DETAILS */
+
+.recon-details-section {
+    margin: 0 12px 14px;
+    border: 1px solid #dce5ef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.recon-details-header {
+    padding: 10px 14px;
+    background: #f7f9fc;
+}
+
+.recon-details-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: #17365d;
+}
+
+.recon-details-subtitle {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.recon-detail-kpis {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 8px;
+    padding: 10px;
+}
+
+.recon-mini-card {
+    min-height: 55px;
+    border-radius: 8px;
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.recon-mini-card strong {
+    font-size: 22px;
+}
+
+.recon-mini-match {
+    background: #eaf8ef;
+    color: #18763a;
+}
+
+.recon-mini-hmis {
+    background: #eaf3ff;
+    color: #0758b7;
+}
+
+.recon-mini-planning {
+    background: #eef9ef;
+    color: #138a45;
+}
+
+.recon-detail-table {
+    min-width: 1150px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .recon-summary-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    .recon-detail-kpis {
+        grid-template-columns: 1fr;
+    }
+
+}
 </style>
 
 </head>
@@ -2037,7 +2428,7 @@ z-index: 10;
         </div>
 
         <div>
-            21-09-2026 01:58 PM
+            23-09-2026 05:03 PM
         </div>
 
         <div class="meta-source">
@@ -2068,7 +2459,7 @@ z-index: 10;
     <button
     class="dashboard-tab"
     onclick="openDashboardTab('testingTab', this)">
-    Testing
+    Facility Reconciliation
 </button>
 
 </div>
@@ -2734,6 +3125,81 @@ z-index: 10;
 </div>
 
 <script>
+const dashboardLoadStart = performance.now();
+// ==========================================================
+// HMIS / PLANNING FACILITY DETAILS — HIDE / SHOW
+// ==========================================================
+
+function toggleReconFacilityDetails(side) {
+
+    let tableBody;
+    let section;
+    let button;
+
+    if (side === "hmis") {
+
+        tableBody =
+            document.getElementById(
+                "test_facilityDetailsBody"
+            );
+
+        button =
+            document.getElementById(
+                "toggleHmisFacilityDetails"
+            );
+
+    } else {
+
+        tableBody =
+            document.getElementById(
+                "planningFacilityDetailsBody"
+            );
+
+        button =
+            document.getElementById(
+                "togglePlanningFacilityDetails"
+            );
+    }
+
+    if (!tableBody || !button) return;
+
+    section =
+        tableBody.closest(
+            ".facility-details-section"
+        );
+
+    if (!section) return;
+
+    // Keep the heading/button visible.
+    // Hide everything after the first child.
+    const children =
+        Array.from(section.children);
+
+    const isHidden =
+        button.dataset.hidden === "true";
+
+    children.forEach((child, index) => {
+
+        if (index > 0) {
+            child.style.display =
+                isHidden ? "" : "none";
+        }
+
+    });
+
+    if (isHidden) {
+
+        button.dataset.hidden = "false";
+        button.textContent =
+            "↑ Hide Facility Details";
+
+    } else {
+
+        button.dataset.hidden = "true";
+        button.textContent =
+            "↓ Show Facility Details";
+    }
+}
 // ==========================================================
 // CREATE TESTING DASHBOARD REPLICA
 // ==========================================================
@@ -2761,7 +3227,678 @@ function createTestingDashboardReplica() {
 
         element.id = "test_" + oldId;
     });
+    // ==========================================================
+// SPLIT TESTING DASHBOARD INTO HMIS + PLANNING
+// ==========================================================
 
+// Keep the common filter panel at the top
+const testingFilterPanel =
+    target.querySelector(".filter-panel");
+
+// Everything after the filter panel becomes HMIS content
+const allChildren = Array.from(target.children);
+
+const hmisContent =
+    document.createElement("div");
+
+allChildren.forEach(child => {
+
+    if (child !== testingFilterPanel) {
+        hmisContent.appendChild(child);
+    }
+
+});
+
+
+// Create comparison grid
+const compareGrid =
+    document.createElement("div");
+
+compareGrid.className =
+    "testing-compare-grid";
+
+
+// ---------------- HMIS SIDE ----------------
+
+const hmisSide =
+    document.createElement("div");
+
+hmisSide.className =
+    "testing-data-side testing-hmis-side";
+
+hmisSide.innerHTML = `
+    <div class="testing-side-header testing-hmis-header">
+        <h2>HMIS DATA</h2>
+        <p>Health Management Information System</p>
+    </div>
+
+    <div class="testing-side-body"></div>
+`;
+
+hmisSide
+    .querySelector(".testing-side-body")
+    .appendChild(hmisContent);
+
+
+// ---------------- PLANNING SIDE ----------------
+
+const planningSide =
+    document.createElement("div");
+
+planningSide.className =
+    "testing-data-side testing-planning-side";
+
+planningSide.innerHTML = `
+    <div class="testing-side-header testing-planning-header">
+        <h2>PLANNING DATA</h2>
+        <p>Planning Section Facility Master Data</p>
+    </div>
+
+    <div class="testing-side-body">
+
+        <!-- PLANNING TOP KPI CARDS -->
+
+        <div class="district-kpi-row">
+
+            <div class="district-summary-kpi">
+                <div class="district-summary-label">
+                    Total Facilities
+                </div>
+                <div
+                    id="planningTotalFacilities"
+                    class="district-summary-value">
+                    0
+                </div>
+            </div>
+
+
+            <div class="district-summary-kpi"
+     onclick="showPlanningFacilityFamilyKPIs('SC')"
+     style="cursor:pointer;">
+                <div class="district-summary-label">SC</div>
+                <div
+                    id="planningSC"
+                    class="district-summary-value">
+                    0
+                </div>
+            </div>
+
+
+            <div class="district-summary-kpi"
+     onclick="showPlanningFacilityFamilyKPIs('PHC')"
+     style="cursor:pointer;">
+                <div class="district-summary-label">PHC</div>
+                <div
+                    id="planningPHC"
+                    class="district-summary-value">
+                    0
+                </div>
+            </div>
+
+
+            <div class="district-summary-kpi"
+     onclick="showPlanningFacilityFamilyKPIs('CHC')"
+     style="cursor:pointer;">
+                <div class="district-summary-label">CHC</div>
+                <div
+                    id="planningCHC"
+                    class="district-summary-value">
+                    0
+                </div>
+            </div>
+
+
+            <div class="district-summary-kpi"
+     onclick="showPlanningFacilityFamilyKPIs('SDH')"
+     style="cursor:pointer;">
+                <div class="district-summary-label">SDH</div>
+                <div
+                    id="planningSDH"
+                    class="district-summary-value">
+                    0
+                </div>
+            </div>
+
+
+            <div class="district-summary-kpi"
+     onclick="showPlanningFacilityFamilyKPIs('DH')"
+     style="cursor:pointer;">
+                <div class="district-summary-label">DH</div>
+                <div
+                    id="planningDH"
+                    class="district-summary-value">
+                    0
+                </div>
+            </div>
+
+
+            <div class="district-summary-kpi"
+     onclick="showPlanningFacilityFamilyKPIs('MC')"
+     style="cursor:pointer;">
+                <div class="district-summary-label">MC</div>
+                <div
+                    id="planningMC"
+                    class="district-summary-value">
+                    0
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- PLANNING FACILITY TYPE KPIs -->
+
+        <div class="facility-kpi-section">
+
+            <div class="facility-kpi-header">
+                FACILITY TYPE KPIs — GROUPED BY FACILITY FAMILY
+            </div>
+
+            <div
+                id="planningFacilityTypeKPIs"
+                class="facility-kpi-grid">
+            </div>
+
+        </div>
+<!-- PLANNING FACILITY DETAILS -->
+
+<div class="panel facility-details-panel" id="planningReconFacilityDetails">
+
+    <div class="panel-title">
+    Facility Details
+</div>
+
+    <input
+        type="text"
+        id="planningFacilitySearch"
+        class="facility-search"
+        placeholder="Search facility name, HFR ID, district..."
+    >
+
+    <div class="facility-table-wrap">
+
+        <table class="facility-details-table">
+
+            <thead>
+                <tr>
+                    <th>District</th>
+                    <th>Subdistrict</th>
+                    <th>Format</th>
+                    <th>Facility Type</th>
+                    <th>Facility Name</th>
+                    <th>Ownership</th>
+                    <th>Rural/Urban</th>
+                    <th>Beds</th>
+                    <th>Building Status</th>
+                    <th>NIN</th>
+                    <th>HFR ID</th>
+                </tr>
+            </thead>
+
+            <tbody id="planningFacilityDetailsBody">
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div
+        id="planningFacilityRowNote"
+        class="facility-row-note">
+    </div>
+
+</div>
+    </div>
+`;
+
+
+// Add both sides
+compareGrid.appendChild(hmisSide);
+compareGrid.appendChild(planningSide);
+// ==========================================================
+// COMMON FACILITY DETAILS HIDE / SHOW BUTTON
+// ==========================================================
+
+// HMIS Facility Details panel
+const hmisFacilityPanel =
+    hmisSide.querySelector(
+        ".facility-details-panel"
+    );
+
+// Planning Facility Details panel
+const planningFacilityPanel =
+    planningSide.querySelector(
+        "#planningReconFacilityDetails"
+    );
+
+// HMIS Facility Details title
+const hmisFacilityTitle =
+    hmisFacilityPanel
+        ? hmisFacilityPanel.querySelector(
+            ".panel-title"
+        )
+        : null;
+
+
+// ----------------------------------------------------------
+// CREATE COMMON HIDE / SHOW BUTTON
+// ----------------------------------------------------------
+
+const facilityDetailsToggle =
+    document.createElement("button");
+
+facilityDetailsToggle.type = "button";
+
+facilityDetailsToggle.textContent =
+    "↑ Hide Facility Details";
+
+facilityDetailsToggle.style.cssText = `
+    background:#eaf3ff;
+    color:#0758b7;
+    border:1px solid #8bb9e8;
+    padding:6px 12px;
+    border-radius:7px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+    margin-left:auto;
+`;
+
+
+// ----------------------------------------------------------
+// PLACE BUTTON NEXT TO "FACILITY DETAILS"
+// ----------------------------------------------------------
+
+if (hmisFacilityTitle) {
+
+    hmisFacilityTitle.style.display =
+        "flex";
+
+    hmisFacilityTitle.style.alignItems =
+        "center";
+
+    hmisFacilityTitle.style.justifyContent =
+        "space-between";
+
+    hmisFacilityTitle.style.gap =
+        "10px";
+
+    hmisFacilityTitle.style.height =
+        "30px";
+
+    hmisFacilityTitle.style.marginBottom =
+        "16px";
+
+    facilityDetailsToggle.style.padding =
+        "4px 10px";
+
+    facilityDetailsToggle.style.height =
+        "28px";
+
+    hmisFacilityTitle.appendChild(
+        facilityDetailsToggle
+    );
+}
+
+
+// Keep Planning Facility Details title
+// exactly the same height as HMIS
+const planningFacilityTitle =
+    planningFacilityPanel
+        ? planningFacilityPanel.querySelector(
+            ".panel-title"
+        )
+        : null;
+
+if (planningFacilityTitle) {
+
+    planningFacilityTitle.style.display =
+        "flex";
+
+    planningFacilityTitle.style.alignItems =
+        "center";
+
+    planningFacilityTitle.style.height =
+        "30px";
+
+    planningFacilityTitle.style.marginBottom =
+        "16px";
+}
+
+
+// ----------------------------------------------------------
+// HIDE / SHOW BOTH FACILITY DETAILS CONTENTS
+// ----------------------------------------------------------
+
+facilityDetailsToggle.onclick = function () {
+
+    const isHidden =
+        facilityDetailsToggle.dataset.hidden ===
+        "true";
+
+
+    // HMIS contents
+    const hmisSearch =
+        hmisFacilityPanel
+            ? hmisFacilityPanel.querySelector(
+                ".facility-search"
+            )
+            : null;
+
+    const hmisTable =
+        hmisFacilityPanel
+            ? hmisFacilityPanel.querySelector(
+                ".facility-table-wrap"
+            )
+            : null;
+
+    const hmisNote =
+        hmisFacilityPanel
+            ? hmisFacilityPanel.querySelector(
+                ".facility-row-note"
+            )
+            : null;
+
+
+    // Planning contents
+    const planningSearch =
+        planningFacilityPanel
+            ? planningFacilityPanel.querySelector(
+                ".facility-search"
+            )
+            : null;
+
+    const planningTable =
+        planningFacilityPanel
+            ? planningFacilityPanel.querySelector(
+                ".facility-table-wrap"
+            )
+            : null;
+
+    const planningNote =
+        planningFacilityPanel
+            ? planningFacilityPanel.querySelector(
+                ".facility-row-note"
+            )
+            : null;
+
+
+    // ------------------------------------------------------
+    // SHOW
+    // ------------------------------------------------------
+
+    if (isHidden) {
+
+        if (hmisSearch)
+            hmisSearch.style.display = "";
+
+        if (hmisTable)
+            hmisTable.style.display = "";
+
+        if (hmisNote)
+            hmisNote.style.display = "";
+
+        if (planningSearch)
+            planningSearch.style.display = "";
+
+        if (planningTable)
+            planningTable.style.display = "";
+
+        if (planningNote)
+            planningNote.style.display = "";
+
+
+        facilityDetailsToggle.textContent =
+            "↑ Hide Facility Details";
+
+        facilityDetailsToggle.dataset.hidden =
+            "false";
+    }
+
+
+    // ------------------------------------------------------
+    // HIDE
+    // ------------------------------------------------------
+
+    else {
+
+        if (hmisSearch)
+            hmisSearch.style.display = "none";
+
+        if (hmisTable)
+            hmisTable.style.display = "none";
+
+        if (hmisNote)
+            hmisNote.style.display = "none";
+
+        if (planningSearch)
+            planningSearch.style.display = "none";
+
+        if (planningTable)
+            planningTable.style.display = "none";
+
+        if (planningNote)
+            planningNote.style.display = "none";
+
+
+        facilityDetailsToggle.textContent =
+            "↓ Show Facility Details";
+
+        facilityDetailsToggle.dataset.hidden =
+            "true";
+    }
+};
+
+// Put common filter first
+target.innerHTML = "";
+
+if (testingFilterPanel) {
+    target.appendChild(testingFilterPanel);
+}
+
+target.appendChild(compareGrid);
+// ==========================================================
+// HMIS vs PLANNING — FACILITY RECONCILIATION
+// ==========================================================
+
+const reconciliationSection = document.createElement("div");
+reconciliationSection.id = "facilityReconciliationSection";
+
+reconciliationSection.innerHTML = `
+
+    <div class="recon-main-header">
+        <div class="recon-title">
+            HMIS vs PLANNING — FACILITY RECONCILIATION
+        </div>
+        <div class="recon-subtitle">
+            Category-wise facility count comparison and missing facility identification
+        </div>
+    </div>
+
+    <div class="recon-summary-grid">
+
+        <div class="recon-summary-card recon-blue">
+            <div class="recon-summary-label">HMIS Facilities</div>
+            <div class="recon-summary-value" id="reconTotalHmis">0</div>
+        </div>
+
+        <div class="recon-summary-card recon-green">
+            <div class="recon-summary-label">Planning Facilities</div>
+            <div class="recon-summary-value" id="reconTotalPlanning">0</div>
+        </div>
+
+        <div class="recon-summary-card recon-purple">
+            <div class="recon-summary-label">Facility Categories</div>
+            <div class="recon-summary-value" id="reconTotalCategories">0</div>
+        </div>
+
+        <div class="recon-summary-card recon-orange">
+            <div class="recon-summary-label">Categories with Difference</div>
+            <div class="recon-summary-value" id="reconMismatchCategories">0</div>
+        </div>
+
+    </div>
+
+
+    <div class="recon-table-section">
+
+        <div class="recon-table-title recon-table-title-row">
+
+    <span id="reconComparisonTitle">
+        FACILITY CATEGORY COMPARISON
+    </span>
+
+    <div class="recon-view-buttons">
+
+        <button
+            type="button"
+            id="reconFacilityTypeBtn"
+            class="recon-view-btn active"
+            onclick="showReconciliationFacilityTypeView()">
+
+            Facility Type View
+
+        </button>
+
+        <button
+            type="button"
+            id="reconDistrictBtn"
+            class="recon-view-btn"
+            onclick="showReconciliationDistrictView()">
+
+            District View
+
+        </button>
+
+    </div>
+
+</div>
+
+        <div class="recon-table-wrap">
+
+            <table class="recon-table">
+
+                <thead>
+    <tr id="reconciliationTableHeader">
+        <th>Facility Category</th>
+        <th>HMIS</th>
+        <th>Planning</th>
+        <th>Difference</th>
+        <th>Status</th>
+    </tr>
+</thead>
+
+                <tbody id="reconciliationCategoryBody">
+
+                    <tr>
+                        <td colspan="5" class="recon-empty">
+                            Facility comparison will appear here.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="recon-details-section">
+
+        <div class="recon-details-header">
+
+            <div>
+                <div class="recon-details-title">
+                    Facility Difference Details
+                </div>
+
+                <div class="recon-details-subtitle"
+                     id="reconSelectedCategory">
+                    Select a facility category above to view facility-level differences.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="recon-detail-kpis">
+
+            <div class="recon-mini-card recon-mini-match">
+                <span>Matched</span>
+                <strong id="reconMatchedCount">0</strong>
+            </div>
+
+            <div class="recon-mini-card recon-mini-hmis">
+                <span>HMIS Only</span>
+                <strong id="reconHmisOnlyCount">0</strong>
+            </div>
+
+            <div class="recon-mini-card recon-mini-planning">
+                <span>Planning Only</span>
+                <strong id="reconPlanningOnlyCount">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="recon-table-wrap">
+
+            <table class="recon-table recon-detail-table">
+
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>District</th>
+                        <th>HMIS Facility Name</th>
+                        <th>Planning Facility Name</th>
+                        <th>HMIS Facility Type</th>
+                        <th>Planning Facility Type</th>
+                        <th>NIN</th>
+                        <th>HFR ID</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reconciliationDetailsBody">
+
+                    <tr>
+                        <td colspan="8" class="recon-empty">
+                            Select a category to view details.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+`;
+
+target.appendChild(reconciliationSection);
+
+    const planningSearch =
+    document.getElementById(
+        "planningFacilitySearch"
+    );
+
+if (planningSearch) {
+
+    planningSearch.addEventListener(
+        "input",
+        function () {
+
+            renderPlanningFacilityDetails(
+                getFilteredPlanningData()
+            );
+
+        }
+    );
+
+}
     console.log("Testing Dashboard replica created.");
     // Connect Testing top family cards separately
 
@@ -2850,7 +3987,10 @@ function openDashboardTab(tabId, button) {
 const FACILITY_API_URL = "https://script.google.com/macros/s/AKfycbz-CxMJizw-kRPWVex2N-GNk0DHRumip8L84mRxDfUArCGDG06IaTJ86vMMgHBDKkwY/exec";
 
 let facilityData = [];
+let planningData = [];
+
 async function loadFacilityData() {
+const facilityLoadStart = performance.now();
 
     try {
 
@@ -2873,7 +4013,18 @@ async function loadFacilityData() {
         }
 
         facilityData = result.data || [];
-        districtPopulation = result.districtPopulation || {};
+planningData = result.planningData || [];
+districtPopulation = result.districtPopulation || {};
+
+console.log(
+    "HMIS records:",
+    facilityData.length
+);
+
+console.log(
+    "Planning records:",
+    planningData.length
+);
         // Detect cadre names directly from live Google Sheet columns
 cadres = [];
 
@@ -2923,7 +4074,13 @@ setupTestingFilterEvents();
 // Update original Facility Dashboard
 refreshDashboard();
 refreshTestingDashboard();
+const facilityLoadEnd = performance.now();
 
+console.log(
+    "⏱ Facility data loaded in:",
+    ((facilityLoadEnd - facilityLoadStart) / 1000).toFixed(2),
+    "seconds"
+);
     } catch (error) {
 
         console.error(
@@ -2944,6 +4101,7 @@ const HR_API_URL = "https://script.google.com/macros/s/AKfycbwnV5BEZ-PMf1Z5dBtKe
 
 let hrLiveData = [];
 async function loadHRData() {
+const hrLoadStart = performance.now();
 
     try {
 
@@ -2974,6 +4132,14 @@ refreshHRDashboard();
 console.log(
     "Live HR records loaded:",
     hrLiveData.length
+);
+
+const hrLoadEnd = performance.now();
+
+console.log(
+    "⏱ HR data loaded in:",
+    ((hrLoadEnd - hrLoadStart) / 1000).toFixed(2),
+    "seconds"
 );
 
     } catch (error) {
@@ -4540,12 +5706,2446 @@ function updateTestingFacilityTypeKPIs(data) {
 // ==========================================================
 // REFRESH TESTING DASHBOARD
 // ==========================================================
+// ==========================================================
+// GET FILTERED PLANNING DATA
+// Uses the same Testing filters as HMIS
+// ==========================================================
 
+function getFilteredPlanningData() {
+
+    let data = [...planningData];
+
+    testingFilterConfig.forEach(config => {
+
+        const element =
+            document.getElementById(config.id);
+
+        if (!element) return;
+
+        const selectedValue =
+            element.value;
+
+        if (
+            selectedValue &&
+            selectedValue !== "All"
+        ) {
+
+            data = data.filter(row =>
+                text(row[config.column]).trim() ===
+                text(selectedValue).trim()
+            );
+
+        }
+
+    });
+
+    return data;
+}
+// ==========================================================
+// PLANNING DASHBOARD — TOP FAMILY CARD CLICK
+// ==========================================================
+
+function showPlanningFacilityFamilyKPIs(family) {
+
+    const data = getFilteredPlanningData();
+
+    const familyData = data.filter(row => {
+
+        const name =
+            text(row["Facility Type"])
+                .trim()
+                .toLowerCase();
+
+        if (family === "SC") {
+            return (
+                name.includes("aam-shc") ||
+                name.includes("uaam-shc")
+            );
+        }
+
+        if (family === "PHC") {
+            return (
+                name.includes("phc-aam") ||
+                name.includes("aam-phc") ||
+                name.includes("uphc")
+            );
+        }
+
+        if (family === "CHC") {
+            return (
+                name.includes("chc") ||
+                name.includes("uchc")
+            );
+        }
+
+        if (family === "SDH") {
+            return name === "sdh";
+        }
+
+        if (family === "DH") {
+            return (
+                name === "dh" ||
+                name.startsWith("dh ")
+            );
+        }
+
+        if (family === "MC") {
+            return name.includes("mc/mch");
+        }
+
+        return false;
+    });
+// Update Planning Facility Details
+// with selected family only
+renderPlanningFacilityDetails(
+    familyData
+);
+
+    // Planning lower KPI container
+    const container =
+        document.getElementById(
+            "planningFacilityTypeKPIs"
+        );
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+
+    // Count Facility Types inside selected family
+    const counts = {};
+
+    familyData.forEach(row => {
+
+        const facilityType =
+            text(row["Facility Type"]).trim();
+
+        if (!facilityType) return;
+
+        counts[facilityType] =
+            (counts[facilityType] || 0) + 1;
+
+    });
+
+
+    Object.entries(counts)
+        .sort((a, b) =>
+            a[0].localeCompare(b[0])
+        )
+        .forEach(([facilityType, count]) => {
+
+            const card =
+                document.createElement("div");
+
+            let familyClass = "family-other";
+
+const name =
+    facilityType.toLowerCase();
+
+if (
+    name.includes("aam-shc") ||
+    name.includes("uaam-shc")
+) {
+    familyClass = "family-shc";
+}
+
+else if (
+    name.includes("phc-aam") ||
+    name.includes("aam-phc") ||
+    name.includes("uphc")
+) {
+    familyClass = "family-phc";
+}
+
+else if (
+    name === "sdh" ||
+    name === "dh" ||
+    name.startsWith("dh ")
+) {
+    familyClass = "family-hospital";
+}
+
+else if (
+    name.includes("chc") ||
+    name.includes("uchc")
+) {
+    familyClass = "family-chc";
+}
+
+else if (
+    name.includes("dispensary")
+) {
+    familyClass = "family-dispensary";
+}
+
+else if (
+    name.includes("mc/mch")
+) {
+    familyClass = "family-mch";
+}
+
+else if (
+    name.includes("primary care")
+) {
+    familyClass = "family-primary";
+}
+
+else if (
+    name.includes("tertiary care")
+) {
+    familyClass = "family-tertiary";
+}
+
+
+card.className =
+    "facility-kpi-card " +
+    familyClass +
+    " family-highlight";
+
+
+            card.innerHTML = `
+
+                <div class="facility-kpi-name">
+                    ${facilityType}
+                </div>
+
+                <div class="facility-kpi-value">
+                    ${formatNumber(count)}
+                </div>
+
+            `;card.onclick = function () {
+
+    showPlanningFacilitiesForKPI(
+        facilityType
+    );
+
+};
+
+card.style.cursor = "pointer";
+
+            container.appendChild(card);
+
+        });
+
+
+    // Change ONLY Planning heading
+    const header =
+        document.querySelector(
+            ".testing-planning-side .facility-kpi-header"
+        );
+
+
+    const familyTitles = {
+
+        SC:
+            "SUB CENTRES (SC) — FACILITY TYPE BREAKUP",
+
+        PHC:
+            "PRIMARY HEALTH CENTRES (PHC) — FACILITY TYPE BREAKUP",
+
+        CHC:
+            "COMMUNITY HEALTH CENTRES (CHC) — FACILITY TYPE BREAKUP",
+
+        SDH:
+            "SUB DISTRICT HOSPITALS (SDH) — FACILITY TYPE BREAKUP",
+
+        DH:
+            "DISTRICT HOSPITALS (DH) — FACILITY TYPE BREAKUP",
+
+        MC:
+            "MEDICAL COLLEGES (MC/MCH) — FACILITY TYPE BREAKUP"
+
+    };
+
+
+    if (header) {
+
+        header.innerHTML = `
+
+            <span>
+                ${familyTitles[family] || family}
+            </span>
+
+            <button
+                onclick="
+                    event.stopPropagation();
+                    showAllPlanningFacilityKPIs();
+                "
+                style="
+                    float:right;
+                    border:none;
+                    background:white;
+                    color:#174a78;
+                    font-weight:700;
+                    padding:5px 12px;
+                    border-radius:6px;
+                    cursor:pointer;
+                "
+            >
+                × Show All
+            </button>
+
+        `;
+
+    }
+
+}
+
+
+// ==========================================================
+// PLANNING DASHBOARD — SHOW ALL
+// ==========================================================
+
+function showAllPlanningFacilityKPIs() {
+
+    // Restore all Planning KPI cards
+    updatePlanningDashboard();
+
+    // Restore Planning KPI heading
+    const header =
+        document.querySelector(
+            ".testing-planning-side .facility-kpi-header"
+        );
+
+    if (header) {
+
+        header.textContent =
+            "FACILITY TYPE KPIs — GROUPED BY FACILITY FAMILY";
+
+    }
+
+}
+// ==========================================================
+// PLANNING FACILITY DETAILS
+// ==========================================================
+
+function renderPlanningFacilityDetails(data) {
+
+    const searchBox =
+        document.getElementById(
+            "planningFacilitySearch"
+        );
+
+    const tableBody =
+        document.getElementById(
+            "planningFacilityDetailsBody"
+        );
+
+    const rowNote =
+        document.getElementById(
+            "planningFacilityRowNote"
+        );
+
+    if (!searchBox || !tableBody) {
+        return;
+    }
+
+
+    const query =
+        text(searchBox.value)
+            .trim()
+            .toLowerCase();
+
+
+    const matchingData =
+        data.filter(row => {
+
+            if (!query) {
+                return true;
+            }
+
+            return [
+
+                row["Facility Name"],
+                row["HFR ID"],
+                row["NIN"],
+                row["District Name"],
+                row["Subdistrict Name"],
+                row["Format Type"],
+                row["Facility Type"]
+
+            ].some(value =>
+
+                text(value)
+                    .toLowerCase()
+                    .includes(query)
+
+            );
+
+        });
+
+
+    const displayData =
+        matchingData.slice(0, 500);
+
+
+    tableBody.innerHTML = "";
+
+
+    displayData.forEach(row => {
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>${text(row["District Name"])}</td>
+
+            <td>${text(row["Subdistrict Name"])}</td>
+
+            <td>${text(row["Format Type"])}</td>
+
+            <td>${text(row["Facility Type"])}</td>
+
+            <td>${text(row["Facility Name"])}</td>
+
+            <td>${text(row["Ownership"])}</td>
+
+            <td>${text(row["Rural/Urban"])}</td>
+
+            <td>${text(row["No. of Beds"])}</td>
+
+            <td>${text(row["Building Status"])}</td>
+
+            <td>${text(row["NIN"])}</td>
+
+            <td>${text(row["HFR ID"])}</td>
+
+        `;
+
+
+        tableBody.appendChild(tr);
+
+    });
+
+
+    if (rowNote) {
+
+        rowNote.textContent =
+
+            matchingData.length > 500
+
+                ? "Showing first 500 of " +
+                  formatNumber(matchingData.length) +
+                  " facilities"
+
+                : formatNumber(matchingData.length) +
+                  " facilities";
+
+    }
+
+}
+// ==========================================================
+// SHOW PLANNING FACILITIES FOR CLICKED KPI
+// ==========================================================
+
+function showPlanningFacilitiesForKPI(
+    facilityType
+) {
+
+    const data =
+        getFilteredPlanningData();
+
+
+    const facilityTypeData =
+        data.filter(row =>
+
+            text(
+                row["Facility Type"]
+            ).trim() ===
+
+            text(
+                facilityType
+            ).trim()
+
+        );
+
+
+    renderPlanningFacilityDetails(
+        facilityTypeData
+    );
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningFacilityDetailsBody"
+        );
+
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+// ==========================================================
+// UPDATE PLANNING DASHBOARD
+// ==========================================================
+
+function updatePlanningDashboard() {
+
+    const data =
+        getFilteredPlanningData();
+renderPlanningFacilityDetails(data);
+
+    // ======================================================
+    // TOP KPI COUNTS
+    // ======================================================
+
+    let sc = 0;
+    let phc = 0;
+    let chc = 0;
+    let sdh = 0;
+    let dh = 0;
+    let mc = 0;
+
+
+    data.forEach(row => {
+
+        const name =
+            text(row["Facility Type"])
+                .trim()
+                .toLowerCase();
+
+
+        // SC
+        if (
+            name.includes("aam-shc") ||
+            name.includes("uaam-shc")
+        ) {
+            sc++;
+        }
+
+
+        // PHC
+        if (
+            name.includes("phc-aam") ||
+            name.includes("aam-phc") ||
+            name.includes("uphc")
+        ) {
+            phc++;
+        }
+
+
+        // CHC
+        if (
+            name.includes("chc") ||
+            name.includes("uchc")
+        ) {
+            chc++;
+        }
+
+
+        // SDH
+        if (name === "sdh") {
+            sdh++;
+        }
+
+
+        // DH
+        if (
+            name === "dh" ||
+            name.startsWith("dh ")
+        ) {
+            dh++;
+        }
+
+
+        // MC
+        if (
+            name.includes("mc/mch")
+        ) {
+            mc++;
+        }
+
+    });
+
+
+    const values = {
+
+        planningTotalFacilities:
+            data.length,
+
+        planningSC: sc,
+        planningPHC: phc,
+        planningCHC: chc,
+        planningSDH: sdh,
+        planningDH: dh,
+        planningMC: mc
+
+    };
+
+
+    Object.entries(values)
+        .forEach(([id, value]) => {
+
+            const element =
+                document.getElementById(id);
+
+            if (element) {
+
+                element.textContent =
+                    formatNumber(value);
+
+            }
+
+        });
+
+
+    // ======================================================
+    // FACILITY TYPE KPI CARDS
+    // ======================================================
+
+    const container =
+        document.getElementById(
+            "planningFacilityTypeKPIs"
+        );
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+
+    function getPlanningFamilyClass(
+        facilityType
+    ) {
+
+        const name =
+            text(facilityType)
+                .toLowerCase();
+
+
+        if (
+            name.includes("aam-shc") ||
+            name.includes("uaam-shc")
+        ) {
+            return "family-shc";
+        }
+
+
+        if (
+            name.includes("phc-aam") ||
+            name.includes("aam-phc") ||
+            name.includes("uphc")
+        ) {
+            return "family-phc";
+        }
+
+
+        if (
+            name === "sdh" ||
+            name === "dh" ||
+            name.startsWith("dh ")
+        ) {
+            return "family-hospital";
+        }
+
+
+        if (
+            name.includes("chc") ||
+            name.includes("uchc")
+        ) {
+            return "family-chc";
+        }
+
+
+        if (
+            name.includes("dispensaries") ||
+            name.includes("dispensary")
+        ) {
+            return "family-dispensary";
+        }
+
+
+        if (
+            name.includes("mc/mch")
+        ) {
+            return "family-mch";
+        }
+
+
+        if (
+            name.includes("primary care")
+        ) {
+            return "family-primary";
+        }
+
+
+        if (
+            name.includes("tertiary care")
+        ) {
+            return "family-tertiary";
+        }
+
+
+        return "family-other";
+    }
+
+
+    facilityTypeKPIList
+        .forEach(facilityType => {
+
+            const count =
+                data.filter(row =>
+
+                    text(
+                        row["Facility Type"]
+                    ).trim() ===
+
+                    text(
+                        facilityType
+                    ).trim()
+
+                ).length;
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "facility-kpi-card " +
+                getPlanningFamilyClass(
+                    facilityType
+                );
+
+
+            card.innerHTML = `
+
+                <div class="facility-kpi-name">
+                    ${facilityType}
+                </div>
+
+                <div class="facility-kpi-value">
+                    ${formatNumber(count)}
+                </div>
+
+            `;
+card.onclick = function () {
+
+    showPlanningFacilitiesForKPI(
+        facilityType
+    );
+
+};
+
+card.style.cursor = "pointer";
+
+            container.appendChild(card);
+
+        });
+
+}
+// ==========================================================
+// HMIS vs PLANNING — RECONCILIATION ENGINE
+// ==========================================================
+
+function normalizeReconText(value) {
+
+    return text(value)
+        .trim()
+        .replace(/\s+/g, " ")
+        .toUpperCase();
+
+}
+
+
+function getReconFacilityKey(row) {
+
+    const district =
+        normalizeReconText(
+            row["District Name"]
+        );
+
+    const subdistrict =
+        normalizeReconText(
+            row["Subdistrict Name"]
+        );
+
+    const facility =
+        normalizeReconText(
+            row["Facility Name"]
+        );
+
+    return (
+        district +
+        "||" +
+        subdistrict +
+        "||" +
+        facility
+    );
+
+}
+function checkReconDuplicates() {
+
+    const data = getTestingFilteredData()
+        .filter(row =>
+            normalizeReconText(row["Facility Type"]) ===
+            normalizeReconText("AAM-SHC (R)")
+        );
+
+    const groups = new Map();
+
+    data.forEach(row => {
+
+        const key = getReconFacilityKey(row);
+
+        if (!groups.has(key)) {
+            groups.set(key, []);
+        }
+
+        groups.get(key).push(row);
+    });
+
+    const duplicates = [];
+
+    groups.forEach((rows, key) => {
+
+        if (rows.length > 1) {
+
+            rows.forEach(row => {
+
+                duplicates.push({
+                    District: text(row["District Name"]),
+                    Subdistrict: text(row["Subdistrict Name"]),
+                    Facility_Name: text(row["Facility Name"]),
+                    NIN: text(row["NIN"]),
+                    HFR_ID: text(row["HFR ID"]),
+                    Facility_Type: text(row["Facility Type"]),
+                    Duplicate_Count: rows.length
+                });
+
+            });
+
+        }
+
+    });
+
+    console.table(duplicates);
+
+    console.log(
+        "AAM-SHC total records:",
+        data.length
+    );
+
+    console.log(
+        "Duplicate records:",
+        duplicates.length
+    );
+
+    console.log(
+    "Unique District + Subdistrict + Facility Name:",
+    groups.size
+);
+
+}
+
+function buildFacilityReconciliation() {
+
+    const hmisData =
+        getTestingFilteredData();
+
+    const planningFilteredData =
+        getFilteredPlanningData();
+
+
+    // ------------------------------------------------------
+    // SUMMARY COUNTS
+    // ------------------------------------------------------
+
+    const hmisTotal =
+        document.getElementById("reconTotalHmis");
+
+    const planningTotal =
+        document.getElementById("reconTotalPlanning");
+
+    if (hmisTotal) {
+        hmisTotal.textContent =
+            hmisData.length.toLocaleString();
+    }
+
+    if (planningTotal) {
+        planningTotal.textContent =
+            planningFilteredData.length.toLocaleString();
+    }
+
+
+    // ------------------------------------------------------
+    // GET ALL FACILITY TYPES
+    // ------------------------------------------------------
+
+    const categorySet = new Set();
+
+    hmisData.forEach(row => {
+
+        const type =
+            text(row["Facility Type"]).trim();
+
+        if (type) {
+            categorySet.add(type);
+        }
+
+    });
+
+
+    planningFilteredData.forEach(row => {
+
+        const type =
+            text(row["Facility Type"]).trim();
+
+        if (type) {
+            categorySet.add(type);
+        }
+
+    });
+
+
+    // Keep reconciliation categories in the same order
+// as the Facility Type KPI cards
+
+const facilityKPIOrder = [
+
+    "AAM-SHC (R)",
+    "Nonfunctional as AAM-SHC",
+    "UAAM-SHC",
+
+    "PHC-AAM (R)",
+    "24X7 AAM-PHC (R)",
+    "Non-functional as AAM-PHC",
+    "24X7 PHC Non functional as AAM",
+    "UPHC-AAM",
+    "24X7 UPHC-AAM",
+
+    "SDH",
+
+    "DH 100-199 Bedded",
+    "DH 200-299 Bedded",
+    "DH 300-399 Bedded",
+    "DH 400-499 Bedded",
+    "DH more than 499 Bedded",
+
+    "FRU CHC",
+    "Non-FRU CHC",
+    "UCHC-FRU",
+
+    "ESI Dispensaries/Hospitals",
+    "Railways Dispensaries/Hospitals",
+    "CGHS Dispensaries/Hospitals",
+    "Ayush Dispensaries/Hospitals",
+
+    "Other Primary Care Facility",
+    "Other Tertiary Care Facility",
+    "State-owned MC/MCH",
+    "Other MC/MCH",
+    "ESI MC/MCH",
+    "Ayush MC/MCH",
+    "Associated (part) Hospital with MC/MCH",
+
+    "CRPF 50 Bedded CH"
+];
+
+
+const categories = [
+
+    // First: categories in our KPI order
+    ...facilityKPIOrder.filter(type =>
+        [...categorySet].some(
+            category =>
+                normalizeReconText(category) ===
+                normalizeReconText(type)
+        )
+    ),
+
+    // Then: any new/unexpected category
+    ...[...categorySet].filter(category =>
+        !facilityKPIOrder.some(
+            type =>
+                normalizeReconText(type) ===
+                normalizeReconText(category)
+        )
+    )
+
+];
+
+
+    const categoryElement =
+        document.getElementById(
+            "reconTotalCategories"
+        );
+
+    if (categoryElement) {
+
+        categoryElement.textContent =
+            categories.length.toLocaleString();
+
+    }
+
+
+    // ------------------------------------------------------
+    // BUILD CATEGORY COMPARISON
+    // ------------------------------------------------------
+
+    const body =
+        document.getElementById(
+            "reconciliationCategoryBody"
+        );
+
+    if (!body) return;
+
+    body.innerHTML = "";
+
+    let mismatchCategoryCount = 0;
+
+
+    categories.forEach(category => {
+
+        const hmisRows =
+            hmisData.filter(row =>
+                normalizeReconText(
+                    row["Facility Type"]
+                ) ===
+                normalizeReconText(category)
+            );
+
+
+        const planningRows =
+            planningFilteredData.filter(row =>
+                normalizeReconText(
+                    row["Facility Type"]
+                ) ===
+                normalizeReconText(category)
+            );
+
+
+        const hmisCount =
+            hmisRows.length;
+
+        const planningCount =
+            planningRows.length;
+
+        const difference =
+            hmisCount - planningCount;
+
+
+        // --------------------------------------------------
+        // ALSO CHECK ACTUAL FACILITY LIST
+        // --------------------------------------------------
+
+        const hmisKeys =
+            new Set(
+                hmisRows.map(
+                    getReconFacilityKey
+                )
+            );
+
+        const planningKeys =
+            new Set(
+                planningRows.map(
+                    getReconFacilityKey
+                )
+            );
+
+
+        const hmisOnly =
+            [...hmisKeys].filter(
+                key =>
+                    !planningKeys.has(key)
+            );
+
+
+        const planningOnly =
+            [...planningKeys].filter(
+                key =>
+                    !hmisKeys.has(key)
+            );
+
+
+        const hasMismatch =
+            difference !== 0 ||
+            hmisOnly.length > 0 ||
+            planningOnly.length > 0;
+
+
+        if (hasMismatch) {
+            mismatchCategoryCount++;
+        }
+
+
+        const row =
+            document.createElement("tr");
+
+        row.style.cursor = "pointer";
+
+
+        let differenceText = "0";
+
+        if (difference > 0) {
+            differenceText =
+                "+" + difference;
+        }
+
+        if (difference < 0) {
+            differenceText =
+                difference.toString();
+        }
+
+
+        const statusHTML =
+            hasMismatch
+
+            ? `<span style="
+                    color:#c2410c;
+                    font-weight:900;
+               ">
+                   ⚠ Difference
+               </span>`
+
+            : `<span style="
+                    color:#15803d;
+                    font-weight:900;
+               ">
+                   ✓ Matched
+               </span>`;
+
+
+        row.innerHTML = `
+
+            <td>
+                <strong>${category}</strong>
+            </td>
+
+            <td>
+                ${hmisCount.toLocaleString()}
+            </td>
+
+            <td>
+                ${planningCount.toLocaleString()}
+            </td>
+
+            <td style="
+                font-weight:900;
+                color:${
+                    difference === 0
+                    ? "#15803d"
+                    : "#c2410c"
+                };
+            ">
+                ${differenceText}
+            </td>
+
+            <td>
+                ${statusHTML}
+            </td>
+
+        `;
+
+
+
+// ------------------------------------------------------
+// CLICKABLE FACILITY TYPE DIFFERENCE
+// ------------------------------------------------------
+
+const cells = row.children;
+
+
+// Difference column
+cells[3].style.cursor = "pointer";
+cells[3].title = "Show mismatched facilities only";
+
+cells[3].addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        showReconciliationCategoryDetails(
+    category,
+    "mismatch"
+);
+
+        document
+            .querySelector(".recon-details-section")
+            ?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+    }
+);
+
+
+// Status column
+cells[4].style.cursor = "pointer";
+
+cells[4].addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        if (hasMismatch) {
+
+            showReconciliationCategoryDetails(
+                category,
+                "mismatch"
+            );
+
+        } else {
+
+            showReconciliationCategoryDetails(
+                category,
+                "all"
+            );
+
+        }
+
+    }
+);
+
+
+// Normal row click = show all
+row.addEventListener(
+    "click",
+    function () {
+
+        showReconciliationCategoryDetails(
+            category,
+            "all"
+        );
+
+    }
+);
+
+
+body.appendChild(row);
+
+    });
+
+
+    const mismatchElement =
+        document.getElementById(
+            "reconMismatchCategories"
+        );
+
+    if (mismatchElement) {
+
+        mismatchElement.textContent =
+            mismatchCategoryCount
+                .toLocaleString();
+
+    }
+
+}
+// ==========================================================
+// RECONCILIATION VIEW SWITCHING
+// ==========================================================
+
+function setReconciliationViewButton(view) {
+
+    const facilityBtn =
+        document.getElementById(
+            "reconFacilityTypeBtn"
+        );
+
+    const districtBtn =
+        document.getElementById(
+            "reconDistrictBtn"
+        );
+
+    if (facilityBtn) {
+        facilityBtn.classList.toggle(
+            "active",
+            view === "facility"
+        );
+    }
+
+    if (districtBtn) {
+        districtBtn.classList.toggle(
+            "active",
+            view === "district"
+        );
+    }
+
+}
+
+
+// ==========================================================
+// FACILITY TYPE VIEW
+// ==========================================================
+
+function showReconciliationFacilityTypeView() {
+
+    setReconciliationViewButton(
+        "facility"
+    );
+
+    const title =
+        document.getElementById(
+            "reconComparisonTitle"
+        );
+
+    if (title) {
+        title.textContent =
+            "FACILITY CATEGORY COMPARISON";
+    }
+
+
+    const header =
+        document.getElementById(
+            "reconciliationTableHeader"
+        );
+
+    if (header) {
+
+        header.innerHTML = `
+            <th>Facility Category</th>
+            <th>HMIS</th>
+            <th>Planning</th>
+            <th>Difference</th>
+            <th>Status</th>
+        `;
+
+    }
+
+
+    // Rebuild existing Facility Type comparison
+    buildFacilityReconciliation();
+
+}
+
+
+// ==========================================================
+// DISTRICT VIEW
+// ==========================================================
+
+function showReconciliationDistrictView() {
+
+    setReconciliationViewButton(
+        "district"
+    );
+
+
+    const title =
+        document.getElementById(
+            "reconComparisonTitle"
+        );
+
+    if (title) {
+        title.textContent =
+            "DISTRICT-WISE FACILITY RECONCILIATION";
+    }
+
+
+    const header =
+        document.getElementById(
+            "reconciliationTableHeader"
+        );
+
+    if (header) {
+
+        header.innerHTML = `
+            <th>District</th>
+            <th>HMIS</th>
+            <th>Planning</th>
+            <th>Difference</th>
+            <th>HMIS Only</th>
+            <th>Planning Only</th>
+            <th>Status</th>
+        `;
+
+    }
+
+
+    const body =
+        document.getElementById(
+            "reconciliationCategoryBody"
+        );
+
+    if (!body) return;
+
+    body.innerHTML = "";
+
+
+    const hmisData =
+        getTestingFilteredData();
+
+    const planningData =
+        getFilteredPlanningData();
+
+
+    // ------------------------------------------------------
+    // GET ALL DISTRICTS
+    // ------------------------------------------------------
+
+    const districtMap =
+        new Map();
+
+
+    hmisData.forEach(row => {
+
+        const district =
+            text(
+                row["District Name"]
+            ).trim();
+
+        if (!district) return;
+
+
+        const key =
+            normalizeReconText(
+                district
+            );
+
+
+        if (!districtMap.has(key)) {
+
+            districtMap.set(
+                key,
+                district
+            );
+
+        }
+
+    });
+
+
+    planningData.forEach(row => {
+
+        const district =
+            text(
+                row["District Name"]
+            ).trim();
+
+        if (!district) return;
+
+
+        const key =
+            normalizeReconText(
+                district
+            );
+
+
+        if (!districtMap.has(key)) {
+
+            districtMap.set(
+                key,
+                district
+            );
+
+        }
+
+    });
+
+
+    const districtResults = [];
+
+
+    districtMap.forEach(
+        (districtName, districtKey) => {
+
+
+        const hmisRows =
+            hmisData.filter(row =>
+
+                normalizeReconText(
+                    row["District Name"]
+                ) === districtKey
+
+            );
+
+
+        const planningRows =
+            planningData.filter(row =>
+
+                normalizeReconText(
+                    row["District Name"]
+                ) === districtKey
+
+            );
+
+
+        // ----------------------------------------------
+        // FACILITY MATCHING
+        // District + Facility Name
+        // ----------------------------------------------
+
+        const reconciliation =
+    reconcileFacilityRows(
+        hmisRows,
+        planningRows
+    );
+
+const matched =
+    reconciliation.matched.length;
+
+const hmisOnly =
+    reconciliation.hmisOnly.length;
+
+const planningOnly =
+    reconciliation.planningOnly.length;
+
+
+        const difference =
+            hmisRows.length -
+            planningRows.length;
+
+
+        const hasMismatch =
+            hmisOnly > 0 ||
+            planningOnly > 0;
+
+
+        districtResults.push({
+
+            districtName:
+                districtName,
+
+            hmisCount:
+                hmisRows.length,
+
+            planningCount:
+                planningRows.length,
+
+            difference:
+                difference,
+
+            matched:
+                matched,
+
+            hmisOnly:
+                hmisOnly,
+
+            planningOnly:
+                planningOnly,
+
+            hasMismatch:
+                hasMismatch
+
+        });
+
+    });
+
+
+    // ------------------------------------------------------
+    // SHOW BIGGEST PROBLEM DISTRICTS FIRST
+    // ------------------------------------------------------
+
+    districtResults.sort(
+        (a, b) => {
+
+            const problemA =
+                a.hmisOnly +
+                a.planningOnly;
+
+            const problemB =
+                b.hmisOnly +
+                b.planningOnly;
+
+            return problemB -
+                   problemA;
+
+        }
+    );
+
+
+    // ------------------------------------------------------
+    // BUILD TABLE
+    // ------------------------------------------------------
+
+    districtResults.forEach(item => {
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+        row.style.cursor =
+            "pointer";
+
+
+        let differenceText =
+            "0";
+
+
+        if (item.difference > 0) {
+
+            differenceText =
+                "+" +
+                item.difference;
+
+        } else if (
+            item.difference < 0
+        ) {
+
+            differenceText =
+                item.difference
+                    .toString();
+
+        }
+
+
+        const statusHTML =
+            item.hasMismatch
+
+            ? `<span style="
+                    color:#c2410c;
+                    font-weight:900;
+               ">
+                   ⚠ Mismatch
+               </span>`
+
+            : `<span style="
+                    color:#15803d;
+                    font-weight:900;
+               ">
+                   ✓ Matched
+               </span>`;
+
+
+        row.innerHTML = `
+
+            <td>
+                <strong>
+                    ${item.districtName}
+                </strong>
+            </td>
+
+            <td>
+                ${item.hmisCount.toLocaleString()}
+            </td>
+
+            <td>
+                ${item.planningCount.toLocaleString()}
+            </td>
+
+            <td style="
+                font-weight:900;
+                color:${
+                    item.difference === 0
+                    ? "#15803d"
+                    : "#c2410c"
+                };
+            ">
+                ${differenceText}
+            </td>
+
+            <td style="
+                font-weight:900;
+                color:#0758b7;
+            ">
+                ${item.hmisOnly.toLocaleString()}
+            </td>
+
+            <td style="
+                font-weight:900;
+                color:#138a45;
+            ">
+                ${item.planningOnly.toLocaleString()}
+            </td>
+
+            <td>
+                ${statusHTML}
+            </td>
+
+        `;
+// ------------------------------------------------------
+// CLICKABLE RECONCILIATION NUMBERS
+// ------------------------------------------------------
+
+const cells = row.children;
+
+
+// Difference
+cells[3].style.cursor = "pointer";
+cells[3].title = "Show all mismatched facilities";
+
+cells[3].addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        showReconciliationDistrictDetails(
+            item.districtName,
+            "mismatch"
+        );
+document
+    .querySelector(".recon-details-section")
+    ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+    }
+);
+
+
+// HMIS Only
+cells[4].style.cursor = "pointer";
+cells[4].title = "Show HMIS Only facilities";
+
+cells[4].addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        showReconciliationDistrictDetails(
+            item.districtName,
+            "hmis"
+        );
+
+    }
+);
+
+
+// Planning Only
+cells[5].style.cursor = "pointer";
+cells[5].title = "Show Planning Only facilities";
+
+cells[5].addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        showReconciliationDistrictDetails(
+            item.districtName,
+            "planning"
+        );
+
+    }
+);
+
+
+// Status
+cells[6].style.cursor = "pointer";
+cells[6].title = "Show mismatched facilities";
+
+cells[6].addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        if (item.hasMismatch) {
+
+            showReconciliationDistrictDetails(
+                item.districtName,
+                "mismatch"
+            );
+
+        } else {
+
+            showReconciliationDistrictDetails(
+                item.districtName,
+                "all"
+            );
+
+        }
+
+    }
+);
+
+        row.addEventListener(
+            "click",
+            function () {
+
+                showReconciliationDistrictDetails(
+                    item.districtName
+                );
+
+            }
+        );
+
+
+        body.appendChild(row);
+
+    });
+
+}
+
+
+// ==========================================================
+// DISTRICT FACILITY-LEVEL DETAILS
+// ==========================================================
+
+function showReconciliationDistrictDetails(
+    districtName,
+    filterType = "all"
+) {
+
+    const districtKey =
+        normalizeReconText(
+            districtName
+        );
+
+
+    const hmisData =
+        getTestingFilteredData()
+            .filter(row =>
+
+                normalizeReconText(
+                    row["District Name"]
+                ) === districtKey
+
+            );
+
+
+    const planningData =
+        getFilteredPlanningData()
+            .filter(row =>
+
+                normalizeReconText(
+                    row["District Name"]
+                ) === districtKey
+
+            );
+
+
+    const reconciliation =
+    reconcileFacilityRows(
+        hmisData,
+        planningData
+    );
+
+const matched =
+    reconciliation.matched;
+
+const hmisOnly =
+    reconciliation.hmisOnly;
+
+const planningOnly =
+    reconciliation.planningOnly;
+
+            
+
+
+    document.getElementById(
+        "reconMatchedCount"
+    ).textContent =
+        matched.length
+            .toLocaleString();
+
+
+    document.getElementById(
+        "reconHmisOnlyCount"
+    ).textContent =
+        hmisOnly.length
+            .toLocaleString();
+
+
+    document.getElementById(
+        "reconPlanningOnlyCount"
+    ).textContent =
+        planningOnly.length
+            .toLocaleString();
+            const matchedCard =
+    document.getElementById(
+        "reconMatchedCount"
+    ).closest(
+        ".recon-mini-card"
+    );
+
+const hmisCard =
+    document.getElementById(
+        "reconHmisOnlyCount"
+    ).closest(
+        ".recon-mini-card"
+    );
+
+const planningCard =
+    document.getElementById(
+        "reconPlanningOnlyCount"
+    ).closest(
+        ".recon-mini-card"
+    );
+
+
+matchedCard.style.cursor = "pointer";
+hmisCard.style.cursor = "pointer";
+planningCard.style.cursor = "pointer";
+
+
+matchedCard.onclick = function () {
+
+    showReconciliationFilteredRows(
+        matched,
+        hmisOnly,
+        planningOnly,
+        "matched"
+    );
+
+};
+
+
+hmisCard.onclick = function () {
+
+    showReconciliationFilteredRows(
+        matched,
+        hmisOnly,
+        planningOnly,
+        "hmis"
+    );
+
+};
+
+
+planningCard.onclick = function () {
+
+    showReconciliationFilteredRows(
+        matched,
+        hmisOnly,
+        planningOnly,
+        "planning"
+    );
+
+};
+
+
+    const selected =
+        document.getElementById(
+            "reconSelectedCategory"
+        );
+
+
+    if (selected) {
+
+        selected.textContent =
+            districtName +
+            " — facility-level reconciliation";
+
+    }
+
+
+    showReconciliationFilteredRows(
+    matched,
+    hmisOnly,
+    planningOnly,
+    filterType
+);
+
+}
+// ==========================================================
+// ONE-TO-ONE FACILITY MATCHING
+// Keeps repeated facilities instead of collapsing them
+// ==========================================================
+
+function reconcileFacilityRows(
+    hmisRows,
+    planningRows
+) {
+
+    const hmisGroups = new Map();
+    const planningGroups = new Map();
+
+
+    // ------------------------------------------------------
+    // GROUP HMIS RECORDS
+    // ------------------------------------------------------
+
+    hmisRows.forEach(row => {
+
+        const key =
+            getReconFacilityKey(row);
+
+        if (!hmisGroups.has(key)) {
+            hmisGroups.set(key, []);
+        }
+
+        hmisGroups.get(key).push(row);
+
+    });
+
+
+    // ------------------------------------------------------
+    // GROUP PLANNING RECORDS
+    // ------------------------------------------------------
+
+    planningRows.forEach(row => {
+
+        const key =
+            getReconFacilityKey(row);
+
+        if (!planningGroups.has(key)) {
+            planningGroups.set(key, []);
+        }
+
+        planningGroups.get(key).push(row);
+
+    });
+
+
+    const matched = [];
+    const hmisOnly = [];
+    const planningOnly = [];
+
+
+    // ------------------------------------------------------
+    // ALL UNIQUE MATCHING KEYS
+    // ------------------------------------------------------
+
+    const allKeys = new Set([
+        ...hmisGroups.keys(),
+        ...planningGroups.keys()
+    ]);
+
+
+    allKeys.forEach(key => {
+
+        const hmisList =
+            hmisGroups.get(key) || [];
+
+        const planningList =
+            planningGroups.get(key) || [];
+
+
+        // Number that can be matched one-to-one
+        const matchedCount =
+            Math.min(
+                hmisList.length,
+                planningList.length
+            );
+
+
+        // --------------------------------------------------
+        // MATCH RECORDS ONE-TO-ONE
+        // --------------------------------------------------
+
+        for (
+            let i = 0;
+            i < matchedCount;
+            i++
+        ) {
+
+            matched.push({
+
+                hmis: hmisList[i],
+
+                planning:
+                    planningList[i]
+
+            });
+
+        }
+
+
+        // --------------------------------------------------
+        // EXTRA HMIS RECORDS
+        // --------------------------------------------------
+
+        for (
+            let i = matchedCount;
+            i < hmisList.length;
+            i++
+        ) {
+
+            hmisOnly.push({
+
+                hmis: hmisList[i],
+                planning: null
+
+            });
+
+        }
+
+
+        // --------------------------------------------------
+        // EXTRA PLANNING RECORDS
+        // --------------------------------------------------
+
+        for (
+            let i = matchedCount;
+            i < planningList.length;
+            i++
+        ) {
+
+            planningOnly.push({
+
+                hmis: null,
+                planning: planningList[i]
+
+            });
+
+        }
+
+    });
+
+
+    return {
+
+        matched,
+        hmisOnly,
+        planningOnly
+
+    };
+
+}
+// ==========================================================
+// SHOW FACILITY-LEVEL DIFFERENCES
+// ==========================================================
+
+function showReconciliationCategoryDetails(
+    category,
+    filterType = "all"
+) {
+
+    const hmisData =
+        getTestingFilteredData()
+            .filter(row =>
+                normalizeReconText(
+                    row["Facility Type"]
+                ) ===
+                normalizeReconText(category)
+            );
+
+
+    const planningFilteredData =
+        getFilteredPlanningData()
+            .filter(row =>
+                normalizeReconText(
+                    row["Facility Type"]
+                ) ===
+                normalizeReconText(category)
+            );
+
+
+    const reconciliation =
+    reconcileFacilityRows(
+        hmisData,
+        planningFilteredData
+    );
+
+const matched =
+    reconciliation.matched;
+
+const hmisOnly =
+    reconciliation.hmisOnly;
+
+const planningOnly =
+    reconciliation.planningOnly;
+
+    // ------------------------------------------------------
+    // UPDATE MINI KPIs
+    // ------------------------------------------------------
+
+    document.getElementById(
+        "reconMatchedCount"
+    ).textContent =
+        matched.length.toLocaleString();
+
+
+    document.getElementById(
+        "reconHmisOnlyCount"
+    ).textContent =
+        hmisOnly.length.toLocaleString();
+
+
+    document.getElementById(
+        "reconPlanningOnlyCount"
+    ).textContent =
+        planningOnly.length.toLocaleString();
+
+
+    const selectedCategory =
+        document.getElementById(
+            "reconSelectedCategory"
+        );
+
+    if (selectedCategory) {
+
+        selectedCategory.textContent =
+            category +
+            " — facility-level comparison";
+
+    }
+
+
+        showReconciliationFilteredRows(
+        matched,
+        hmisOnly,
+        planningOnly,
+        filterType
+    );
+    }
+// ==========================================================
+// RECONCILIATION DETAIL FILTER
+// ==========================================================
+
+function showReconciliationFilteredRows(
+    matched,
+    hmisOnly,
+    planningOnly,
+    filterType
+) {
+
+    let rows = [];
+
+
+    if (filterType === "matched") {
+
+        rows = matched.map(item => ({
+            status: "Matched",
+            ...item
+        }));
+
+    }
+
+
+    else if (filterType === "hmis") {
+
+        rows = hmisOnly.map(item => ({
+            status: "HMIS Only",
+            ...item
+        }));
+
+    }
+
+
+    else if (filterType === "planning") {
+
+        rows = planningOnly.map(item => ({
+            status: "Planning Only",
+            ...item
+        }));
+
+    }
+
+
+    else if (filterType === "mismatch") {
+
+        rows = [
+
+            ...hmisOnly.map(item => ({
+                status: "HMIS Only",
+                ...item
+            })),
+
+            ...planningOnly.map(item => ({
+                status: "Planning Only",
+                ...item
+            }))
+
+        ];
+
+    }
+
+
+    else {
+
+        // Normal view:
+        // mismatches first, then matched
+
+        rows = [
+
+            ...hmisOnly.map(item => ({
+                status: "HMIS Only",
+                ...item
+            })),
+
+            ...planningOnly.map(item => ({
+                status: "Planning Only",
+                ...item
+            })),
+
+            ...matched.map(item => ({
+                status: "Matched",
+                ...item
+            }))
+
+        ];
+
+    }
+
+
+    renderReconciliationFacilityRows(rows);
+
+}
+
+// ==========================================================
+// RENDER FACILITY COMPARISON TABLE
+// ==========================================================
+
+function renderReconciliationFacilityRows(items) {
+
+    const body =
+        document.getElementById(
+            "reconciliationDetailsBody"
+        );
+
+    if (!body) return;
+
+    body.innerHTML = "";
+
+
+    if (items.length === 0) {
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="recon-empty">
+
+                    No facilities found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    items
+        .slice(0, 500)
+        .forEach(item => {
+
+            const h =
+                item.hmis || {};
+
+            const p =
+                item.planning || {};
+
+
+            const district =
+                text(
+                    h["District Name"] ||
+                    p["District Name"]
+                );
+
+
+            const nin =
+                text(
+                    h["NIN"] ||
+                    p["NIN"]
+                );
+
+
+            const hfr =
+                text(
+                    h["HFR ID"] ||
+                    p["HFR ID"]
+                );
+
+
+            let statusColor =
+                "#15803d";
+
+            let rowBackground =
+                "#ffffff";
+
+
+                        if (
+                item.status ===
+                "HMIS Only"
+            ) {
+
+                statusColor =
+                    "#b91c1c";
+
+                rowBackground =
+                    "#fdecec";
+
+            }
+
+
+            if (
+                item.status ===
+                "Planning Only"
+            ) {
+
+                statusColor =
+                    "#b91c1c";
+
+                rowBackground =
+                    "#fdecec";
+
+            }
+
+
+            const row =
+                document.createElement("tr");
+
+            row.style.background =
+                rowBackground;
+
+
+            row.innerHTML = `
+
+                <td style="
+                    font-weight:900;
+                    color:${statusColor};
+                    white-space:nowrap;
+                ">
+                    ${item.status}
+                </td>
+
+                <td>
+                    ${district}
+                </td>
+
+                <td>
+                    ${text(
+                        h["Facility Name"]
+                    )}
+                </td>
+
+                <td>
+                    ${text(
+                        p["Facility Name"]
+                    )}
+                </td>
+
+                <td>
+                    ${text(
+                        h["Facility Type"]
+                    )}
+                </td>
+
+                <td>
+                    ${text(
+                        p["Facility Type"]
+                    )}
+                </td>
+
+                <td>
+                    ${nin}
+                </td>
+
+                <td>
+                    ${hfr}
+                </td>
+
+            `;
+
+
+            body.appendChild(row);
+
+        });
+
+}
 function refreshTestingDashboard() {
 
     const data = getTestingFilteredData();
+
     updateTestingFacilityTypeKPIs(data);
     renderTestingFacilityDetails(data);
+
+    // Update right-side Planning dashboard
+    updatePlanningDashboard();
+    // Update HMIS vs Planning reconciliation
+buildFacilityReconciliation();
+checkReconDuplicates();
 
     // ------------------------------------------------------
     // DISTRICT POPULATION
@@ -6609,11 +10209,33 @@ document
 // Create replica for Testing tab
 createTestingDashboardReplica();
 
-// Load live Facility data from Google Sheets
-loadFacilityData();
+// ==========================================================
+// LOAD ALL DASHBOARD DATA + TOTAL LOAD TIME
+// ==========================================================
 
-// Load live CHC HR data from Google Sheets
-loadHRData();
+Promise.all([
+    loadFacilityData(),
+    loadHRData()
+])
+.then(() => {
+
+    const dashboardLoadEnd = performance.now();
+
+    console.log(
+        "========================================"
+    );
+
+    console.log(
+        "⏱ TOTAL DASHBOARD LOAD TIME:",
+        ((dashboardLoadEnd - dashboardLoadStart) / 1000).toFixed(2),
+        "seconds"
+    );
+
+    console.log(
+        "========================================"
+    );
+
+});
 
 </script>
 
