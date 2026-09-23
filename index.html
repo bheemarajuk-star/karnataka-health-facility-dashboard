@@ -2428,7 +2428,7 @@ z-index: 10;
         </div>
 
         <div>
-            23-09-2026 05:03 PM
+            23-09-2026 05:33 PM
         </div>
 
         <div class="meta-source">
@@ -3770,7 +3770,20 @@ reconciliationSection.innerHTML = `
             District View
 
         </button>
+<button
+    type="button"
+    id="reconExportBtn"
+    class="recon-view-btn"
+    onclick="exportReconciliationDetails()"
+    style="
+        background:#15803d;
+        color:white;
+        border-color:#15803d;
+    ">
 
+    ⬇ Export Reconciliation
+
+</button>
     </div>
 
 </div>
@@ -7629,6 +7642,194 @@ planningCard.onclick = function () {
     planningOnly,
     filterType
 );
+
+}
+// ==========================================================
+// EXPORT CURRENT RECONCILIATION DETAILS
+// ==========================================================
+
+function exportReconciliationDetails() {
+
+    const tableBody =
+        document.getElementById(
+            "reconciliationDetailsBody"
+        );
+
+    if (!tableBody) {
+        alert(
+            "Reconciliation details are not available."
+        );
+        return;
+    }
+
+
+    const rows =
+        Array.from(
+            tableBody.querySelectorAll("tr")
+        );
+
+
+    // ------------------------------------------------------
+    // CHECK WHETHER DETAIL DATA EXISTS
+    // ------------------------------------------------------
+
+    const validRows =
+        rows.filter(row => {
+
+            const cells =
+                row.querySelectorAll("td");
+
+            return cells.length === 8;
+
+        });
+
+
+    if (validRows.length === 0) {
+
+        alert(
+            "Please select a Facility Type or District before exporting."
+        );
+
+        return;
+    }
+
+
+    // ------------------------------------------------------
+    // CSV HEADINGS
+    // ------------------------------------------------------
+
+    const csvRows = [];
+
+    csvRows.push([
+        "Status",
+        "District",
+        "HMIS Facility Name",
+        "Planning Facility Name",
+        "HMIS Facility Type",
+        "Planning Facility Type",
+        "NIN",
+        "HFR ID"
+    ]);
+
+
+    // ------------------------------------------------------
+    // GET CURRENT DETAIL TABLE ROWS
+    // ------------------------------------------------------
+
+    validRows.forEach(row => {
+
+        const cells =
+            Array.from(
+                row.querySelectorAll("td")
+            );
+
+        csvRows.push(
+            cells.map(cell =>
+                cell.innerText.trim()
+            )
+        );
+
+    });
+
+
+    // ------------------------------------------------------
+    // ESCAPE VALUES FOR EXCEL / CSV
+    // ------------------------------------------------------
+
+    const csvContent =
+        csvRows
+            .map(row =>
+                row.map(value => {
+
+                    const safeValue =
+                        String(value)
+                            .replace(
+                                /"/g,
+                                '""'
+                            );
+
+                    return `"${safeValue}"`;
+
+                }).join(",")
+            )
+            .join("\r\n");
+
+
+    // ------------------------------------------------------
+    // CREATE DOWNLOAD FILE
+    // ------------------------------------------------------
+
+    const blob =
+        new Blob(
+            [
+                "\uFEFF",
+                csvContent
+            ],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    // ------------------------------------------------------
+    // FILE NAME
+    // ------------------------------------------------------
+
+    const selected =
+        document.getElementById(
+            "reconSelectedCategory"
+        );
+
+    let scopeName =
+        selected
+            ? selected.textContent.trim()
+            : "Reconciliation";
+
+
+    scopeName =
+        scopeName
+            .replace(
+                /[^a-zA-Z0-9]+/g,
+                "_"
+            )
+            .replace(
+                /^_+|_+$/g,
+                ""
+            );
+
+
+    const today =
+        new Date()
+            .toISOString()
+            .slice(0, 10);
+
+
+    link.href = url;
+
+    link.download =
+        "Facility_Reconciliation_" +
+        scopeName +
+        "_" +
+        today +
+        ".csv";
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
 
 }
 // ==========================================================
