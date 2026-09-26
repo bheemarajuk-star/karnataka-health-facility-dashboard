@@ -126,6 +126,72 @@ body {
     background: #1976d2;
     color: white;
 }
+/* =========================================================
+   INDIVIDUAL DASHBOARD TAB COLORS
+========================================================= */
+
+/* Facility Dashboard — Blue */
+.dashboard-tab:nth-child(1) {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.dashboard-tab:nth-child(1):hover {
+    background: #bbdefb;
+}
+
+.dashboard-tab:nth-child(1).active {
+    background: #1976d2;
+    color: white;
+}
+
+
+/* Planning Facility Dashboard — Green */
+.dashboard-tab:nth-child(2) {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.dashboard-tab:nth-child(2):hover {
+    background: #c8e6c9;
+}
+
+.dashboard-tab:nth-child(2).active {
+    background: #2e7d32;
+    color: white;
+}
+
+
+/* HR Data — Orange */
+.dashboard-tab:nth-child(3) {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.dashboard-tab:nth-child(3):hover {
+    background: #ffe0b2;
+}
+
+.dashboard-tab:nth-child(3).active {
+    background: #ef6c00;
+    color: white;
+}
+
+
+/* Facility Reconciliation — Purple */
+.dashboard-tab:nth-child(4) {
+    background: #f3e5f5;
+    color: #6a1b9a;
+}
+
+.dashboard-tab:nth-child(4):hover {
+    background: #e1bee7;
+}
+
+.dashboard-tab:nth-child(4).active {
+    background: #7b1fa2;
+    color: white;
+}
 
 .tab-content {
     display: none;
@@ -2368,6 +2434,7 @@ z-index: 10;
     }
 
 }
+
 </style>
 
 </head>
@@ -2428,7 +2495,7 @@ z-index: 10;
         </div>
 
         <div>
-            23-09-2026 05:33 PM
+            25-09-2026 02:54 PM
         </div>
 
         <div class="meta-source">
@@ -2450,7 +2517,11 @@ z-index: 10;
         onclick="openDashboardTab('facilityTab', this)">
         Facility Dashboard
     </button>
-
+<button
+    class="dashboard-tab"
+    onclick="openDashboardTab('planningFacilityTab', this)">
+    Planning Facility Dashboard
+</button>
     <button
         class="dashboard-tab"
         onclick="openDashboardTab('hrDataTab', this)">
@@ -3115,6 +3186,14 @@ z-index: 10;
 
 </div>
 <!-- ======================================================
+     PLANNING FACILITY DASHBOARD TAB
+====================================================== -->
+
+<div id="planningFacilityTab"
+     class="tab-content">
+
+</div>
+<!-- ======================================================
      TESTING DASHBOARD TAB
 ====================================================== -->
 
@@ -3200,6 +3279,1506 @@ function toggleReconFacilityDetails(side) {
             "↓ Show Facility Details";
     }
 }
+// ==========================================================
+// CREATE PLANNING FACILITY DASHBOARD
+// ==========================================================
+
+function createPlanningFacilityDashboard() {
+
+    const source =
+        document.getElementById("facilityTab");
+
+    const target =
+        document.getElementById(
+            "planningFacilityTab"
+        );
+
+    if (!source || !target) return;
+
+
+    // ------------------------------------------------------
+    // COPY COMPLETE FACILITY DASHBOARD
+    // ------------------------------------------------------
+
+    target.innerHTML =
+        source.innerHTML;
+
+
+    // ------------------------------------------------------
+    // CHANGE ALL IDs
+    // Prevent conflict with Facility Dashboard
+    // ------------------------------------------------------
+
+    target
+        .querySelectorAll("[id]")
+        .forEach(element => {
+
+            const oldId =
+                element.id;
+
+            element.setAttribute(
+                "data-original-id",
+                oldId
+            );
+
+            element.id =
+                "planningDash_" + oldId;
+
+        });
+
+
+    // ------------------------------------------------------
+    // REMOVE EXISTING INLINE CLICK ACTIONS
+    // Planning dashboard is only a module shell for now
+    // ------------------------------------------------------
+
+    target
+        .querySelectorAll("[onclick]")
+        .forEach(element => {
+
+            element.removeAttribute(
+                "onclick"
+            );
+
+        });
+
+
+    // ------------------------------------------------------
+    // RESET ALL FILTERS
+    // ------------------------------------------------------
+
+    target
+        .querySelectorAll("select")
+        .forEach(select => {
+
+            select.innerHTML =
+                '<option value="All">All</option>';
+
+            select.value = "All";
+
+        });
+
+
+    // ------------------------------------------------------
+    // RESET ALL SUMMARY KPI VALUES TO ZERO
+    // ------------------------------------------------------
+
+    target
+        .querySelectorAll(
+            ".district-summary-value"
+        )
+        .forEach(element => {
+
+            element.textContent = "0";
+
+        });
+
+
+    // ------------------------------------------------------
+    // DISTRICT POPULATION
+    // ------------------------------------------------------
+
+    const populationValue =
+        target.querySelector(
+            ".population-kpi-value"
+        );
+
+    if (populationValue) {
+
+        populationValue.textContent =
+            "0";
+
+    }
+
+
+    const populationDistrict =
+        target.querySelector(
+            ".population-kpi-district"
+        );
+
+    if (populationDistrict) {
+
+        populationDistrict.textContent =
+            "Karnataka";
+
+    }
+
+
+    // ------------------------------------------------------
+    // REMOVE OLD FACILITY TYPE KPI CONTENT
+    // ------------------------------------------------------
+
+    const facilityKPIContainer =
+        document.getElementById(
+            "planningDash_facilityTypeKPIs"
+        );
+
+    if (facilityKPIContainer) {
+
+        facilityKPIContainer.innerHTML =
+            "";
+
+    }
+
+
+    // ------------------------------------------------------
+    // RESET FACILITY DETAILS
+    // ------------------------------------------------------
+
+    const facilityDetailsBody =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    if (facilityDetailsBody) {
+
+        facilityDetailsBody.innerHTML =
+            "";
+
+    }
+
+
+    const facilityRowNote =
+        document.getElementById(
+            "planningDash_facilityRowNote"
+        );
+
+    if (facilityRowNote) {
+
+        facilityRowNote.textContent =
+            "0 facility records";
+
+    }
+
+
+    const facilitySearch =
+        document.getElementById(
+            "planningDash_facilitySearch"
+        );
+
+    if (facilitySearch) {
+
+        facilitySearch.value = "";
+
+        facilitySearch.placeholder =
+            "Search Planning Facility Name, NIN, HFR ID...";
+
+    }
+
+
+    // ------------------------------------------------------
+    // CHANGE SECTION TITLE
+    // ------------------------------------------------------
+
+    const filterTitle =
+        target.querySelector(
+            ".filter-panel .section-title"
+        );
+
+    if (filterTitle) {
+
+        filterTitle.textContent =
+            "Planning Facility Dashboard Filters";
+
+    }
+
+
+    buildPlanningFacilityZeroKPIs();
+
+
+// ------------------------------------------------------
+// CONNECT CLEAR FILTER BUTTON
+// ------------------------------------------------------
+
+const clearButton =
+    target.querySelector(".clear-btn");
+
+if (clearButton) {
+
+    clearButton.onclick =
+        clearPlanningDashboardFilters;
+
+}
+// ------------------------------------------------------
+// CONNECT TOP PLANNING KPI CARDS
+// ------------------------------------------------------
+
+const planningTopKPIs = {
+
+    planningDash_districtSC: "SC",
+    planningDash_districtPHC: "PHC",
+    planningDash_districtCHC: "CHC",
+    planningDash_districtSDH: "SDH",
+    planningDash_districtDH: "DH",
+    planningDash_districtMC: "MC"
+
+};
+
+
+Object.entries(planningTopKPIs)
+    .forEach(([valueId, family]) => {
+
+        const valueElement =
+            document.getElementById(
+                valueId
+            );
+
+        if (!valueElement) return;
+
+
+        const card =
+            valueElement.closest(
+                ".district-summary-kpi"
+            );
+
+
+        if (!card) return;
+
+
+        card.style.cursor =
+            "pointer";
+
+
+        card.onclick =
+            function () {
+
+                showStandalonePlanningFacilityFamilyKPIs(
+    family
+);
+
+            };
+
+    });
+
+
+// TOTAL FACILITIES = SHOW EVERYTHING
+
+const planningTotalValue =
+    document.getElementById(
+        "planningDash_districtTotalFacilities"
+    );
+
+
+if (planningTotalValue) {
+
+    const totalCard =
+        planningTotalValue.closest(
+            ".district-summary-kpi"
+        );
+
+
+    if (totalCard) {
+
+        totalCard.style.cursor =
+            "pointer";
+
+        totalCard.onclick =
+            showAllPlanningFacilityKPIs;
+
+    }
+
+}
+
+// ------------------------------------------------------
+// CONNECT FACILITY SEARCH
+// ------------------------------------------------------
+
+const planningSearch =
+    document.getElementById(
+        "planningDash_facilitySearch"
+    );
+
+if (planningSearch) {
+
+    planningSearch.addEventListener(
+        "input",
+        function () {
+
+            renderPlanningDashboardFacilityDetails(
+                getPlanningDashboardFilteredData()
+            );
+
+        }
+    );
+
+}
+}
+
+// ==========================================================
+// BUILD PLANNING FACILITY TYPE KPI CARDS — ZERO DATA
+// ==========================================================
+
+function buildPlanningFacilityZeroKPIs() {
+
+    const container =
+        document.getElementById(
+            "planningDash_facilityTypeKPIs"
+        );
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+}
+
+// ==========================================================
+// PLANNING FACILITY DASHBOARD — LIVE DATA
+// ==========================================================
+
+const planningDashFilterConfig = [
+
+    {
+        id: "planningDash_districtFilter",
+        column: "District Name"
+    },
+
+    {
+        id: "planningDash_subdistrictFilter",
+        column: "Subdistrict Name"
+    },
+
+    {
+        id: "planningDash_healthblockFilter",
+        column: "Healthblock Name"
+    },
+
+    {
+        id: "planningDash_formatFilter",
+        column: "Format Type"
+    },
+
+    {
+        id: "planningDash_facilityTypeFilter",
+        column: "Facility Type"
+    },
+
+    {
+        id: "planningDash_ownershipFilter",
+        column: "Ownership"
+    },
+
+    {
+        id: "planningDash_ruralUrbanFilter",
+        column: "Rural/Urban"
+    },
+
+    {
+        id: "planningDash_facilityFilter",
+        column: "Facility Name"
+    }
+
+];
+
+
+// ==========================================================
+// PLANNING — GET FILTERED DATA
+// ==========================================================
+
+function getPlanningDashboardFilteredData() {
+
+    return planningFacilityData.filter(row => {
+
+        return planningDashFilterConfig.every(config => {
+
+            const select =
+                document.getElementById(config.id);
+
+            if (!select) {
+                return true;
+            }
+
+            const selected =
+                select.value || "All";
+
+            if (selected === "All") {
+                return true;
+            }
+
+            return text(row[config.column]).trim() === selected;
+
+        });
+
+    });
+
+}
+
+
+// ==========================================================
+// PLANNING — CASCADING FILTERS
+// ==========================================================
+
+function populatePlanningDashboardFilters() {
+
+    let availableData =
+        planningFacilityData;
+
+    planningDashFilterConfig.forEach(config => {
+
+        const select =
+            document.getElementById(config.id);
+
+        if (!select) return;
+
+        const currentValue =
+            select.value || "All";
+
+
+        const values = [
+            ...new Set(
+                availableData
+                    .map(row =>
+                        text(row[config.column]).trim()
+                    )
+                    .filter(value => value !== "")
+            )
+        ].sort((a, b) =>
+            a.localeCompare(
+                b,
+                undefined,
+                { numeric: true }
+            )
+        );
+
+
+        select.innerHTML =
+            '<option value="All">All</option>';
+
+
+        values.forEach(value => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = value;
+            option.textContent = value;
+
+            select.appendChild(option);
+
+        });
+
+
+        if (values.includes(currentValue)) {
+            select.value = currentValue;
+        } else {
+            select.value = "All";
+        }
+
+
+        if (select.value !== "All") {
+
+            availableData =
+                availableData.filter(row =>
+                    text(row[config.column]).trim() ===
+                    select.value
+                );
+
+        }
+
+    });
+
+}
+
+
+// ==========================================================
+// PLANNING — SETUP FILTER EVENTS
+// ==========================================================
+
+function setupPlanningDashboardFilterEvents() {
+
+    planningDashFilterConfig.forEach(
+        (config, changedIndex) => {
+
+            const select =
+                document.getElementById(config.id);
+
+            if (!select) return;
+
+
+            select.addEventListener(
+                "change",
+                function () {
+
+                    // Reset filters after changed filter
+                    for (
+                        let i = changedIndex + 1;
+                        i < planningDashFilterConfig.length;
+                        i++
+                    ) {
+
+                        const nextSelect =
+                            document.getElementById(
+                                planningDashFilterConfig[i].id
+                            );
+
+                        if (nextSelect) {
+                            nextSelect.value = "All";
+                        }
+
+                    }
+
+
+                    populatePlanningDashboardFilters();
+
+                    refreshPlanningFacilityDashboard();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================================
+// PLANNING — CLEAR FILTERS
+// ==========================================================
+
+function clearPlanningDashboardFilters() {
+
+    planningDashFilterConfig.forEach(config => {
+
+        const select =
+            document.getElementById(config.id);
+
+        if (select) {
+            select.value = "All";
+        }
+
+    });
+
+
+    populatePlanningDashboardFilters();
+
+    refreshPlanningFacilityDashboard();
+
+}
+
+// ==========================================================
+// PLANNING FACILITY DASHBOARD — KPI INTERACTION
+// ==========================================================
+
+let selectedPlanningFacilityFamily = "ALL";
+
+function getPlanningFamilyData(data, family) {
+
+    if (!family || family === "ALL") {
+        return data;
+    }
+
+    return data.filter(row => {
+
+        const facilityType =
+            text(row["Facility Type"])
+                .trim()
+                .toLowerCase();
+
+        const formatType =
+            text(row["Format Type"])
+                .trim()
+                .toLowerCase();
+
+
+        if (family === "SC") {
+
+            return (
+                facilityType.includes("aam-shc") ||
+                facilityType.includes("uaam-shc")
+            );
+
+        }
+
+
+        if (family === "PHC") {
+
+            return formatType === "phc format";
+
+        }
+
+
+        if (family === "CHC") {
+
+            return (
+                formatType === "chc format" ||
+                formatType === "uchc format"
+            );
+
+        }
+
+
+        if (family === "SDH") {
+
+            return formatType === "sdh format";
+
+        }
+
+
+        if (family === "DH") {
+
+            return formatType === "dh format";
+
+        }
+
+
+        if (family === "MC") {
+
+            return facilityType.includes("mc/mch");
+
+        }
+
+
+        return true;
+
+    });
+
+}
+
+
+// ==========================================================
+// PLANNING — TOP FAMILY KPI CLICK
+// ==========================================================
+
+function showStandalonePlanningFacilityFamilyKPIs(family) {
+
+    selectedPlanningFacilityFamily = family;
+
+    const allData =
+        getPlanningDashboardFilteredData();
+
+    const familyData =
+        getPlanningFamilyData(
+            allData,
+            family
+        );
+
+
+    // Show only concerned lower KPI cards
+    updatePlanningDashboardFacilityTypeKPIs(
+        allData
+    );
+// Add same running border light used in Facility Dashboard
+document
+    .querySelectorAll(
+        "#planningDash_facilityTypeKPIs .facility-kpi-card"
+    )
+    .forEach(card => {
+
+        card.classList.add(
+            "family-highlight"
+        );
+
+    });
+
+    // Show facilities belonging to selected family
+    renderPlanningDashboardFacilityDetails(
+        familyData
+    );
+
+
+    // Heading
+    const header =
+        document.querySelector(
+            "#planningFacilityTab .facility-kpi-header"
+        );
+
+
+    const familyTitles = {
+
+        SC:
+            "SUB CENTRES (SC) — FACILITY TYPE BREAKUP",
+
+        PHC:
+            "PRIMARY HEALTH CENTRES (PHC) — FACILITY TYPE BREAKUP",
+
+        CHC:
+            "COMMUNITY HEALTH CENTRES (CHC) — FACILITY TYPE BREAKUP",
+
+        SDH:
+            "SUB DISTRICT HOSPITALS (SDH) — FACILITY TYPE BREAKUP",
+
+        DH:
+            "DISTRICT HOSPITALS (DH) — FACILITY TYPE BREAKUP",
+
+        MC:
+            "MEDICAL COLLEGES (MC/MCH) — FACILITY TYPE BREAKUP"
+
+    };
+
+
+    if (header) {
+
+        header.innerHTML = `
+
+            <span>
+                ${familyTitles[family] || family}
+            </span>
+
+            <button
+                type="button"
+                onclick="
+                    event.stopPropagation();
+                    showAllStandalonePlanningFacilityKPIs();
+                "
+                style="
+                    float:right;
+                    border:none;
+                    background:white;
+                    color:#174a78;
+                    font-weight:700;
+                    padding:5px 12px;
+                    border-radius:6px;
+                    cursor:pointer;
+                "
+            >
+                × Show All
+            </button>
+        `;
+
+    }
+
+
+    const kpiSection =
+        document.getElementById(
+            "planningDash_facilityTypeKPIs"
+        );
+
+    if (kpiSection) {
+
+        kpiSection.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    }
+
+}
+
+
+// ==========================================================
+// PLANNING — SHOW ALL KPI CARDS
+// ==========================================================
+
+function showAllStandalonePlanningFacilityKPIs() {
+
+    selectedPlanningFacilityFamily = "ALL";
+
+    const data =
+        getPlanningDashboardFilteredData();
+
+
+    updatePlanningDashboardFacilityTypeKPIs(
+        data
+    );
+
+
+    renderPlanningDashboardFacilityDetails(
+        data
+    );
+
+
+    const header =
+        document.querySelector(
+            "#planningFacilityTab .facility-kpi-header"
+        );
+
+
+    if (header) {
+
+        header.textContent =
+            "FACILITY TYPE KPIs — GROUPED BY FACILITY FAMILY";
+
+    }
+
+}
+
+
+// ==========================================================
+// PLANNING — DETAILED KPI CLICK
+// ==========================================================
+
+function showStandalonePlanningFacilitiesForKPI(
+    facilityType
+) {
+
+    const data =
+        getPlanningDashboardFilteredData();
+
+
+    const facilityTypeData =
+        data.filter(row =>
+
+            text(row["Facility Type"])
+                .trim() ===
+            text(facilityType)
+                .trim()
+
+        );
+
+
+    renderPlanningDashboardFacilityDetails(
+        facilityTypeData
+    );
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+// ==========================================================
+// PLANNING — REFRESH COMPLETE DASHBOARD
+// ==========================================================
+
+function refreshPlanningFacilityDashboard() {
+
+    const data =
+        getPlanningDashboardFilteredData();
+
+
+    // ======================================================
+    // DISTRICT POPULATION
+    // ======================================================
+
+    const districtSelect =
+        document.getElementById(
+            "planningDash_districtFilter"
+        );
+
+
+    const selectedDistrict =
+        districtSelect
+            ? districtSelect.value
+            : "All";
+
+
+    let populationValue = 0;
+    let populationName = "Karnataka";
+
+
+    if (
+        selectedDistrict &&
+        selectedDistrict !== "All"
+    ) {
+
+        populationValue =
+            districtPopulation[selectedDistrict] || 0;
+
+        populationName =
+            selectedDistrict;
+
+    } else {
+
+        populationValue =
+            Object.values(districtPopulation)
+                .reduce(
+                    (sum, value) =>
+                        sum + numberValue(value),
+                    0
+                );
+
+    }
+
+
+    const populationElement =
+        document.getElementById(
+            "planningDash_districtPopulationValue"
+        );
+
+    if (populationElement) {
+
+        populationElement.textContent =
+            formatNumber(populationValue);
+
+    }
+
+
+    const populationNameElement =
+        document.getElementById(
+            "planningDash_districtPopulationName"
+        );
+
+    if (populationNameElement) {
+
+        populationNameElement.textContent =
+            populationName;
+
+    }
+
+
+    // ======================================================
+    // TOP FACILITY FAMILY COUNTS
+    // ======================================================
+
+    function facilityTypeName(row) {
+
+        return text(row["Facility Type"])
+            .trim()
+            .toLowerCase();
+
+    }
+
+
+    const scCount =
+        data.filter(row => {
+
+            const name =
+                facilityTypeName(row);
+
+            return (
+                name.includes("aam-shc") ||
+                name.includes("uaam-shc")
+            );
+
+        }).length;
+
+
+    const phcCount =
+        data.filter(row => {
+
+            const name =
+                facilityTypeName(row);
+
+            return (
+                name.includes("phc-aam") ||
+                name.includes("aam-phc") ||
+                name.includes("uphc")
+            );
+
+        }).length;
+
+
+    const chcCount =
+        data.filter(row => {
+
+            const name =
+                facilityTypeName(row);
+
+            return (
+                name.includes("chc") ||
+                name.includes("uchc")
+            );
+
+        }).length;
+
+
+    const sdhCount =
+    data.filter(row =>
+
+        text(row["Format Type"])
+            .trim()
+            .toLowerCase() === "sdh format"
+
+    ).length;
+
+
+const dhCount =
+    data.filter(row =>
+
+        text(row["Format Type"])
+            .trim()
+            .toLowerCase() === "dh format"
+
+    ).length;
+
+
+    const mcCount =
+        data.filter(row =>
+            facilityTypeName(row)
+                .includes("mc/mch")
+        ).length;
+
+
+    const topValues = {
+
+        planningDash_districtTotalFacilities:
+            data.length,
+
+        planningDash_districtSC:
+            scCount,
+
+        planningDash_districtPHC:
+            phcCount,
+
+        planningDash_districtCHC:
+            chcCount,
+
+        planningDash_districtSDH:
+            sdhCount,
+
+        planningDash_districtDH:
+            dhCount,
+
+        planningDash_districtMC:
+            mcCount
+
+    };
+
+
+    Object.entries(topValues)
+        .forEach(([id, value]) => {
+
+            const element =
+                document.getElementById(id);
+
+            if (element) {
+
+                element.textContent =
+                    formatNumber(value);
+
+            }
+
+        });
+
+
+    // ======================================================
+// KEEP SELECTED FAMILY ACTIVE DURING FILTER CHANGES
+// ======================================================
+
+updatePlanningDashboardFacilityTypeKPIs(
+    data
+);
+
+
+const planningDisplayData =
+    getPlanningFamilyData(
+        data,
+        selectedPlanningFacilityFamily
+    );
+
+
+renderPlanningDashboardFacilityDetails(
+    planningDisplayData
+);
+
+}
+// ==========================================================
+// PLANNING — DETAILED FACILITY TYPE KPIs
+// ==========================================================
+
+function updatePlanningDashboardFacilityTypeKPIs(data) {
+
+    const container =
+        document.getElementById(
+            "planningDash_facilityTypeKPIs"
+        );
+
+    if (!container) return;
+
+
+    container.innerHTML = "";
+
+
+    let planningFacilityTypes = [
+
+        "AAM-SHC (R)",
+        "Nonfunctional as AAM-SHC",
+        "UAAM-SHC",
+
+        "PHC-AAM (R)",
+        "24X7 AAM-PHC (R)",
+        "Non-functional as AAM-PHC",
+        "24X7 PHC Non functional as AAM",
+        "UPHC-AAM",
+        "24X7 UPHC-AAM",
+
+        "SDH",
+
+        "DH 100-199 Bedded",
+        "DH 200-299 Bedded",
+        "DH 300-399 Bedded",
+        "DH 400-499 Bedded",
+        "DH more than 499 Bedded",
+
+        "FRU CHC",
+        "Non-FRU CHC",
+        "UCHC-FRU",
+
+        "ESI Dispensaries/Hospitals",
+        "Railways Dispensaries/Hospitals",
+        "CGHS Dispensaries/Hospitals",
+        "Ayush Dispensaries/Hospitals",
+
+        "Other Primary Care Facility",
+        "Other Tertiary Care Facility",
+
+        "State-owned MC/MCH",
+        "Other MC/MCH",
+        "ESI MC/MCH",
+        "Ayush MC/MCH",
+        "Associated (part) Hospital with MC/MCH",
+
+        "CRPF 50 Bedded CH"
+
+    ];
+    // ------------------------------------------------------
+// SHOW ONLY KPI CARDS FOR SELECTED TOP FAMILY
+// ------------------------------------------------------
+
+if (
+    selectedPlanningFacilityFamily !== "ALL"
+) {
+
+    planningFacilityTypes =
+        planningFacilityTypes.filter(
+            facilityType => {
+
+                const name =
+                    facilityType
+                        .trim()
+                        .toLowerCase();
+
+
+                if (
+                    selectedPlanningFacilityFamily ===
+                    "SC"
+                ) {
+
+                    return (
+                        name.includes("aam-shc") ||
+                        name.includes("uaam-shc")
+                    );
+
+                }
+
+
+                if (
+                    selectedPlanningFacilityFamily ===
+                    "PHC"
+                ) {
+
+                    return (
+                        name.includes("phc-aam") ||
+                        name.includes("aam-phc") ||
+                        name.includes("uphc")
+                    );
+
+                }
+
+
+                if (
+                    selectedPlanningFacilityFamily ===
+                    "CHC"
+                ) {
+
+                    return (
+                        name.includes("chc") ||
+                        name.includes("uchc")
+                    );
+
+                }
+
+
+                if (
+                    selectedPlanningFacilityFamily ===
+                    "SDH"
+                ) {
+
+                    return name === "sdh";
+
+                }
+
+
+                if (
+                    selectedPlanningFacilityFamily ===
+                    "DH"
+                ) {
+
+                    return name.startsWith(
+                        "dh "
+                    );
+
+                }
+
+
+                if (
+                    selectedPlanningFacilityFamily ===
+                    "MC"
+                ) {
+
+                    return (
+                        name.includes("mc/mch") ||
+                        name.includes(
+                            "associated (part) hospital"
+                        )
+                    );
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+}
+
+
+    function getFamilyClass(facilityType) {
+
+        const name =
+            facilityType.toLowerCase();
+
+
+        if (
+            name.includes("aam-shc") ||
+            name.includes("uaam-shc")
+        ) {
+            return "family-shc";
+        }
+
+
+        if (
+            name.includes("phc") ||
+            name.includes("uphc")
+        ) {
+            return "family-phc";
+        }
+
+
+        if (
+            name === "sdh" ||
+            name.startsWith("dh ")
+        ) {
+            return "family-hospital";
+        }
+
+
+        if (
+            name.includes("chc") ||
+            name.includes("50 bedded ch")
+        ) {
+            return "family-chc";
+        }
+
+
+        if (
+            name.includes("mc/mch") ||
+            name.includes(
+                "associated (part) hospital"
+            )
+        ) {
+            return "family-mch";
+        }
+
+
+        if (
+            name.includes("dispensaries") ||
+            name.includes("ayush")
+        ) {
+            return "family-dispensary";
+        }
+
+
+        if (name.includes("primary care")) {
+            return "family-primary";
+        }
+
+
+        if (name.includes("tertiary care")) {
+            return "family-tertiary";
+        }
+
+
+        return "family-other";
+
+    }
+
+
+    planningFacilityTypes.forEach(
+        facilityType => {
+
+            const count =
+                data.filter(row =>
+                    text(row["Facility Type"]).trim() ===
+                    facilityType
+                ).length;
+
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "facility-kpi-card " +
+                getFamilyClass(facilityType);
+
+
+            card.innerHTML = `
+    <div class="facility-kpi-name">
+        ${facilityType}
+    </div>
+
+    <div class="facility-kpi-value">
+        ${formatNumber(count)}
+    </div>
+`;
+
+
+card.style.cursor =
+    "pointer";
+
+
+card.onclick =
+    function () {
+
+        showStandalonePlanningFacilitiesForKPI(
+            facilityType
+        );
+
+    };
+
+
+container.appendChild(card);
+
+        }
+    );
+
+}
+// ==========================================================
+// PLANNING — FACILITY DETAILS
+// ==========================================================
+
+function renderPlanningDashboardFacilityDetails(data) {
+
+    const searchBox =
+        document.getElementById(
+            "planningDash_facilitySearch"
+        );
+
+    const tableBody =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    const rowNote =
+        document.getElementById(
+            "planningDash_facilityRowNote"
+        );
+
+
+    if (!searchBox || !tableBody) {
+        return;
+    }
+
+
+    const query =
+        text(searchBox.value)
+            .trim()
+            .toLowerCase();
+
+
+    const matchingData =
+        data.filter(row => {
+
+            if (!query) {
+                return true;
+            }
+
+
+            return [
+
+                row["District Name"],
+                row["Subdistrict Name"],
+                row["Healthblock Name"],
+                row["Format Type"],
+                row["Facility Type"],
+                row["Facility Name"],
+                row["Ownership"],
+                row["Rural/Urban"],
+                row["NIN"],
+                row["HFR ID"]
+
+            ].some(value =>
+
+                text(value)
+                    .toLowerCase()
+                    .includes(query)
+
+            );
+
+        });
+
+
+    const displayData =
+        matchingData.slice(0, 500);
+
+
+    tableBody.innerHTML = "";
+
+
+    displayData.forEach(row => {
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>${text(row["District Name"])}</td>
+
+            <td>${text(row["Subdistrict Name"])}</td>
+
+            <td>${text(row["Format Type"])}</td>
+
+            <td>${text(row["Facility Type"])}</td>
+
+            <td>${text(row["Facility Name"])}</td>
+
+            <td>${text(row["Ownership"])}</td>
+
+            <td>${text(row["Rural/Urban"])}</td>
+
+            <td class="number">
+                ${formatNumber(
+                    numberValue(row["No. of Beds"])
+                )}
+            </td>
+
+            <td>
+                ${text(row["Building Status"])}
+            </td>
+
+            <td>${text(row["NIN"])}</td>
+
+            <td>${text(row["HFR ID"])}</td>
+
+        `;
+
+
+        tableBody.appendChild(tr);
+
+    });
+
+
+    if (rowNote) {
+
+        rowNote.textContent =
+            "Showing " +
+            formatNumber(displayData.length) +
+            " of " +
+            formatNumber(matchingData.length) +
+            " matching facilities" +
+            (
+                matchingData.length > 500
+                    ? " (first 500 shown for performance)"
+                    : ""
+            );
+
+    }
+
+}
+    
 // ==========================================================
 // CREATE TESTING DASHBOARD REPLICA
 // ==========================================================
@@ -4001,6 +5580,7 @@ const FACILITY_API_URL = "https://script.google.com/macros/s/AKfycbz-CxMJizw-kRP
 
 let facilityData = [];
 let planningData = [];
+let planningFacilityData = [];
 
 async function loadFacilityData() {
 const facilityLoadStart = performance.now();
@@ -4025,9 +5605,21 @@ const facilityLoadStart = performance.now();
             );
         }
 
-        facilityData = result.data || [];
-planningData = result.planningData || [];
-districtPopulation = result.districtPopulation || {};
+        facilityData =
+    result.data || [];
+
+planningData =
+    result.planningData || [];
+
+planningFacilityData =
+    result.planningFacilityData || [];
+
+districtPopulation =
+    result.districtPopulation || {};
+    console.log(
+    "Planning Facility records loaded:",
+    planningFacilityData.length
+);
 
 console.log(
     "HMIS records:",
@@ -4086,7 +5678,15 @@ setupTestingFilterEvents();
 
 // Update original Facility Dashboard
 refreshDashboard();
+
+// Update Facility Reconciliation
 refreshTestingDashboard();
+
+// Build Planning Facility Dashboard filters
+populatePlanningDashboardFilters();
+
+// Update Planning Facility Dashboard
+refreshPlanningFacilityDashboard();
 const facilityLoadEnd = performance.now();
 
 console.log(
@@ -10407,7 +12007,14 @@ document
 // INITIAL LOAD
 // ==========================================================
 
-// Create replica for Testing tab
+// Create Planning Facility Dashboard
+createPlanningFacilityDashboard();
+
+// Connect Planning Facility Dashboard filters
+setupPlanningDashboardFilterEvents();
+
+
+// Create replica for Facility Reconciliation tab
 createTestingDashboardReplica();
 
 // ==========================================================
