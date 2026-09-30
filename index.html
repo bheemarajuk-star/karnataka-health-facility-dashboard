@@ -1088,7 +1088,7 @@ button {
 
 .district-kpi-row {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(10, minmax(0, 1fr));
     gap: 14px;
     margin-bottom: 16px;
     align-items: stretch;
@@ -1144,9 +1144,10 @@ button {
 }
 
 .population-kpi-value {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 800;
     margin-top: 3px;
+    white-space: nowrap;
 }
 
 .population-kpi-district {
@@ -2174,6 +2175,53 @@ z-index: 10;
     }
 
 }
+/* ======================================================
+   MCH — RUNNING CYAN BORDER
+   ====================================================== */
+
+.mch-running-border {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.mch-running-border::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            transparent 300deg,
+            #00eaff 330deg,
+            #00eaff 350deg,
+            transparent 360deg
+        );
+
+    animation: mchBorderRun 2.2s linear infinite;
+    z-index: -2;
+}
+
+.mch-running-border::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: inherit;
+    border-radius: inherit;
+    z-index: -1;
+}
+
+@keyframes mchBorderRun {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
 /* =========================================================
    PLANNING KPI — MATCH HMIS APPEARANCE
    ========================================================= */
@@ -2434,7 +2482,41 @@ z-index: 10;
     }
 
 }
+/* ======================================================
+   FACILITY DETAILS — EXPORT BUTTON
+   ====================================================== */
 
+.facility-details-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.facility-details-title-row .panel-title {
+    margin-bottom: 0;
+}
+
+.facility-export-btn {
+    border: none;
+    background: #1769aa;
+    color: white;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.facility-export-btn:hover {
+    background: #0d4f86;
+}
+
+.facility-export-btn:active {
+    transform: translateY(1px);
+}
 </style>
 
 </head>
@@ -2495,7 +2577,7 @@ z-index: 10;
         </div>
 
         <div>
-            25-09-2026 02:54 PM
+            30-09-2026 05:20 PM
         </div>
 
         <div class="meta-source">
@@ -2930,9 +3012,22 @@ z-index: 10;
 
 <div class="panel facility-details-panel">
 
+    <div class="facility-details-title-row">
+
     <div class="panel-title">
         Facility Details
     </div>
+
+    <button
+        type="button"
+        id="facilityExportBtn"
+        class="facility-export-btn"
+        onclick="exportCurrentFacilityDetails()"
+    >
+        ⬇ Export CSV
+    </button>
+
+</div>
 
     <input
         type="text"
@@ -3481,7 +3576,65 @@ function createPlanningFacilityDashboard() {
             "Planning Facility Dashboard Filters";
 
     }
+// ------------------------------------------------------
+// ADD AAK + MCH TO PLANNING MAIN KPI ROW ONLY
+// ------------------------------------------------------
 
+const planningMainKpiRow =
+    target.querySelector(".district-kpi-row");
+
+if (planningMainKpiRow) {
+
+    const aakCard =
+        document.createElement("div");
+
+    aakCard.className =
+        "district-summary-kpi";
+
+    aakCard.innerHTML = `
+        <div class="district-summary-label">
+            AAK
+        </div>
+
+        <div
+            id="planningDash_districtAAK"
+            class="district-summary-value">
+            0
+        </div>
+
+        <div class="district-summary-small">
+            Ayushman Arogya Kendras
+        </div>
+    `;
+
+    planningMainKpiRow.appendChild(aakCard);
+
+
+    const mchCard =
+        document.createElement("div");
+
+    mchCard.className =
+        "district-summary-kpi";
+
+    mchCard.innerHTML = `
+        <div class="district-summary-label">
+            MCH
+        </div>
+
+        <div
+            id="planningDash_districtMCH"
+            class="district-summary-value">
+            0
+        </div>
+
+        <div class="district-summary-small">
+            MCH Wings
+        </div>
+    `;
+
+    planningMainKpiRow.appendChild(mchCard);
+
+}
 
     buildPlanningFacilityZeroKPIs();
 
@@ -3549,6 +3702,31 @@ Object.entries(planningTopKPIs)
             };
 
     });
+    // ------------------------------------------------------
+// CONNECT AAK TOP KPI CARD
+// ------------------------------------------------------
+
+const planningAAKValue =
+    document.getElementById(
+        "planningDash_districtAAK"
+    );
+
+if (planningAAKValue) {
+
+    const aakCard =
+        planningAAKValue.closest(
+            ".district-summary-kpi"
+        );
+
+    if (aakCard) {
+
+        aakCard.style.cursor = "pointer";
+
+        aakCard.onclick =
+            showPlanningAAKKPIs;
+
+    }
+}
 
 
 // TOTAL FACILITIES = SHOW EVERYTHING
@@ -3578,7 +3756,31 @@ if (planningTotalValue) {
     }
 
 }
+// ------------------------------------------------------
+// CONNECT MCH TOP KPI CARD
+// ------------------------------------------------------
 
+const planningMCHValue =
+    document.getElementById(
+        "planningDash_districtMCH"
+    );
+
+if (planningMCHValue) {
+
+    const mchCard =
+        planningMCHValue.closest(
+            ".district-summary-kpi"
+        );
+
+    if (mchCard) {
+
+        mchCard.style.cursor = "pointer";
+
+        mchCard.onclick =
+            showPlanningMCHKPIs;
+
+    }
+}
 // ------------------------------------------------------
 // CONNECT FACILITY SEARCH
 // ------------------------------------------------------
@@ -4052,7 +4254,171 @@ document
     }
 
 }
+// ==========================================================
+// PLANNING — SHOW AAK FACILITY TYPE KPIs
+// ==========================================================
 
+function showPlanningAAKKPIs() {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+    const selectedHealthBlock =
+        document.getElementById(
+            "planningDash_healthblockFilter"
+        )?.value || "All";
+
+
+    // Filter AAK data using current Planning geography
+const filteredAAKData =
+    aakData.filter(row => {
+
+        const districtMatch =
+            selectedDistrict === "All" ||
+            text(row["District Name"]).trim() ===
+                selectedDistrict;
+
+        const talukMatch =
+            selectedSubdistrict === "All" ||
+            text(row["Subdistrict Name"]).trim() ===
+                selectedSubdistrict;
+
+        const blockMatch =
+            selectedHealthBlock === "All" ||
+            text(row["Block_Name"]).trim() ===
+                selectedHealthBlock;
+
+        return (
+            districtMatch &&
+            talukMatch &&
+            blockMatch
+        );
+
+    });
+
+    const container =
+        document.getElementById(
+            "planningDash_facilityTypeKPIs"
+        );
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+
+    const aakTypes = [
+        "AAM-SHC",
+        "AAM-PHC",
+        "AAM-USHC",
+        "AAM-UPHC",
+        "AAM-AYUSH"
+    ];
+
+
+    aakTypes.forEach(typeName => {
+
+        const count =
+            filteredAAKData.filter(row =>
+                text(row["Facility Type"])
+                    .trim() === typeName
+            ).length;
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "facility-kpi-card family-shc";
+            card.style.cursor = "pointer";
+
+card.onclick = function () {
+
+    showPlanningAAKFacilityDetails(
+        typeName,
+        filteredAAKData
+    );
+
+};
+
+        card.innerHTML = `
+            <div class="facility-kpi-name">
+                ${typeName}
+            </div>
+
+            <div class="facility-kpi-value">
+                ${formatNumber(count)}
+            </div>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+
+    // Change heading exactly like other facility families
+    const header =
+        document.querySelector(
+            "#planningFacilityTab .facility-kpi-header"
+        );
+
+    if (header) {
+
+        header.innerHTML = `
+
+            <span>
+                AYUSHMAN AROGYA KENDRAS (AAK) — FACILITY TYPE BREAKUP
+            </span>
+
+            <button
+                type="button"
+                onclick="
+                    event.stopPropagation();
+                    showAllStandalonePlanningFacilityKPIs();
+                "
+                style="
+                    float:right;
+                    border:none;
+                    background:white;
+                    color:#174a78;
+                    font-weight:700;
+                    padding:5px 12px;
+                    border-radius:6px;
+                    cursor:pointer;
+                "
+            >
+                × Show All
+            </button>
+        `;
+    }
+
+
+    // Same highlight effect as other Planning KPI cards
+    document
+        .querySelectorAll(
+            "#planningDash_facilityTypeKPIs .facility-kpi-card"
+        )
+        .forEach(card => {
+
+            card.classList.add(
+                "family-highlight"
+            );
+
+        });
+
+
+    // Scroll to KPI section
+    container.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
 
 // ==========================================================
 // PLANNING — SHOW ALL KPI CARDS
@@ -4134,6 +4500,341 @@ function showStandalonePlanningFacilitiesForKPI(
         });
 
     }
+
+}
+// ==========================================================
+// PLANNING — SHOW AAK FACILITY DETAILS
+// ==========================================================
+
+function showPlanningAAKFacilityDetails(
+    facilityType,
+    filteredAAKData
+) {
+
+    const data =
+        filteredAAKData.filter(row =>
+
+            text(row["Facility Type"]).trim() ===
+            text(facilityType).trim()
+
+        );
+
+
+    const tableBody =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    const rowNote =
+        document.getElementById(
+            "planningDash_facilityRowNote"
+        );
+
+
+    if (!tableBody) return;
+
+
+    tableBody.innerHTML = "";
+
+
+    const displayData =
+        data.slice(0, 500);
+
+
+    displayData.forEach(row => {
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>${text(row["District Name"])}</td>
+
+            <td>${text(row["Subdistrict Name"])}</td>
+
+            <td>AAK</td>
+
+            <td>${text(row["Facility Type"])}</td>
+
+            <td>${text(row["Facility Name"])}</td>
+
+            <td>—</td>
+
+<td>—</td>
+
+<td>—</td>
+
+<td>—</td>
+
+<td>${text(row["NIN"])}</td>
+
+<td>—</td>
+        `;
+
+
+        tableBody.appendChild(tr);
+
+    });
+
+
+    if (rowNote) {
+
+        rowNote.textContent =
+            "Showing " +
+            formatNumber(displayData.length) +
+            " of " +
+            formatNumber(data.length) +
+            " " +
+            facilityType +
+            " facilities" +
+            (
+                data.length > 500
+                    ? " (first 500 shown for performance)"
+                    : ""
+            );
+
+    }
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+// ==========================================================
+// PLANNING — SHOW MCH KPI
+// ==========================================================
+
+function showPlanningMCHKPIs() {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+
+    // Filter MCH using District and Subdistrict
+    const filteredMCHData =
+        mchData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            return (
+                districtMatch &&
+                subdistrictMatch
+            );
+
+        });
+
+
+    const container =
+        document.getElementById(
+            "planningDash_facilityTypeKPIs"
+        );
+
+    if (!container) return;
+
+
+    container.innerHTML = "";
+
+
+    // ------------------------------------------------------
+    // MCH KPI CARD
+    // ------------------------------------------------------
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "facility-kpi-card family-mc";
+        card.classList.add("mch-running-border");
+
+    card.style.cursor =
+        "pointer";
+
+    card.innerHTML = `
+        <div class="facility-kpi-name">
+            MCH WINGS
+        </div>
+
+        <div class="facility-kpi-value">
+            ${formatNumber(filteredMCHData.length)}
+        </div>
+    `;
+
+
+    card.onclick =
+        function () {
+
+            showPlanningMCHFacilityDetails(
+                filteredMCHData
+            );
+
+        };
+
+
+    container.appendChild(card);
+
+
+    
+
+
+    // ------------------------------------------------------
+    // CHANGE KPI HEADING
+    // ------------------------------------------------------
+
+    const header =
+        document.querySelector(
+            "#planningFacilityTab .facility-kpi-header"
+        );
+
+
+    if (header) {
+
+        header.innerHTML = `
+
+            <span>
+                MATERNAL AND CHILD HEALTH (MCH) — FACILITY BREAKUP
+            </span>
+
+            <button
+                type="button"
+                onclick="
+                    event.stopPropagation();
+                    showAllStandalonePlanningFacilityKPIs();
+                "
+                style="
+                    float:right;
+                    border:none;
+                    background:white;
+                    color:#174a78;
+                    font-weight:700;
+                    padding:5px 12px;
+                    border-radius:6px;
+                    cursor:pointer;
+                "
+            >
+                × Show All
+            </button>
+        `;
+
+    }
+
+
+    container.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+// ==========================================================
+// PLANNING — SHOW MCH FACILITY DETAILS
+// ==========================================================
+
+function showPlanningMCHFacilityDetails(
+    filteredMCHData
+) {
+
+    const tableBody =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    const rowNote =
+        document.getElementById(
+            "planningDash_facilityRowNote"
+        );
+
+
+    if (!tableBody) return;
+
+
+    tableBody.innerHTML = "";
+
+
+    const displayData =
+        filteredMCHData.slice(0, 500);
+
+
+    displayData.forEach(row => {
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>${text(row["District Name"])}</td>
+
+            <td>${text(row["Subdistrict Name"])}</td>
+
+            <td>MCH</td>
+
+            <td>MCH Wing</td>
+
+            <td>${text(row["Facility Name"])}</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+        `;
+
+
+        tableBody.appendChild(tr);
+
+    });
+
+
+    if (rowNote) {
+
+        rowNote.textContent =
+            "Showing " +
+            formatNumber(displayData.length) +
+            " of " +
+            formatNumber(filteredMCHData.length) +
+            " MCH Wings";
+
+    }
+
+
+    tableBody.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 
 }
 // ==========================================================
@@ -4297,7 +4998,78 @@ const dhCount =
             facilityTypeName(row)
                 .includes("mc/mch")
         ).length;
+// ======================================================
+// AAK + MCH COUNTS
+// Separate source sheets
+// ======================================================
 
+const selectedSubdistrict =
+    document.getElementById(
+        "planningDash_subdistrictFilter"
+    )?.value || "All";
+
+const selectedHealthBlock =
+    document.getElementById(
+        "planningDash_healthblockFilter"
+    )?.value || "All";
+
+
+// ---------------- AAK ----------------
+
+const filteredAAKData =
+    aakData.filter(row => {
+
+        const districtMatch =
+            selectedDistrict === "All" ||
+            text(row["District Name"]).trim() ===
+                selectedDistrict;
+
+        const talukMatch =
+            selectedSubdistrict === "All" ||
+            text(row["Subdistrict Name"]).trim() ===
+                selectedSubdistrict;
+
+        const blockMatch =
+            selectedHealthBlock === "All" ||
+            text(row["Block_Name"]).trim() ===
+                selectedHealthBlock;
+
+        return (
+            districtMatch &&
+            talukMatch &&
+            blockMatch
+        );
+
+    });
+
+const aakCount =
+    filteredAAKData.length;
+
+
+// ---------------- MCH ----------------
+
+const filteredMCHData =
+    mchData.filter(row => {
+
+        const districtMatch =
+            selectedDistrict === "All" ||
+            text(row["District"]).trim() ===
+                selectedDistrict;
+
+        const talukMatch =
+            selectedSubdistrict === "All" ||
+            text(row["Taluka"]).trim() ===
+                selectedSubdistrict;
+
+        return (
+            districtMatch &&
+            talukMatch
+        );
+
+    });
+
+const mchCount =
+    filteredMCHData.length;
 
     const topValues = {
 
@@ -4320,7 +5092,13 @@ const dhCount =
             dhCount,
 
         planningDash_districtMC:
-            mcCount
+    mcCount,
+
+planningDash_districtAAK:
+    aakCount,
+
+planningDash_districtMCH:
+    mchCount
 
     };
 
@@ -5582,6 +6360,10 @@ let facilityData = [];
 let planningData = [];
 let planningFacilityData = [];
 
+// Separate programme datasets
+let aakData = [];
+let mchData = [];
+
 async function loadFacilityData() {
 const facilityLoadStart = performance.now();
 
@@ -5614,11 +6396,28 @@ planningData =
 planningFacilityData =
     result.planningFacilityData || [];
 
+// Ayushman Arogya Kendra data
+aakData =
+    result.aakData || [];
+
+// MCH Wing data
+mchData =
+    result.mchData || [];
+
 districtPopulation =
     result.districtPopulation || {};
     console.log(
     "Planning Facility records loaded:",
     planningFacilityData.length
+);
+console.log(
+    "AAK records loaded:",
+    aakData.length
+);
+
+console.log(
+    "MCH records loaded:",
+    mchData.length
 );
 
 console.log(
@@ -12044,7 +12843,167 @@ Promise.all([
     );
 
 });
+// ==========================================================
+// EXPORT CURRENT FACILITY DETAILS TABLE TO CSV
+// ==========================================================
 
+function exportCurrentFacilityDetails() {
+
+    const planningTab =
+        document.getElementById("planningFacilityTab");
+
+    const planningVisible =
+        planningTab &&
+        planningTab.style.display !== "none";
+
+
+    const tableBodyId =
+        planningVisible
+            ? "planningDash_facilityDetailsBody"
+            : "facilityDetailsBody";
+
+
+    const tableBody =
+        document.getElementById(tableBodyId);
+
+
+    if (!tableBody) {
+        alert("Facility Details table not found.");
+        return;
+    }
+
+
+    const table =
+        tableBody.closest("table");
+
+
+    if (!table) {
+        alert("Facility Details table not found.");
+        return;
+    }
+
+
+    const rows =
+        Array.from(
+            table.querySelectorAll("tr")
+        );
+
+
+    if (rows.length <= 1) {
+        alert("No facility data available to export.");
+        return;
+    }
+
+
+    const csvRows = [];
+
+
+    rows.forEach(row => {
+
+        const cells =
+            Array.from(
+                row.querySelectorAll("th, td")
+            );
+
+
+        const values =
+            cells.map(cell => {
+
+                let value =
+    cell.innerText
+        .replaceAll(
+            String.fromCharCode(10),
+            " "
+        )
+        .replaceAll(
+            String.fromCharCode(13),
+            " "
+        )
+        .trim();
+
+                // Escape double quotes for CSV
+                value =
+                    value.replace(/"/g, '""');
+
+
+                return `"${value}"`;
+
+            });
+
+
+        csvRows.push(
+            values.join(",")
+        );
+
+    });
+
+
+    const csvContent =
+        "﻿" +
+        csvRows.join(
+    String.fromCharCode(13, 10)
+);
+
+
+    const blob =
+        new Blob(
+            [csvContent],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    const now =
+        new Date();
+
+
+    const dateText =
+        now.getFullYear() +
+        "-" +
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0") +
+        "-" +
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+
+    const fileName =
+        planningVisible
+            ? "Planning_Facility_Details_" +
+              dateText +
+              ".csv"
+            : "HMIS_Facility_Details_" +
+              dateText +
+              ".csv";
+
+
+    link.href = url;
+
+    link.download =
+        fileName;
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+}
 </script>
 
 
