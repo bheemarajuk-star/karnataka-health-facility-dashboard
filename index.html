@@ -1088,7 +1088,7 @@ button {
 
 .district-kpi-row {
     display: grid;
-    grid-template-columns: repeat(10, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
     gap: 14px;
     margin-bottom: 16px;
     align-items: stretch;
@@ -1633,72 +1633,101 @@ tr:hover td {
     position: relative;
 }
 /* =========================================================
-   SELECTED FAMILY KPI — BRIGHT MOVING BORDER LIGHT
+   SELECTED FAMILY KPI — RUNNING BORDER LIGHT
    ========================================================= */
 
 .facility-kpi-card.family-highlight {
     position: relative;
-    z-index: 1;
     overflow: hidden;
+    isolation: isolate;
     margin: 2px;
     border-radius: 6px;
 }
 
-/* Bright moving light */
+
+/* Running light only around the border */
 .facility-kpi-card.family-highlight::before {
+
     content: "";
+
     position: absolute;
+    inset: 0;
 
-    width: 160%;
-    height: 300%;
+    border-radius: inherit;
 
-    left: -30%;
-    top: -100%;
+    padding: 2px;
 
-    z-index: -2;
+    background:
+        conic-gradient(
+            from var(--kpi-border-angle),
 
-    background: conic-gradient(
-        transparent 0deg,
-        transparent 240deg,
-        #00bfff 270deg,
-        #ffffff 295deg,
-        #00e5ff 320deg,
-        #1976d2 345deg,
-        transparent 360deg
-    );
+            transparent 0deg,
+            transparent 285deg,
 
-    animation: kpiBorderLight 1.8s linear infinite;
+            #00bfff 305deg,
+            #00e5ff 320deg,
+            #ffffff 330deg,
+            #00e5ff 340deg,
+            #1976d2 350deg,
 
-    filter:
-        brightness(1.7)
-        drop-shadow(0 0 5px #00bfff)
-        drop-shadow(0 0 10px #42a5f5);
+            transparent 360deg
+        );
+
+
+    /* Show gradient ONLY in border area */
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+
+    mask-composite: exclude;
+
+
+    pointer-events: none;
+
+    z-index: 2;
+
+    animation:
+        kpiRunningBorder 1.8s linear infinite;
+
 }
 
-/* Keep original KPI card colour inside */
-.facility-kpi-card.family-highlight::after {
-    content: "";
-    position: absolute;
 
-    inset: 3px;
+/* Keep KPI text above border animation */
+.facility-kpi-card.family-highlight
+.facility-kpi-name,
 
-    z-index: -1;
+.facility-kpi-card.family-highlight
+.facility-kpi-value {
 
-    background: inherit;
+    position: relative;
+    z-index: 3;
 
-    border-radius: 4px;
 }
 
-/* Rotate light around the card */
-@keyframes kpiBorderLight {
+
+@property --kpi-border-angle {
+
+    syntax: "<angle>";
+
+    initial-value: 0deg;
+
+    inherits: false;
+
+}
+
+
+@keyframes kpiRunningBorder {
 
     from {
-        transform: rotate(0deg);
+        --kpi-border-angle: 0deg;
     }
 
     to {
-        transform: rotate(360deg);
+        --kpi-border-angle: 360deg;
     }
+
 }
 
 .facility-kpi-card:hover {
@@ -2577,7 +2606,7 @@ z-index: 10;
         </div>
 
         <div>
-            30-09-2026 05:20 PM
+            01-10-2026 08:20 AM
         </div>
 
         <div class="meta-source">
@@ -4070,66 +4099,50 @@ function getPlanningFamilyData(data, family) {
 
     return data.filter(row => {
 
-        const facilityType =
-            text(row["Facility Type"])
-                .trim()
-                .toLowerCase();
-
         const formatType =
             text(row["Format Type"])
                 .trim()
-                .toLowerCase();
+                .toUpperCase();
 
 
         if (family === "SC") {
-
-            return (
-                facilityType.includes("aam-shc") ||
-                facilityType.includes("uaam-shc")
-            );
-
+            return formatType === "SC";
         }
 
 
         if (family === "PHC") {
-
-            return formatType === "phc format";
-
+            return formatType === "PHC";
         }
 
 
         if (family === "CHC") {
-
             return (
-                formatType === "chc format" ||
-                formatType === "uchc format"
+                formatType === "CHC" ||
+                formatType === "UCHC"
             );
-
         }
 
 
         if (family === "SDH") {
-
-            return formatType === "sdh format";
-
+            return formatType === "SDH";
         }
 
 
         if (family === "DH") {
-
-            return formatType === "dh format";
-
+            return formatType === "DH";
         }
 
 
         if (family === "MC") {
-
-            return facilityType.includes("mc/mch");
-
+            return (
+                formatType === "MC" ||
+                formatType === "MCH" ||
+                formatType === "MC/MCH"
+            );
         }
 
 
-        return true;
+        return false;
 
     });
 
@@ -4921,83 +4934,61 @@ function refreshPlanningFacilityDashboard() {
     // TOP FACILITY FAMILY COUNTS
     // ======================================================
 
-    function facilityTypeName(row) {
+   function planningFormatType(row) {
 
-        return text(row["Facility Type"])
-            .trim()
-            .toLowerCase();
-
-    }
-
-
-    const scCount =
-        data.filter(row => {
-
-            const name =
-                facilityTypeName(row);
-
-            return (
-                name.includes("aam-shc") ||
-                name.includes("uaam-shc")
-            );
-
-        }).length;
+    return text(row["Format Type"])
+        .trim()
+        .toUpperCase();
+}
 
 
-    const phcCount =
-        data.filter(row => {
-
-            const name =
-                facilityTypeName(row);
-
-            return (
-                name.includes("phc-aam") ||
-                name.includes("aam-phc") ||
-                name.includes("uphc")
-            );
-
-        }).length;
-
-
-    const chcCount =
-        data.filter(row => {
-
-            const name =
-                facilityTypeName(row);
-
-            return (
-                name.includes("chc") ||
-                name.includes("uchc")
-            );
-
-        }).length;
-
-
-    const sdhCount =
+// SC
+const scCount =
     data.filter(row =>
-
-        text(row["Format Type"])
-            .trim()
-            .toLowerCase() === "sdh format"
-
+        planningFormatType(row) === "SC"
     ).length;
 
 
+// PHC
+const phcCount =
+    data.filter(row =>
+        planningFormatType(row) === "PHC"
+    ).length;
+
+
+// CHC = CHC + UCHC
+const chcCount =
+    data.filter(row => {
+
+        const formatType =
+            planningFormatType(row);
+
+        return (
+            formatType === "CHC" ||
+            formatType === "UCHC"
+        );
+
+    }).length;
+
+
+// SDH
+const sdhCount =
+    data.filter(row =>
+        planningFormatType(row) === "SDH"
+    ).length;
+
+
+// DH
 const dhCount =
     data.filter(row =>
-
-        text(row["Format Type"])
-            .trim()
-            .toLowerCase() === "dh format"
-
+        planningFormatType(row) === "DH"
     ).length;
 
 
-    const mcCount =
-        data.filter(row =>
-            facilityTypeName(row)
-                .includes("mc/mch")
-        ).length;
+// MC
+// Planning facility sheet currently has no MC Format Type.
+// Keep as 0 unless MC is later added to Planning facility.
+const mcCount = 0;
 // ======================================================
 // AAK + MCH COUNTS
 // Separate source sheets
@@ -5143,8 +5134,7 @@ renderPlanningDashboardFacilityDetails(
 // ==========================================================
 // PLANNING — DETAILED FACILITY TYPE KPIs
 // ==========================================================
-
-function updatePlanningDashboardFacilityTypeKPIs(data) {
+   function updatePlanningDashboardFacilityTypeKPIs(data) {
 
     const container =
         document.getElementById(
@@ -5157,267 +5147,299 @@ function updatePlanningDashboardFacilityTypeKPIs(data) {
     container.innerHTML = "";
 
 
-    let planningFacilityTypes = [
+    // ======================================================
+    // SELECT DATA FOR CURRENT FAMILY
+    // ======================================================
 
-        "AAM-SHC (R)",
-        "Nonfunctional as AAM-SHC",
-        "UAAM-SHC",
-
-        "PHC-AAM (R)",
-        "24X7 AAM-PHC (R)",
-        "Non-functional as AAM-PHC",
-        "24X7 PHC Non functional as AAM",
-        "UPHC-AAM",
-        "24X7 UPHC-AAM",
-
-        "SDH",
-
-        "DH 100-199 Bedded",
-        "DH 200-299 Bedded",
-        "DH 300-399 Bedded",
-        "DH 400-499 Bedded",
-        "DH more than 499 Bedded",
-
-        "FRU CHC",
-        "Non-FRU CHC",
-        "UCHC-FRU",
-
-        "ESI Dispensaries/Hospitals",
-        "Railways Dispensaries/Hospitals",
-        "CGHS Dispensaries/Hospitals",
-        "Ayush Dispensaries/Hospitals",
-
-        "Other Primary Care Facility",
-        "Other Tertiary Care Facility",
-
-        "State-owned MC/MCH",
-        "Other MC/MCH",
-        "ESI MC/MCH",
-        "Ayush MC/MCH",
-        "Associated (part) Hospital with MC/MCH",
-
-        "CRPF 50 Bedded CH"
-
-    ];
-    // ------------------------------------------------------
-// SHOW ONLY KPI CARDS FOR SELECTED TOP FAMILY
-// ------------------------------------------------------
-
-if (
-    selectedPlanningFacilityFamily !== "ALL"
-) {
-
-    planningFacilityTypes =
-        planningFacilityTypes.filter(
-            facilityType => {
-
-                const name =
-                    facilityType
-                        .trim()
-                        .toLowerCase();
+    const sourceData =
+        selectedPlanningFacilityFamily === "ALL"
+            ? data
+            : getPlanningFamilyData(
+                data,
+                selectedPlanningFacilityFamily
+            );
 
 
-                if (
-                    selectedPlanningFacilityFamily ===
-                    "SC"
-                ) {
+    // ======================================================
+    // COUNT EVERY FACILITY TYPE FOUND IN THE SOURCE DATA
+    // ======================================================
 
-                    return (
-                        name.includes("aam-shc") ||
-                        name.includes("uaam-shc")
-                    );
-
-                }
+    const counts = {};
 
 
-                if (
-                    selectedPlanningFacilityFamily ===
-                    "PHC"
-                ) {
+    sourceData.forEach(row => {
 
-                    return (
-                        name.includes("phc-aam") ||
-                        name.includes("aam-phc") ||
-                        name.includes("uphc")
-                    );
+        const facilityType =
+            text(row["Facility Type"])
+                .trim();
 
-                }
+        if (!facilityType) {
+            return;
+        }
 
 
-                if (
-                    selectedPlanningFacilityFamily ===
-                    "CHC"
-                ) {
+        counts[facilityType] =
+            (counts[facilityType] || 0) + 1;
 
-                    return (
-                        name.includes("chc") ||
-                        name.includes("uchc")
-                    );
-
-                }
+    });
 
 
-                if (
-                    selectedPlanningFacilityFamily ===
-                    "SDH"
-                ) {
+    // ======================================================
+// ARRANGE FACILITY TYPES BY FORMAT TYPE
+// SC → PHC → CHC/UCHC → SDH → DH → OTHER
+// ======================================================
 
-                    return name === "sdh";
-
-                }
-
-
-                if (
-                    selectedPlanningFacilityFamily ===
-                    "DH"
-                ) {
-
-                    return name.startsWith(
-                        "dh "
-                    );
-
-                }
+const formatOrder = {
+    "SC": 1,
+    "PHC": 2,
+    "CHC": 3,
+    "UCHC": 3,
+    "SDH": 4,
+    "DH": 5,
+    "MC": 6,
+    "MCH": 6,
+    "MC/MCH": 6
+};
 
 
-                if (
-                    selectedPlanningFacilityFamily ===
-                    "MC"
-                ) {
-
-                    return (
-                        name.includes("mc/mch") ||
-                        name.includes(
-                            "associated (part) hospital"
-                        )
-                    );
-
-                }
+const facilityTypeFormatMap = {};
 
 
-                return true;
+sourceData.forEach(row => {
 
+    const facilityType =
+        text(row["Facility Type"]).trim();
+
+    const formatType =
+        text(row["Format Type"])
+            .trim()
+            .toUpperCase();
+
+    if (
+        facilityType &&
+        !facilityTypeFormatMap[facilityType]
+    ) {
+        facilityTypeFormatMap[facilityType] =
+            formatType;
+    }
+
+});
+
+
+const facilityTypes =
+    Object.keys(counts)
+        .sort((a, b) => {
+
+            const formatA =
+                facilityTypeFormatMap[a] || "";
+
+            const formatB =
+                facilityTypeFormatMap[b] || "";
+
+
+            const orderA =
+                formatOrder[formatA] ?? 99;
+
+            const orderB =
+                formatOrder[formatB] ?? 99;
+
+
+            // First sort by Format Type family
+            if (orderA !== orderB) {
+                return orderA - orderB;
             }
-        );
-
-}
 
 
-    function getFamilyClass(facilityType) {
+            // Then alphabetically inside the family
+            return a.localeCompare(
+                b,
+                undefined,
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
+            );
 
-        const name =
-            facilityType.toLowerCase();
+        });
 
+
+    // ======================================================
+    // FAMILY COLOUR
+    // Format Type decides family — not Facility Type name
+    // ======================================================
+
+    function getPlanningFamilyClass() {
 
         if (
-            name.includes("aam-shc") ||
-            name.includes("uaam-shc")
+            selectedPlanningFacilityFamily === "SC"
         ) {
             return "family-shc";
         }
 
 
         if (
-            name.includes("phc") ||
-            name.includes("uphc")
+            selectedPlanningFacilityFamily === "PHC"
         ) {
             return "family-phc";
         }
 
 
         if (
-            name === "sdh" ||
-            name.startsWith("dh ")
-        ) {
-            return "family-hospital";
-        }
-
-
-        if (
-            name.includes("chc") ||
-            name.includes("50 bedded ch")
+            selectedPlanningFacilityFamily === "CHC"
         ) {
             return "family-chc";
         }
 
 
         if (
-            name.includes("mc/mch") ||
-            name.includes(
-                "associated (part) hospital"
-            )
+            selectedPlanningFacilityFamily === "SDH" ||
+            selectedPlanningFacilityFamily === "DH"
+        ) {
+            return "family-hospital";
+        }
+
+
+        if (
+            selectedPlanningFacilityFamily === "MC"
         ) {
             return "family-mch";
         }
 
 
-        if (
-            name.includes("dispensaries") ||
-            name.includes("ayush")
-        ) {
-            return "family-dispensary";
-        }
-
-
-        if (name.includes("primary care")) {
-            return "family-primary";
-        }
-
-
-        if (name.includes("tertiary care")) {
-            return "family-tertiary";
-        }
-
-
         return "family-other";
-
     }
 
 
-    planningFacilityTypes.forEach(
+    // ======================================================
+    // CREATE KPI CARDS
+    // ======================================================
+
+    facilityTypes.forEach(
         facilityType => {
 
             const count =
-                data.filter(row =>
-                    text(row["Facility Type"]).trim() ===
-                    facilityType
-                ).length;
+                counts[facilityType] || 0;
+
+
+            let familyClass =
+                getPlanningFamilyClass();
+
+
+            // ------------------------------------------------
+            // SHOW ALL MODE:
+            // determine colour from the row's actual Format Type
+            // ------------------------------------------------
+
+            if (
+                selectedPlanningFacilityFamily === "ALL"
+            ) {
+
+                const matchingRow =
+                    sourceData.find(row =>
+                        text(
+                            row["Facility Type"]
+                        ).trim() ===
+                        facilityType
+                    );
+
+
+                const formatType =
+                    matchingRow
+                        ? text(
+                            matchingRow["Format Type"]
+                        )
+                            .trim()
+                            .toUpperCase()
+                        : "";
+
+
+                if (formatType === "SC") {
+                    familyClass = "family-shc";
+                }
+
+                else if (formatType === "PHC") {
+                    familyClass = "family-phc";
+                }
+
+                else if (
+                    formatType === "CHC" ||
+                    formatType === "UCHC"
+                ) {
+                    familyClass = "family-chc";
+                }
+
+                else if (
+                    formatType === "SDH" ||
+                    formatType === "DH"
+                ) {
+                    familyClass = "family-hospital";
+                }
+
+                else if (
+                    formatType === "MC" ||
+                    formatType === "MCH" ||
+                    formatType === "MC/MCH"
+                ) {
+                    familyClass = "family-mch";
+                }
+
+            }
 
 
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             card.className =
                 "facility-kpi-card " +
-                getFamilyClass(facilityType);
+                familyClass;
+
+
+            // Running border when a family is selected
+            if (
+                selectedPlanningFacilityFamily !==
+                "ALL"
+            ) {
+
+                card.classList.add(
+                    "family-highlight"
+                );
+
+            }
+
+
+            card.style.cursor =
+                "pointer";
 
 
             card.innerHTML = `
-    <div class="facility-kpi-name">
-        ${facilityType}
-    </div>
 
-    <div class="facility-kpi-value">
-        ${formatNumber(count)}
-    </div>
-`;
+                <div class="facility-kpi-name">
+                    ${facilityType}
+                </div>
 
+                <div class="facility-kpi-value">
+                    ${formatNumber(count)}
+                </div>
 
-card.style.cursor =
-    "pointer";
+            `;
 
 
-card.onclick =
-    function () {
+            card.onclick =
+                function () {
 
-        showStandalonePlanningFacilitiesForKPI(
-            facilityType
-        );
+                    showStandalonePlanningFacilitiesForKPI(
+                        facilityType
+                    );
 
-    };
+                };
 
 
-container.appendChild(card);
+            container.appendChild(
+                card
+            );
 
         }
     );
@@ -7068,20 +7090,27 @@ function getTestingFilteredData() {
 let selectedFacilityFamily = "ALL";
 function updateFacilityTypeKPIs(data) {
 
-    const container = document.getElementById("facilityTypeKPIs");
+    const container =
+        document.getElementById("facilityTypeKPIs");
 
     if (!container) return;
 
     container.innerHTML = "";
 
-    // ==========================================
+
+    // ======================================================
     // FACILITY FAMILY CLASSIFICATION
-    // ==========================================
+    // Used only for card colour/group styling
+    // ======================================================
+
     function getFacilityFamily(facilityType) {
 
-        const name = facilityType.toLowerCase();
+        const name =
+            text(facilityType)
+                .trim()
+                .toLowerCase();
 
-        // AAM-SHC FAMILY
+
         if (
             name.includes("aam-shc") ||
             name.includes("uaam-shc")
@@ -7089,7 +7118,7 @@ function updateFacilityTypeKPIs(data) {
             return "family-shc";
         }
 
-        // PHC / AAM-PHC FAMILY
+
         if (
             name.includes("phc-aam") ||
             name.includes("aam-phc") ||
@@ -7098,7 +7127,7 @@ function updateFacilityTypeKPIs(data) {
             return "family-phc";
         }
 
-        // DISTRICT / SUB DISTRICT HOSPITAL
+
         if (
             name === "sdh" ||
             name.startsWith("dh ")
@@ -7106,7 +7135,7 @@ function updateFacilityTypeKPIs(data) {
             return "family-hospital";
         }
 
-        // CHC FAMILY
+
         if (
             name.includes("chc") ||
             name.includes("uchc")
@@ -7114,7 +7143,7 @@ function updateFacilityTypeKPIs(data) {
             return "family-chc";
         }
 
-        // DISPENSARIES
+
         if (
             name.includes("dispensaries") ||
             name.includes("dispensary")
@@ -7122,93 +7151,202 @@ function updateFacilityTypeKPIs(data) {
             return "family-dispensary";
         }
 
-        // MC / MCH FAMILY
+
         if (
             name.includes("mc/mch")
         ) {
             return "family-mch";
         }
 
-        // OTHER PRIMARY CARE
+
         if (
             name.includes("primary care")
         ) {
             return "family-primary";
         }
 
-        // OTHER TERTIARY CARE
+
         if (
             name.includes("tertiary care")
         ) {
             return "family-tertiary";
         }
 
-        // CRPF / OTHER SPECIAL FACILITY
+
         return "family-other";
     }
 
 
-    // ==========================================
-    // CREATE KPI CARDS
-    // ==========================================
-    facilityTypeKPIList.forEach((facilityType) => {
-            const familyClass =
-            getFacilityFamily(facilityType);
+    // ======================================================
+    // GET ALL FACILITY TYPES DIRECTLY FROM CURRENT DATA
+    // No hard-coded Facility Type list
+    // ======================================================
 
-        const familyMap = {
-            SC: ["family-shc"],
-            PHC: ["family-phc"],
-            CHC: ["family-chc"],
-            SDH: ["family-hospital"],
-            DH: ["family-hospital"],
-            MC: ["family-mch"]
-        };
+    const facilityTypeCounts = {};
 
-        if (selectedFacilityFamily !== "ALL") {
 
-            const allowedFamilies =
-                familyMap[selectedFacilityFamily] || [];
+    data.forEach(row => {
 
-            if (!allowedFamilies.includes(familyClass)) {
-                return;
-            }
+        const facilityType =
+            text(row["Facility Type"]).trim();
 
-            const name =
-                facilityType.toLowerCase();
-
-            if (
-                selectedFacilityFamily === "SDH" &&
-                name !== "sdh"
-            ) {
-                return;
-            }
-
-            if (
-                selectedFacilityFamily === "DH" &&
-                !(
-                    name === "dh" ||
-                    name.startsWith("dh ")
-                )
-            ) {
-                return;
-            }
+        if (!facilityType) {
+            return;
         }
 
-        const count = data.filter(row =>
-            text(row["Facility Type"]) === facilityType
-        ).length;
 
-        const card = document.createElement("div");
+        if (!facilityTypeCounts[facilityType]) {
+            facilityTypeCounts[facilityType] = 0;
+        }
 
-        
+
+        facilityTypeCounts[facilityType]++;
+
+    });
+
+
+    let facilityTypes =
+        Object.keys(facilityTypeCounts);
+
+
+    // ======================================================
+    // FILTER BY SELECTED FACILITY FAMILY
+    // ======================================================
+
+    if (
+        selectedFacilityFamily &&
+        selectedFacilityFamily !== "ALL"
+    ) {
+
+        facilityTypes =
+            facilityTypes.filter(facilityType => {
+
+                const familyClass =
+                    getFacilityFamily(facilityType);
+
+                const name =
+                    facilityType
+                        .trim()
+                        .toLowerCase();
+
+
+                if (
+                    selectedFacilityFamily === "SC"
+                ) {
+
+                    return (
+                        familyClass === "family-shc"
+                    );
+
+                }
+
+
+                if (
+                    selectedFacilityFamily === "PHC"
+                ) {
+
+                    return (
+                        familyClass === "family-phc"
+                    );
+
+                }
+
+
+                if (
+                    selectedFacilityFamily === "CHC"
+                ) {
+
+                    return (
+                        familyClass === "family-chc"
+                    );
+
+                }
+
+
+                if (
+                    selectedFacilityFamily === "SDH"
+                ) {
+
+                    return name === "sdh";
+
+                }
+
+
+                if (
+                    selectedFacilityFamily === "DH"
+                ) {
+
+                    return (
+                        name === "dh" ||
+                        name.startsWith("dh ")
+                    );
+
+                }
+
+
+                if (
+                    selectedFacilityFamily === "MC"
+                ) {
+
+                    return (
+                        familyClass === "family-mch"
+                    );
+
+                }
+
+
+                return true;
+
+            });
+
+    }
+
+
+    // ======================================================
+    // SORT FACILITY TYPES
+    // ======================================================
+
+    facilityTypes.sort((a, b) =>
+        a.localeCompare(
+            b,
+            undefined,
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
+        )
+    );
+
+
+    // ======================================================
+    // CREATE KPI CARDS
+    // ======================================================
+
+    facilityTypes.forEach(facilityType => {
+
+        const count =
+            facilityTypeCounts[facilityType] || 0;
+
+
+        const familyClass =
+            getFacilityFamily(facilityType);
+
+
+        const card =
+            document.createElement("div");
+
 
         card.className =
-            "facility-kpi-card " + familyClass;
-            card.onclick = function () {
-    showFacilitiesForKPI(facilityType);
-};
+            "facility-kpi-card " +
+            familyClass;
+
+
+        card.style.cursor =
+            "pointer";
+
 
         card.innerHTML = `
+
             <div class="facility-kpi-name">
                 ${facilityType}
             </div>
@@ -7216,7 +7354,19 @@ function updateFacilityTypeKPIs(data) {
             <div class="facility-kpi-value">
                 ${formatNumber(count)}
             </div>
+
         `;
+
+
+        card.onclick =
+            function () {
+
+                showFacilitiesForKPI(
+                    facilityType
+                );
+
+            };
+
 
         container.appendChild(card);
 
@@ -7803,92 +7953,211 @@ function showFacilityFamilyKPIs(family) {
 
     const data = getFilteredData();
 
-    // ------------------------------------------------------
-    // FILTER FACILITY DETAILS BY SELECTED FAMILY
-    // ------------------------------------------------------
 
-    const familyData = data.filter(row => {
+    // ======================================================
+    // FILTER USING FORMAT TYPE
+    // Facility Type is NOT used to determine the family
+    // ======================================================
 
-        const name =
-            text(row["Facility Type"])
-                .trim()
-                .toLowerCase();
+    const familyData =
+        data.filter(row => {
 
-        if (family === "SC") {
-
-            return (
-                name.includes("aam-shc") ||
-                name.includes("uaam-shc")
-            );
-        }
-
-        if (family === "PHC") {
-
-            return (
-                name.includes("phc-aam") ||
-                name.includes("aam-phc") ||
-                name.includes("uphc")
-            );
-        }
-
-        if (family === "CHC") {
-
-            return (
-                name.includes("chc") ||
-                name.includes("uchc")
-            );
-        }
-
-        if (family === "SDH") {
-
-            return name === "sdh";
-        }
-
-        if (family === "DH") {
-
-            return (
-                name === "dh" ||
-                name.startsWith("dh ")
-            );
-        }
-
-        if (family === "MC") {
-
-            return name.includes("mc/mch");
-        }
-
-        return true;
-
-    });
+            const formatType =
+                text(row["Format Type"])
+                    .trim()
+                    .toUpperCase();
 
 
-    // Update lower Facility Type KPI cards
-    updateFacilityTypeKPIs(data);
-    document
-    .querySelectorAll(
-        "#facilityTypeKPIs .facility-kpi-card"
-    )
-    .forEach(card => {
+            if (family === "SC") {
+    return (
+        formatType === "SC" ||
+        formatType === "SC FORMAT"
+    );
+}
 
-        card.classList.add(
-            "family-highlight"
+if (family === "PHC") {
+    return (
+        formatType === "PHC" ||
+        formatType === "PHC FORMAT"
+    );
+}
+
+if (family === "CHC") {
+    return (
+        formatType === "CHC" ||
+        formatType === "CHC FORMAT" ||
+        formatType === "UCHC" ||
+        formatType === "UCHC FORMAT"
+    );
+}
+
+if (family === "SDH") {
+    return (
+        formatType === "SDH" ||
+        formatType === "SDH FORMAT"
+    );
+}
+
+if (family === "DH") {
+    return (
+        formatType === "DH" ||
+        formatType === "DH FORMAT"
+    );
+}
+
+
+            if (family === "MC") {
+
+                return (
+                    formatType === "MC" ||
+                    formatType === "MCH" ||
+                    formatType === "MC/MCH"
+                );
+
+            }
+
+
+            return true;
+
+        });
+
+
+    // ======================================================
+    // CREATE FACILITY TYPE KPIs FROM ACTUAL FAMILY DATA
+    // ======================================================
+
+    const container =
+        document.getElementById(
+            "facilityTypeKPIs"
         );
 
-    });
+
+    if (container) {
+
+        container.innerHTML = "";
 
 
-    // Update Facility Details
-    renderFacilityDetails(familyData);
+        const counts = {};
 
 
-    // ------------------------------------------------------
-    // CHANGE LOWER KPI HEADING
-    // ------------------------------------------------------
+        familyData.forEach(row => {
+
+            const facilityType =
+                text(row["Facility Type"]).trim();
+
+            if (!facilityType) {
+                return;
+            }
+
+
+            counts[facilityType] =
+                (counts[facilityType] || 0) + 1;
+
+        });
+
+
+        Object.entries(counts)
+            .sort((a, b) =>
+                a[0].localeCompare(
+                    b[0],
+                    undefined,
+                    {
+                        numeric: true,
+                        sensitivity: "base"
+                    }
+                )
+            )
+            .forEach(
+                ([facilityType, count]) => {
+
+                    const card =
+                        document.createElement("div");
+
+
+                    let familyClass = "family-other";
+
+if (family === "SC") {
+    familyClass = "family-shc";
+}
+
+if (family === "PHC") {
+    familyClass = "family-phc";
+}
+
+if (family === "CHC") {
+    familyClass = "family-chc";
+}
+
+if (
+    family === "SDH" ||
+    family === "DH"
+) {
+    familyClass = "family-hospital";
+}
+
+if (family === "MC") {
+    familyClass = "family-mch";
+}
+
+card.className =
+    "facility-kpi-card " +
+    familyClass +
+    " family-highlight";
+
+
+                    card.style.cursor =
+                        "pointer";
+
+
+                    card.innerHTML = `
+
+                        <div class="facility-kpi-name">
+                            ${facilityType}
+                        </div>
+
+                        <div class="facility-kpi-value">
+                            ${formatNumber(count)}
+                        </div>
+
+                    `;
+
+
+                    card.onclick =
+                        function () {
+
+                            showFacilitiesForKPI(
+                                facilityType
+                            );
+
+                        };
+
+
+                    container.appendChild(card);
+
+                }
+            );
+
+    }
+
+
+    // ======================================================
+    // FACILITY DETAILS = ALL FACILITIES OF SELECTED FORMAT
+    // ======================================================
+
+    renderFacilityDetails(
+        familyData
+    );
+
+
+    // ======================================================
+    // HEADING
+    // ======================================================
 
     const header =
         document.querySelector(
             "#facilityTab .facility-kpi-header"
         );
+
 
     const familyTitles = {
 
@@ -7941,16 +8210,8 @@ function showFacilityFamilyKPIs(family) {
             </button>
 
         `;
+
     }
-
-
-    // Go directly to Facility Details
-    const details =
-        document.getElementById(
-            "facilityDetailsBody"
-        );
-
-    
 
 }
 // ==========================================================
