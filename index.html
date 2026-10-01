@@ -130,7 +130,7 @@ body {
    INDIVIDUAL DASHBOARD TAB COLORS
 ========================================================= */
 
-/* Facility Dashboard — Blue */
+/*HMIS Facility Dashboard — Blue */
 .dashboard-tab:nth-child(1) {
     background: #e3f2fd;
     color: #0d47a1;
@@ -2606,7 +2606,7 @@ z-index: 10;
         </div>
 
         <div>
-            01-10-2026 08:20 AM
+            01-10-2026 03:11 PM
         </div>
 
         <div class="meta-source">
@@ -3833,6 +3833,25 @@ if (planningSearch) {
     );
 
 }
+// ------------------------------------------------------
+// CONNECT PLANNING EXPORT CSV BUTTON
+// ------------------------------------------------------
+
+const planningExportBtn =
+    document.getElementById(
+        "planningDash_facilityExportBtn"
+    );
+
+if (planningExportBtn) {
+
+    planningExportBtn.onclick =
+        function () {
+
+            exportCurrentFacilityDetails();
+
+        };
+
+}
 }
 
 // ==========================================================
@@ -4134,12 +4153,26 @@ function getPlanningFamilyData(data, family) {
 
 
         if (family === "MC") {
-            return (
-                formatType === "MC" ||
-                formatType === "MCH" ||
-                formatType === "MC/MCH"
-            );
-        }
+
+    const facilityType =
+        text(row["Facility Type"])
+            .trim()
+            .toLowerCase();
+
+    const isMC =
+        formatType === "MC" ||
+        formatType === "MC FORMAT";
+
+    const isAssociatedHospital =
+        facilityType ===
+        "associated (part) hospital with mc/mch";
+
+    return (
+        isMC &&
+        !isAssociatedHospital
+    );
+
+}
 
 
         return false;
@@ -4986,9 +5019,33 @@ const dhCount =
 
 
 // MC
-// Planning facility sheet currently has no MC Format Type.
-// Keep as 0 unless MC is later added to Planning facility.
-const mcCount = 0;
+// Main MC count is based on Format Type.
+// Associated (part) Hospital with MC/MCH is excluded.
+const mcCount =
+    data.filter(row => {
+
+        const formatType =
+            planningFormatType(row);
+
+        const facilityType =
+            text(row["Facility Type"])
+                .trim()
+                .toLowerCase();
+
+        const isMC =
+            formatType === "MC" ||
+            formatType === "MC FORMAT";
+
+        const isAssociatedHospital =
+            facilityType ===
+            "associated (part) hospital with mc/mch";
+
+        return (
+            isMC &&
+            !isAssociatedHospital
+        );
+
+    }).length;
 // ======================================================
 // AAK + MCH COUNTS
 // Separate source sheets
@@ -8008,13 +8065,20 @@ if (family === "DH") {
 
             if (family === "MC") {
 
-                return (
-                    formatType === "MC" ||
-                    formatType === "MCH" ||
-                    formatType === "MC/MCH"
-                );
+    const facilityType =
+        text(row["Facility Type"])
+            .trim()
+            .toLowerCase();
 
-            }
+    return (
+        (
+            formatType === "MC" ||
+            formatType === "MC FORMAT"
+        ) &&
+        facilityType !==
+            "associated (part) hospital with mc/mch"
+    );
+}
 
 
             return true;
@@ -11161,12 +11225,18 @@ checkReconDuplicates();
 
 
     // MC
-    const mcCount = data.filter(row => {
+    const mcCount =
+    data.filter(row => {
 
-        const name =
-            testingFacilityTypeName(row);
+        const formatType =
+            text(row["Format Type"])
+                .trim()
+                .toUpperCase();
 
-        return name.includes("mc/mch");
+        return (
+            formatType === "MC" ||
+            formatType === "MC FORMAT"
+        );
 
     }).length;
 
@@ -11418,11 +11488,35 @@ const dhCount = data.filter(row => {
 
 
 // MC
-const mcCount = data.filter(row => {
-    const name = facilityTypeName(row);
+// Main MC family is determined by Format Type.
+// Associated (part) Hospital is excluded.
+const mcCount =
+    data.filter(row => {
 
-    return name.includes("mc/mch");
-}).length;
+        const formatType =
+            text(row["Format Type"])
+                .trim()
+                .toUpperCase();
+
+        const facilityType =
+            text(row["Facility Type"])
+                .trim()
+                .toLowerCase();
+
+        const isMC =
+            formatType === "MC" ||
+            formatType === "MC FORMAT";
+
+        const isAssociatedHospital =
+            facilityType ===
+            "associated (part) hospital with mc/mch";
+
+        return (
+            isMC &&
+            !isAssociatedHospital
+        );
+
+    }).length;
 
 
 // UPDATE CARDS
