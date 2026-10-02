@@ -135,6 +135,22 @@ body {
     background: #e3f2fd;
     color: #0d47a1;
 }
+/* =========================================================
+   PLANNING FACILITY DASHBOARD — OUTER SPACING
+========================================================= */
+
+#planningFacilityTab.active {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    box-sizing: border-box !important;
+}
+/* Planning Dashboard — wider District Population card */
+/* Planning Dashboard — Population number fit */
+#planningFacilityTab .population-kpi-value {
+    font-size: 24px !important;
+    white-space: nowrap;
+}
+
 
 .dashboard-tab:nth-child(1):hover {
     background: #bbdefb;
@@ -2606,7 +2622,7 @@ z-index: 10;
         </div>
 
         <div>
-            01-10-2026 04:19 PM
+            01-10-2026 05:40 PM
         </div>
 
         <div class="meta-source">
@@ -3420,12 +3436,23 @@ function createPlanningFacilityDashboard() {
     if (!source || !target) return;
 
 
-    // ------------------------------------------------------
-    // COPY COMPLETE FACILITY DASHBOARD
-    // ------------------------------------------------------
+// ------------------------------------------------------
+// MAKE PLANNING TAB USE EXACT HMIS TAB LAYOUT
+// ------------------------------------------------------
 
-    target.innerHTML =
-        source.innerHTML;
+target.className = source.className;
+
+// Planning must not become active automatically
+target.classList.remove("active");
+target.classList.add("tab-content");
+
+
+// ------------------------------------------------------
+// COPY COMPLETE HMIS DASHBOARD STRUCTURE
+// ------------------------------------------------------
+
+target.innerHTML =
+    source.innerHTML;
 
 
     // ------------------------------------------------------
