@@ -146,11 +146,54 @@ body {
 }
 /* Planning Dashboard — wider District Population card */
 /* Planning Dashboard — Population number fit */
-#planningFacilityTab .population-kpi-value {
-    font-size: 24px !important;
-    white-space: nowrap;
+/* Planning Dashboard — Population card */
+#planningFacilityTab .district-kpi-row {
+    grid-template-columns:
+        minmax(175px, 1.15fr)
+        repeat(9, minmax(145px, 1fr));
 }
 
+/* Population number */
+#planningFacilityTab .population-kpi-value {
+    font-size: 20px !important;
+    font-weight: 800;
+    white-space: nowrap;
+    line-height: 1.1;
+}
+
+/* Population card */
+#planningFacilityTab .population-kpi {
+    min-width: 175px;
+    overflow: hidden;
+    padding-left: 20px;
+    padding-right: 12px;
+}
+/* =========================================================
+   HMIS DASHBOARD — POPULATION CARD ZOOM FIX
+   Same method as Planning Dashboard
+========================================================= */
+
+#facilityTab .district-kpi-row {
+    grid-template-columns:
+        minmax(175px, 1.15fr)
+        repeat(9, minmax(145px, 1fr));
+}
+
+/* Population number */
+#facilityTab .population-kpi-value {
+    font-size: 20px !important;
+    font-weight: 800;
+    white-space: nowrap;
+    line-height: 1.1;
+}
+
+/* Population card */
+#facilityTab .population-kpi {
+    min-width: 175px;
+    overflow: hidden;
+    padding-left: 20px;
+    padding-right: 12px;
+}
 
 .dashboard-tab:nth-child(1):hover {
     background: #bbdefb;
@@ -1316,7 +1359,25 @@ button {
     text-align: left;
     white-space: nowrap;
 }
+/* Facility Details sortable headers */
+.facility-details-table th {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+}
 
+.facility-details-table th:hover {
+    background: #245f8c;
+}
+
+.facility-sort-arrow {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 11px;
+    font-weight: 900;
+    color: #ffffff;
+    opacity: 1;
+}
 .facility-details-table td {
     padding: 9px 10px;
     border-bottom: 1px solid #e5e7eb;
@@ -2622,7 +2683,7 @@ z-index: 10;
         </div>
 
         <div>
-            01-10-2026 05:40 PM
+            03-10-2026 02:04 PM
         </div>
 
         <div class="meta-source">
@@ -2707,20 +2768,20 @@ z-index: 10;
 
         <div class="filter-box">
 
-            <label>Format Type</label>
+    <label>Base Category</label>
 
-            <select id="formatFilter"></select>
+    <select id="baseCategoryFilter"></select>
 
-        </div>
+</div>
 
 
-        <div class="filter-box">
+<div class="filter-box">
 
-            <label>Facility Type</label>
+    <label>Dashboard Classification</label>
 
-            <select id="facilityTypeFilter"></select>
+    <select id="dashboardClassificationFilter"></select>
 
-        </div>
+</div>
 
 
         <div class="filter-box">
@@ -2865,12 +2926,30 @@ z-index: 10;
 <!-- MC -->
 <div class="district-summary-kpi clickable-family-kpi"
      onclick="showFacilityFamilyKPIs('MC')">
-    <div class="district-summary-label">MC</div>
+    <div class="district-summary-label">Medical College</div>
     <div id="districtMC"
          class="district-summary-value">0</div>
     <div class="district-summary-small">
         Medical Colleges
     </div>
+</div>
+<!-- NAMMA CLINIC -->
+<div class="district-summary-kpi clickable-family-kpi"
+     onclick="showFacilityFamilyKPIs('NAMMA CLINIC')">
+
+    <div class="district-summary-label">
+        Namma Clinic
+    </div>
+
+    <div id="districtNammaClinic"
+         class="district-summary-value">
+        0
+    </div>
+
+    <div class="district-summary-small">
+        Namma Clinics
+    </div>
+
 </div>
 </div>
 <!-- FACILITY FAMILY POPUP -->
@@ -2904,7 +2983,7 @@ z-index: 10;
 <div class="facility-kpi-section">
 
     <div class="facility-kpi-header">
-        FACILITY TYPE KPIs — GROUPED BY FACILITY FAMILY
+        DASHBOARD CLASSIFICATION
     </div>
 
     <div id="facilityTypeKPIs" class="facility-kpi-grid">
@@ -3420,6 +3499,43 @@ function toggleReconFacilityDetails(side) {
     }
 }
 // ==========================================================
+// BASE CATEGORY HELPER
+// ==========================================================
+
+function baseCategoryName(row) {
+
+    return text(row["Base Category"])
+        .trim()
+        .toUpperCase();
+
+}
+// ==========================================================
+// DASHBOARD CLASSIFICATION HELPERS
+// ==========================================================
+
+function dashboardClassifications(row) {
+
+    return text(row["Dashboard Classification"])
+        .split("/")
+        .map(value => value.trim())
+        .filter(value => value !== "");
+
+}
+
+function hasDashboardClassification(row, classification) {
+
+    const target =
+        text(classification)
+            .trim()
+            .toUpperCase();
+
+    return dashboardClassifications(row)
+        .some(value =>
+            value.toUpperCase() === target
+        );
+
+}
+// ==========================================================
 // CREATE PLANNING FACILITY DASHBOARD
 // ==========================================================
 
@@ -3476,6 +3592,52 @@ target.innerHTML =
                 "planningDash_" + oldId;
 
         });
+        // ======================================================
+// PLANNING ONLY — ADD AYUSH TOP KPI CARD
+// ======================================================
+
+const planningNammaCard =
+    document.getElementById(
+        "planningDash_districtNammaClinic"
+    )?.closest(
+        ".district-summary-kpi"
+    );
+
+if (
+    planningNammaCard &&
+    !document.getElementById(
+        "planningDash_districtAyush"
+    )
+) {
+
+    const ayushCard =
+        document.createElement("div");
+
+    ayushCard.className =
+        "district-summary-kpi clickable-family-kpi";
+
+    ayushCard.innerHTML = `
+
+        <div class="district-summary-label">
+            AYUSH
+        </div>
+
+        <div id="planningDash_districtAyush"
+             class="district-summary-value">
+            0
+        </div>
+
+        <div class="district-summary-small">
+            AYUSH Facilities
+        </div>
+
+    `;
+
+    planningNammaCard.insertAdjacentElement(
+        "afterend",
+        ayushCard
+    );
+}
 
 
     // ------------------------------------------------------
@@ -3492,6 +3654,43 @@ target.innerHTML =
             );
 
         });
+        const planningSortColumns = [
+    "District Name",
+    "Subdistrict Name",
+    "Format Type",
+    "Facility Type",
+    "Facility Name",
+    "Ownership",
+    "Rural/Urban",
+    "No. of Beds",
+    "Building Status",
+    "NIN",
+    "HFR ID"
+];
+
+const planningHeaders =
+    target.querySelectorAll(
+        ".facility-details-table thead th"
+    );
+
+planningHeaders.forEach((header, index) => {
+
+    const column =
+        planningSortColumns[index];
+
+    if (!column) return;
+
+    header.style.cursor = "pointer";
+
+    header.onclick = function () {
+
+        sortPlanningFacilityDetails(
+            column
+        );
+
+    };
+
+});
 
 
     // ------------------------------------------------------
@@ -3719,7 +3918,13 @@ const planningTopKPIs = {
     planningDash_districtCHC: "CHC",
     planningDash_districtSDH: "SDH",
     planningDash_districtDH: "DH",
-    planningDash_districtMC: "MC"
+    planningDash_districtMC: "MC",
+
+    planningDash_districtNammaClinic:
+        "NAMMA CLINIC",
+
+    planningDash_districtAyush:
+        "AYUSH"
 
 };
 
@@ -3920,13 +4125,14 @@ const planningDashFilterConfig = [
     },
 
     {
-        id: "planningDash_formatFilter",
-        column: "Format Type"
+        id: "planningDash_baseCategoryFilter",
+        column: "Base Category"
     },
 
     {
-        id: "planningDash_facilityTypeFilter",
-        column: "Facility Type"
+        id: "planningDash_dashboardClassificationFilter",
+        column: "Dashboard Classification",
+        splitValues: true
     },
 
     {
@@ -3950,7 +4156,6 @@ const planningDashFilterConfig = [
 // ==========================================================
 // PLANNING — GET FILTERED DATA
 // ==========================================================
-
 function getPlanningDashboardFilteredData() {
 
     return planningFacilityData.filter(row => {
@@ -3967,11 +4172,28 @@ function getPlanningDashboardFilteredData() {
             const selected =
                 select.value || "All";
 
-            if (selected === "All") {
+            if (
+                !selected ||
+                selected === "All"
+            ) {
                 return true;
             }
 
-            return text(row[config.column]).trim() === selected;
+            // Dashboard Classification
+            if (config.splitValues) {
+
+                return hasDashboardClassification(
+                    row,
+                    selected
+                );
+
+            }
+
+            // Normal filters
+            return (
+                text(row[config.column])
+                    .trim() === selected
+            );
 
         });
 
@@ -3999,26 +4221,62 @@ function populatePlanningDashboardFilters() {
         const currentValue =
             select.value || "All";
 
+        let values = [];
 
-        const values = [
-            ...new Set(
-                availableData
-                    .map(row =>
-                        text(row[config.column]).trim()
-                    )
-                    .filter(value => value !== "")
-            )
-        ].sort((a, b) =>
+
+        // Dashboard Classification
+        if (config.splitValues) {
+
+            values = [
+                ...new Set(
+                    availableData
+                        .flatMap(row =>
+                            dashboardClassifications(row)
+                        )
+                        .filter(Boolean)
+                )
+            ];
+
+        }
+
+        // Normal filters
+        else {
+
+            values = [
+                ...new Set(
+                    availableData
+                        .map(row =>
+                            text(row[config.column])
+                                .trim()
+                        )
+                        .filter(Boolean)
+                )
+            ];
+
+        }
+
+
+        values.sort((a, b) =>
             a.localeCompare(
                 b,
                 undefined,
-                { numeric: true }
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
             )
         );
 
 
-        select.innerHTML =
-            '<option value="All">All</option>';
+        select.innerHTML = "";
+
+        const allOption =
+            document.createElement("option");
+
+        allOption.value = "All";
+        allOption.textContent = "All";
+
+        select.appendChild(allOption);
 
 
         values.forEach(value => {
@@ -4043,11 +4301,26 @@ function populatePlanningDashboardFilters() {
 
         if (select.value !== "All") {
 
-            availableData =
-                availableData.filter(row =>
-                    text(row[config.column]).trim() ===
-                    select.value
-                );
+            if (config.splitValues) {
+
+                availableData =
+                    availableData.filter(row =>
+                        hasDashboardClassification(
+                            row,
+                            select.value
+                        )
+                    );
+
+            } else {
+
+                availableData =
+                    availableData.filter(row =>
+                        text(row[config.column])
+                            .trim() ===
+                        select.value
+                    );
+
+            }
 
         }
 
@@ -4142,69 +4415,38 @@ function getPlanningFamilyData(data, family) {
     if (!family || family === "ALL") {
         return data;
     }
-
-    return data.filter(row => {
-
-        const formatType =
-            text(row["Format Type"])
-                .trim()
-                .toUpperCase();
-
-
-        if (family === "SC") {
-            return formatType === "SC";
-        }
-
-
-        if (family === "PHC") {
-            return formatType === "PHC";
-        }
-
-
-        if (family === "CHC") {
-            return (
-                formatType === "CHC" ||
-                formatType === "UCHC"
-            );
-        }
-
-
-        if (family === "SDH") {
-            return formatType === "SDH";
-        }
-
-
-        if (family === "DH") {
-            return formatType === "DH";
-        }
-
-
-        if (family === "MC") {
-
-    const facilityType =
-        text(row["Facility Type"])
-            .trim()
-            .toLowerCase();
-
-    const isMC =
-        formatType === "MC" ||
-        formatType === "MC FORMAT";
-
-    const isAssociatedHospital =
-        facilityType ===
-        "associated (part) hospital with mc/mch";
-
-    return (
-        isMC &&
-        !isAssociatedHospital
-    );
-
+    // Namma Clinic uses separate Namma Clinics sheet
+if (family === "NAMMA CLINIC") {
+    return nammaClinicData;
 }
 
+// AYUSH uses separate Ayush sheet
+if (family === "AYUSH") {
+    return ayushData;
+}
 
-        return false;
+    const baseCategoryMap = {
+        SC: "SC",
+        PHC: "PHC",
+        CHC: "CHC",
+        SDH: "SDH",
+        DH: "DH",
+        MC: "MEDICAL COLLEGE",
+        "NAMMA CLINIC": "NAMMA CLINIC",
+        AYUSH: "AYUSH"
+    };
 
-    });
+    const targetBaseCategory =
+        baseCategoryMap[family];
+
+    if (!targetBaseCategory) {
+        return [];
+    }
+
+    return data.filter(row =>
+        baseCategoryName(row) ===
+        targetBaseCategory
+    );
 
 }
 
@@ -4259,25 +4501,31 @@ document
 
     const familyTitles = {
 
-        SC:
-            "SUB CENTRES (SC) — FACILITY TYPE BREAKUP",
+    SC:
+        "SUB CENTRES (SC) — DASHBOARD CLASSIFICATION",
 
-        PHC:
-            "PRIMARY HEALTH CENTRES (PHC) — FACILITY TYPE BREAKUP",
+    PHC:
+        "PRIMARY HEALTH CENTRES (PHC) — DASHBOARD CLASSIFICATION",
 
-        CHC:
-            "COMMUNITY HEALTH CENTRES (CHC) — FACILITY TYPE BREAKUP",
+    CHC:
+        "COMMUNITY HEALTH CENTRES (CHC) — DASHBOARD CLASSIFICATION",
 
-        SDH:
-            "SUB DISTRICT HOSPITALS (SDH) — FACILITY TYPE BREAKUP",
+    SDH:
+        "SUB DISTRICT HOSPITALS (SDH) — DASHBOARD CLASSIFICATION",
 
-        DH:
-            "DISTRICT HOSPITALS (DH) — FACILITY TYPE BREAKUP",
+    DH:
+        "DISTRICT HOSPITALS (DH) — DASHBOARD CLASSIFICATION",
 
-        MC:
-            "MEDICAL COLLEGES (MC/MCH) — FACILITY TYPE BREAKUP"
+    MC:
+    "MEDICAL COLLEGES — DASHBOARD CLASSIFICATION",
 
-    };
+"NAMMA CLINIC":
+    "NAMMA CLINICS — DASHBOARD CLASSIFICATION",
+
+AYUSH:
+    "AYUSH — DASHBOARD CLASSIFICATION"
+
+};
 
 
     if (header) {
@@ -4524,7 +4772,7 @@ function showAllStandalonePlanningFacilityKPIs() {
     if (header) {
 
         header.textContent =
-            "FACILITY TYPE KPIs — GROUPED BY FACILITY FAMILY";
+    "DASHBOARD CLASSIFICATION";
 
     }
 
@@ -4536,26 +4784,49 @@ function showAllStandalonePlanningFacilityKPIs() {
 // ==========================================================
 
 function showStandalonePlanningFacilitiesForKPI(
-    facilityType
+    classification
 ) {
 
-    const data =
+    let data =
         getPlanningDashboardFilteredData();
 
 
-    const facilityTypeData =
+    // ======================================================
+    // KEEP SELECTED BASE CATEGORY FAMILY
+    // ======================================================
+
+    if (
+        selectedPlanningFacilityFamily &&
+        selectedPlanningFacilityFamily !== "ALL"
+    ) {
+
+        data =
+            getPlanningFamilyData(
+                data,
+                selectedPlanningFacilityFamily
+            );
+
+    }
+
+
+    // ======================================================
+    // FILTER BY DASHBOARD CLASSIFICATION
+    // Exact component match after "/" split
+    // ======================================================
+
+    const classificationData =
         data.filter(row =>
 
-            text(row["Facility Type"])
-                .trim() ===
-            text(facilityType)
-                .trim()
+            hasDashboardClassification(
+                row,
+                classification
+            )
 
         );
 
 
     renderPlanningDashboardFacilityDetails(
-        facilityTypeData
+        classificationData
     );
 
 
@@ -4994,85 +5265,45 @@ function refreshPlanningFacilityDashboard() {
     // TOP FACILITY FAMILY COUNTS
     // ======================================================
 
-   function planningFormatType(row) {
+   // ======================================================
+// MAIN FACILITY COUNTS — BASE CATEGORY
+// ======================================================
 
-    return text(row["Format Type"])
-        .trim()
-        .toUpperCase();
-}
-
-
-// SC
 const scCount =
     data.filter(row =>
-        planningFormatType(row) === "SC"
+        baseCategoryName(row) === "SC"
     ).length;
 
 
-// PHC
 const phcCount =
     data.filter(row =>
-        planningFormatType(row) === "PHC"
+        baseCategoryName(row) === "PHC"
     ).length;
 
 
-// CHC = CHC + UCHC
 const chcCount =
-    data.filter(row => {
-
-        const formatType =
-            planningFormatType(row);
-
-        return (
-            formatType === "CHC" ||
-            formatType === "UCHC"
-        );
-
-    }).length;
+    data.filter(row =>
+        baseCategoryName(row) === "CHC"
+    ).length;
 
 
-// SDH
 const sdhCount =
     data.filter(row =>
-        planningFormatType(row) === "SDH"
+        baseCategoryName(row) === "SDH"
     ).length;
 
 
-// DH
 const dhCount =
     data.filter(row =>
-        planningFormatType(row) === "DH"
+        baseCategoryName(row) === "DH"
     ).length;
 
 
-// MC
-// Main MC count is based on Format Type.
-// Associated (part) Hospital with MC/MCH is excluded.
 const mcCount =
-    data.filter(row => {
-
-        const formatType =
-            planningFormatType(row);
-
-        const facilityType =
-            text(row["Facility Type"])
-                .trim()
-                .toLowerCase();
-
-        const isMC =
-            formatType === "MC" ||
-            formatType === "MC FORMAT";
-
-        const isAssociatedHospital =
-            facilityType ===
-            "associated (part) hospital with mc/mch";
-
-        return (
-            isMC &&
-            !isAssociatedHospital
-        );
-
-    }).length;
+    data.filter(row =>
+        baseCategoryName(row) ===
+        "MEDICAL COLLEGE"
+    ).length;
 // ======================================================
 // AAK + MCH COUNTS
 // Separate source sheets
@@ -5146,7 +5377,74 @@ const filteredMCHData =
 const mchCount =
     filteredMCHData.length;
 
-    const topValues = {
+
+// ======================================================
+// NAMMA CLINIC
+// Separate source: Namma Clinics
+// District + Subdistrict filtering
+// ======================================================
+
+const filteredNammaClinicData =
+    nammaClinicData.filter(row => {
+
+        const districtMatch =
+            selectedDistrict === "All" ||
+            text(row["District Name"]).trim() ===
+                selectedDistrict;
+
+        const talukMatch =
+            selectedSubdistrict === "All" ||
+            text(row["Subdistrict Name"]).trim() ===
+                selectedSubdistrict;
+
+        return (
+            districtMatch &&
+            talukMatch
+        );
+
+    });
+
+const nammaClinicCount =
+    filteredNammaClinicData.length;
+
+
+// ======================================================
+// AYUSH
+// Separate source: Ayush
+// District + Subdistrict + Health Block filtering
+// ======================================================
+
+const filteredAyushData =
+    ayushData.filter(row => {
+
+        const districtMatch =
+            selectedDistrict === "All" ||
+            text(row["District Name"]).trim() ===
+                selectedDistrict;
+
+        const talukMatch =
+            selectedSubdistrict === "All" ||
+            text(row["Subdistrict Name"]).trim() ===
+                selectedSubdistrict;
+
+        const blockMatch =
+            selectedHealthBlock === "All" ||
+            text(row["Healthblock Name"]).trim() ===
+                selectedHealthBlock;
+
+        return (
+            districtMatch &&
+            talukMatch &&
+            blockMatch
+        );
+
+    });
+
+const ayushCount =
+    filteredAyushData.length;
+
+
+const topValues = {
 
         planningDash_districtTotalFacilities:
             data.length,
@@ -5168,6 +5466,11 @@ const mchCount =
 
         planningDash_districtMC:
     mcCount,
+    planningDash_districtNammaClinic:
+    nammaClinicCount,
+
+planningDash_districtAyush:
+    ayushCount,
 
 planningDash_districtAAK:
     aakCount,
@@ -5187,7 +5490,9 @@ planningDash_districtMCH:
             if (element) {
 
                 element.textContent =
-                    formatNumber(value);
+    value === "—"
+        ? "—"
+        : formatNumber(value);
 
             }
 
@@ -5248,93 +5553,35 @@ renderPlanningDashboardFacilityDetails(
     // COUNT EVERY FACILITY TYPE FOUND IN THE SOURCE DATA
     // ======================================================
 
-    const counts = {};
-
-
-    sourceData.forEach(row => {
-
-        const facilityType =
-            text(row["Facility Type"])
-                .trim();
-
-        if (!facilityType) {
-            return;
-        }
-
-
-        counts[facilityType] =
-            (counts[facilityType] || 0) + 1;
-
-    });
-
-
     // ======================================================
-// ARRANGE FACILITY TYPES BY FORMAT TYPE
-// SC → PHC → CHC/UCHC → SDH → DH → OTHER
+// COUNT DASHBOARD CLASSIFICATIONS
+// Split values such as CHC / FRU / MCH Wing
 // ======================================================
 
-const formatOrder = {
-    "SC": 1,
-    "PHC": 2,
-    "CHC": 3,
-    "UCHC": 3,
-    "SDH": 4,
-    "DH": 5,
-    "MC": 6,
-    "MCH": 6,
-    "MC/MCH": 6
-};
-
-
-const facilityTypeFormatMap = {};
+const counts = {};
 
 
 sourceData.forEach(row => {
 
-    const facilityType =
-        text(row["Facility Type"]).trim();
+    dashboardClassifications(row)
+        .forEach(classification => {
 
-    const formatType =
-        text(row["Format Type"])
-            .trim()
-            .toUpperCase();
+            counts[classification] =
+                (counts[classification] || 0) + 1;
 
-    if (
-        facilityType &&
-        !facilityTypeFormatMap[facilityType]
-    ) {
-        facilityTypeFormatMap[facilityType] =
-            formatType;
-    }
+        });
 
 });
 
+
+    // ======================================================
+// ARRANGE DASHBOARD CLASSIFICATIONS
+// ======================================================
 
 const facilityTypes =
     Object.keys(counts)
         .sort((a, b) => {
 
-            const formatA =
-                facilityTypeFormatMap[a] || "";
-
-            const formatB =
-                facilityTypeFormatMap[b] || "";
-
-
-            const orderA =
-                formatOrder[formatA] ?? 99;
-
-            const orderB =
-                formatOrder[formatB] ?? 99;
-
-
-            // First sort by Format Type family
-            if (orderA !== orderB) {
-                return orderA - orderB;
-            }
-
-
-            // Then alphabetically inside the family
             return a.localeCompare(
                 b,
                 undefined,
@@ -5345,7 +5592,6 @@ const facilityTypes =
             );
 
         });
-
 
     // ======================================================
     // FAMILY COLOUR
@@ -5410,64 +5656,62 @@ const facilityTypes =
 
 
             // ------------------------------------------------
-            // SHOW ALL MODE:
-            // determine colour from the row's actual Format Type
-            // ------------------------------------------------
+// SHOW ALL MODE:
+// determine colour from the classification's
+// actual Base Category
+// ------------------------------------------------
 
-            if (
-                selectedPlanningFacilityFamily === "ALL"
-            ) {
+if (
+    selectedPlanningFacilityFamily === "ALL"
+) {
 
-                const matchingRow =
-                    sourceData.find(row =>
-                        text(
-                            row["Facility Type"]
-                        ).trim() ===
-                        facilityType
-                    );
+    const matchingRow =
+        sourceData.find(row =>
 
+            dashboardClassifications(row)
+                .some(classification =>
+                    classification === facilityType
+                )
 
-                const formatType =
-                    matchingRow
-                        ? text(
-                            matchingRow["Format Type"]
-                        )
-                            .trim()
-                            .toUpperCase()
-                        : "";
+        );
 
 
-                if (formatType === "SC") {
-                    familyClass = "family-shc";
-                }
+    const baseCategory =
+        matchingRow
+            ? baseCategoryName(matchingRow)
+            : "";
 
-                else if (formatType === "PHC") {
-                    familyClass = "family-phc";
-                }
 
-                else if (
-                    formatType === "CHC" ||
-                    formatType === "UCHC"
-                ) {
-                    familyClass = "family-chc";
-                }
+    if (baseCategory === "SC") {
+        familyClass = "family-shc";
+    }
 
-                else if (
-                    formatType === "SDH" ||
-                    formatType === "DH"
-                ) {
-                    familyClass = "family-hospital";
-                }
+    else if (baseCategory === "PHC") {
+        familyClass = "family-phc";
+    }
 
-                else if (
-                    formatType === "MC" ||
-                    formatType === "MCH" ||
-                    formatType === "MC/MCH"
-                ) {
-                    familyClass = "family-mch";
-                }
+    else if (baseCategory === "CHC") {
+        familyClass = "family-chc";
+    }
 
-            }
+    else if (
+        baseCategory === "SDH" ||
+        baseCategory === "DH"
+    ) {
+        familyClass = "family-hospital";
+    }
+
+    else if (
+        baseCategory === "MEDICAL COLLEGE"
+    ) {
+        familyClass = "family-mch";
+    }
+
+    else {
+        familyClass = "family-other";
+    }
+
+}
 
 
             const card =
@@ -5594,11 +5838,26 @@ function renderPlanningDashboardFacilityDetails(data) {
         });
 
 
-    const displayData =
-        matchingData.slice(0, 500);
+    const sortedData =
+    sortFacilityRows(
+        matchingData,
+        planningFacilitySort
+    );
+
+const displayData =
+    sortedData.slice(0, 500);
 
 
     tableBody.innerHTML = "";
+    const planningTable =
+    tableBody.closest(
+        ".facility-details-table"
+    );
+
+updateFacilitySortArrows(
+    planningTable,
+    planningFacilitySort
+);
 
 
     displayData.forEach(row => {
@@ -5884,17 +6143,49 @@ planningSide.innerHTML = `
 
             <thead>
                 <tr>
-                    <th>District</th>
-                    <th>Subdistrict</th>
-                    <th>Format</th>
-                    <th>Facility Type</th>
-                    <th>Facility Name</th>
-                    <th>Ownership</th>
-                    <th>Rural/Urban</th>
-                    <th>Beds</th>
-                    <th>Building Status</th>
-                    <th>NIN</th>
-                    <th>HFR ID</th>
+                    <th onclick="sortHMISFacilityDetails('District Name')">
+    District<span id="hmisSortDistrict"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('Subdistrict Name')">
+    Subdistrict<span id="hmisSortSubdistrict"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('Format Type')">
+    Format<span id="hmisSortFormat"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('Facility Type')">
+    Facility Type<span id="hmisSortFacilityType"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('Facility Name')">
+    Facility Name<span id="hmisSortFacilityName"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('Ownership')">
+    Ownership<span id="hmisSortOwnership"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('Rural/Urban')">
+    Rural/Urban<span id="hmisSortRuralUrban"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('No. of Beds')">
+    Beds<span id="hmisSortBeds"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('Building Status')">
+    Building<span id="hmisSortBuilding"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('NIN')">
+    NIN<span id="hmisSortNIN"></span>
+</th>
+
+<th onclick="sortHMISFacilityDetails('HFR ID')">
+    HFR ID<span id="hmisSortHFR"></span>
+</th>
                 </tr>
             </thead>
 
@@ -6470,6 +6761,10 @@ let planningFacilityData = [];
 let aakData = [];
 let mchData = [];
 
+// Planning separate facility datasets
+let nammaClinicData = [];
+let ayushData = [];
+
 async function loadFacilityData() {
 const facilityLoadStart = performance.now();
 
@@ -6510,6 +6805,14 @@ aakData =
 mchData =
     result.mchData || [];
 
+// Planning — Namma Clinic data
+nammaClinicData =
+    result.nammaClinicData || [];
+
+// Planning — AYUSH data
+ayushData =
+    result.ayushData || [];
+
 districtPopulation =
     result.districtPopulation || {};
     console.log(
@@ -6524,6 +6827,15 @@ console.log(
 console.log(
     "MCH records loaded:",
     mchData.length
+);
+console.log(
+    "Namma Clinic records loaded:",
+    nammaClinicData.length
+);
+
+console.log(
+    "AYUSH records loaded:",
+    ayushData.length
 );
 
 console.log(
@@ -6758,13 +7070,14 @@ const filterConfig = [
     },
 
     {
-        id: "formatFilter",
-        column: "Format Type"
+        id: "baseCategoryFilter",
+        column: "Base Category"
     },
 
     {
-        id: "facilityTypeFilter",
-        column: "Facility Type"
+        id: "dashboardClassificationFilter",
+        column: "Dashboard Classification",
+        splitValues: true
     },
 
     {
@@ -6907,30 +7220,95 @@ function populateAllFilters() {
 
     let availableData = facilityData;
 
+
     filterConfig.forEach((config, index) => {
 
-        const select = document.getElementById(config.id);
-        const currentValue = select.value || "All";
+        const select =
+            document.getElementById(config.id);
 
-        // Get values only from data remaining after previous filters
-        const values = [
-            ...new Set(
-                availableData
-                    .map(row => text(row[config.column]))
-                    .filter(Boolean)
+        if (!select) {
+            return;
+        }
+
+
+        const currentValue =
+            select.value || "All";
+
+
+        let values = [];
+
+
+        // ==================================================
+        // DASHBOARD CLASSIFICATION
+        // Split values using "/"
+        // ==================================================
+
+        if (config.splitValues) {
+
+            values = [
+                ...new Set(
+                    availableData
+                        .flatMap(row =>
+                            dashboardClassifications(row)
+                        )
+                        .filter(Boolean)
+                )
+            ];
+
+        }
+
+        // ==================================================
+        // NORMAL FILTER
+        // ==================================================
+
+        else {
+
+            values = [
+                ...new Set(
+                    availableData
+                        .map(row =>
+                            text(row[config.column])
+                                .trim()
+                        )
+                        .filter(Boolean)
+                )
+            ];
+
+        }
+
+
+        values.sort((a, b) =>
+            a.localeCompare(
+                b,
+                undefined,
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
             )
-        ].sort((a, b) => a.localeCompare(b));
+        );
+
+
+        // ==================================================
+        // REBUILD DROPDOWN
+        // ==================================================
 
         select.innerHTML = "";
 
-        const allOption = document.createElement("option");
+
+        const allOption =
+            document.createElement("option");
+
         allOption.value = "All";
         allOption.textContent = "All";
+
         select.appendChild(allOption);
+
 
         values.forEach(value => {
 
-            const option = document.createElement("option");
+            const option =
+                document.createElement("option");
 
             option.value = value;
             option.textContent = value;
@@ -6939,19 +7317,51 @@ function populateAllFilters() {
 
         });
 
-        // Keep current selection if still valid
+
+        // ==================================================
+        // KEEP CURRENT SELECTION
+        // ==================================================
+
         if (values.includes(currentValue)) {
-            select.value = currentValue;
+
+            select.value =
+                currentValue;
+
         } else {
-            select.value = "All";
+
+            select.value =
+                "All";
+
         }
 
-        // Filter data before creating NEXT dropdown
+
+        // ==================================================
+        // APPLY THIS FILTER BEFORE BUILDING NEXT FILTER
+        // ==================================================
+
         if (select.value !== "All") {
 
-            availableData = availableData.filter(row =>
-                text(row[config.column]) === select.value
-            );
+
+            if (config.splitValues) {
+
+                availableData =
+                    availableData.filter(row =>
+                        hasDashboardClassification(
+                            row,
+                            select.value
+                        )
+                    );
+
+            } else {
+
+                availableData =
+                    availableData.filter(row =>
+                        text(row[config.column])
+                            .trim() ===
+                        select.value
+                    );
+
+            }
 
         }
 
@@ -7110,10 +7520,20 @@ function getFilteredData() {
 
         return filterConfig.every(config => {
 
+            const select =
+                document.getElementById(
+                    config.id
+                );
+
+
+            if (!select) {
+                return true;
+            }
+
+
             const selected =
-                document
-                .getElementById(config.id)
-                .value;
+                select.value;
+
 
             if (
                 !selected ||
@@ -7124,8 +7544,22 @@ function getFilteredData() {
 
             }
 
+
+            // Dashboard Classification
+            if (config.splitValues) {
+
+                return hasDashboardClassification(
+                    row,
+                    selected
+                );
+
+            }
+
+
+            // Normal filters
             return (
-                text(row[config.column]) ===
+                text(row[config.column])
+                    .trim() ===
                 selected
             );
 
@@ -7265,7 +7699,62 @@ function updateFacilityTypeKPIs(data) {
     // GET ALL FACILITY TYPES DIRECTLY FROM CURRENT DATA
     // No hard-coded Facility Type list
     // ======================================================
+// ======================================================
+// NAMMA CLINIC SPECIAL RULE
+// ======================================================
 
+const baseCategoryFilter =
+    document.getElementById(
+        "baseCategoryFilter"
+    );
+
+const selectedBaseCategory =
+    baseCategoryFilter
+        ? text(baseCategoryFilter.value)
+            .trim()
+            .toUpperCase()
+        : "ALL";
+
+
+if (
+    selectedBaseCategory ===
+    "NAMMA CLINIC"
+) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "facility-kpi-card " +
+        "family-primary " +
+        "family-highlight";
+
+    card.style.cursor =
+        "pointer";
+
+    card.innerHTML = `
+
+        <div class="facility-kpi-name">
+            Namma Clinic
+        </div>
+
+        <div class="facility-kpi-value">
+            ${formatNumber(data.length)}
+        </div>
+
+    `;
+
+    card.onclick =
+        function () {
+
+            renderFacilityDetails(data);
+
+        };
+
+    container.appendChild(card);
+
+    return;
+}
     const facilityTypeCounts = {};
 
 
@@ -8037,114 +8526,83 @@ function showFacilityFamilyKPIs(family) {
 
     const data = getFilteredData();
 
+    // ------------------------------------------------------
+    // Convert internal card name to actual Base Category
+    // ------------------------------------------------------
 
-    // ======================================================
-    // FILTER USING FORMAT TYPE
-    // Facility Type is NOT used to determine the family
-    // ======================================================
+    const baseCategoryMap = {
+        SC: "SC",
+        PHC: "PHC",
+        CHC: "CHC",
+        SDH: "SDH",
+        DH: "DH",
+        MC: "MEDICAL COLLEGE",
+        "NAMMA CLINIC": "NAMMA CLINIC"
+    };
+
+    const selectedBaseCategory =
+        baseCategoryMap[family] ||
+        text(family).trim().toUpperCase();
+
+
+    // ------------------------------------------------------
+    // FILTER BY BASE CATEGORY
+    // ------------------------------------------------------
 
     const familyData =
-        data.filter(row => {
-
-            const formatType =
-                text(row["Format Type"])
-                    .trim()
-                    .toUpperCase();
+        data.filter(row =>
+            baseCategoryName(row) ===
+            selectedBaseCategory
+        );
 
 
-            if (family === "SC") {
-    return (
-        formatType === "SC" ||
-        formatType === "SC FORMAT"
-    );
-}
-
-if (family === "PHC") {
-    return (
-        formatType === "PHC" ||
-        formatType === "PHC FORMAT"
-    );
-}
-
-if (family === "CHC") {
-    return (
-        formatType === "CHC" ||
-        formatType === "CHC FORMAT" ||
-        formatType === "UCHC" ||
-        formatType === "UCHC FORMAT"
-    );
-}
-
-if (family === "SDH") {
-    return (
-        formatType === "SDH" ||
-        formatType === "SDH FORMAT"
-    );
-}
-
-if (family === "DH") {
-    return (
-        formatType === "DH" ||
-        formatType === "DH FORMAT"
-    );
-}
-
-
-            if (family === "MC") {
-
-    const facilityType =
-        text(row["Facility Type"])
-            .trim()
-            .toLowerCase();
-
-    return (
-        (
-            formatType === "MC" ||
-            formatType === "MC FORMAT"
-        ) &&
-        facilityType !==
-            "associated (part) hospital with mc/mch"
-    );
-}
-
-
-            return true;
-
-        });
-
-
-    // ======================================================
-    // CREATE FACILITY TYPE KPIs FROM ACTUAL FAMILY DATA
-    // ======================================================
+    // ------------------------------------------------------
+    // BUILD DASHBOARD CLASSIFICATION COUNTS
+    // ------------------------------------------------------
 
     const container =
         document.getElementById(
             "facilityTypeKPIs"
         );
 
-
     if (container) {
 
         container.innerHTML = "";
 
-
         const counts = {};
 
 
-        familyData.forEach(row => {
+// ======================================================
+// NAMMA CLINIC — SPECIAL CLASSIFICATION
+// ======================================================
 
-            const facilityType =
-                text(row["Facility Type"]).trim();
+if (family === "NAMMA CLINIC") {
 
-            if (!facilityType) {
-                return;
-            }
+    counts["Namma Clinic"] =
+        familyData.length;
+
+}
 
 
-            counts[facilityType] =
-                (counts[facilityType] || 0) + 1;
+// ======================================================
+// ALL OTHER BASE CATEGORIES
+// ======================================================
 
-        });
+else {
+
+    familyData.forEach(row => {
+
+        dashboardClassifications(row)
+            .forEach(classification => {
+
+                counts[classification] =
+                    (counts[classification] || 0) + 1;
+
+            });
+
+    });
+
+}
 
 
         Object.entries(counts)
@@ -8159,41 +8617,50 @@ if (family === "DH") {
                 )
             )
             .forEach(
-                ([facilityType, count]) => {
+                ([classification, count]) => {
 
                     const card =
                         document.createElement("div");
 
 
-                    let familyClass = "family-other";
+                    let familyClass =
+                        "family-other";
 
-if (family === "SC") {
-    familyClass = "family-shc";
-}
+                    if (family === "SC") {
+                        familyClass = "family-shc";
+                    }
 
-if (family === "PHC") {
-    familyClass = "family-phc";
-}
+                    if (family === "PHC") {
+                        familyClass = "family-phc";
+                    }
 
-if (family === "CHC") {
-    familyClass = "family-chc";
-}
+                    if (family === "CHC") {
+                        familyClass = "family-chc";
+                    }
 
-if (
-    family === "SDH" ||
-    family === "DH"
-) {
-    familyClass = "family-hospital";
-}
+                    if (
+                        family === "SDH" ||
+                        family === "DH"
+                    ) {
+                        familyClass =
+                            "family-hospital";
+                    }
 
-if (family === "MC") {
-    familyClass = "family-mch";
-}
+                    if (family === "MC") {
+                        familyClass =
+                            "family-mch";
+                    }
 
-card.className =
-    "facility-kpi-card " +
-    familyClass +
-    " family-highlight";
+                    if (family === "NAMMA CLINIC") {
+                        familyClass =
+                            "family-primary";
+                    }
+
+
+                    card.className =
+                        "facility-kpi-card " +
+                        familyClass +
+                        " family-highlight";
 
 
                     card.style.cursor =
@@ -8203,7 +8670,7 @@ card.className =
                     card.innerHTML = `
 
                         <div class="facility-kpi-name">
-                            ${facilityType}
+                            ${classification}
                         </div>
 
                         <div class="facility-kpi-value">
@@ -8214,13 +8681,25 @@ card.className =
 
 
                     card.onclick =
-                        function () {
+    function () {
 
-                            showFacilitiesForKPI(
-                                facilityType
-                            );
+        // Namma Clinic is already filtered
+        // by Base Category
+        if (family === "NAMMA CLINIC") {
 
-                        };
+            renderFacilityDetails(
+                familyData
+            );
+
+            return;
+        }
+
+
+        showFacilitiesForKPI(
+            classification
+        );
+
+    };
 
 
                     container.appendChild(card);
@@ -8231,18 +8710,18 @@ card.className =
     }
 
 
-    // ======================================================
-    // FACILITY DETAILS = ALL FACILITIES OF SELECTED FORMAT
-    // ======================================================
+    // ------------------------------------------------------
+    // SHOW ALL FACILITIES OF SELECTED BASE CATEGORY
+    // ------------------------------------------------------
 
     renderFacilityDetails(
         familyData
     );
 
 
-    // ======================================================
+    // ------------------------------------------------------
     // HEADING
-    // ======================================================
+    // ------------------------------------------------------
 
     const header =
         document.querySelector(
@@ -8253,22 +8732,25 @@ card.className =
     const familyTitles = {
 
         SC:
-            "SUB CENTRES (SC) — FACILITY TYPE BREAKUP",
+            "SUB CENTRES (SC) — DASHBOARD CLASSIFICATION",
 
         PHC:
-            "PRIMARY HEALTH CENTRES (PHC) — FACILITY TYPE BREAKUP",
+            "PRIMARY HEALTH CENTRES (PHC) — DASHBOARD CLASSIFICATION",
 
         CHC:
-            "COMMUNITY HEALTH CENTRES (CHC) — FACILITY TYPE BREAKUP",
+            "COMMUNITY HEALTH CENTRES (CHC) — DASHBOARD CLASSIFICATION",
 
         SDH:
-            "SUB DISTRICT HOSPITALS (SDH) — FACILITY TYPE BREAKUP",
+            "SUB DISTRICT HOSPITALS (SDH) — DASHBOARD CLASSIFICATION",
 
         DH:
-            "DISTRICT HOSPITALS (DH) — FACILITY TYPE BREAKUP",
+            "DISTRICT HOSPITALS (DH) — DASHBOARD CLASSIFICATION",
 
         MC:
-            "MEDICAL COLLEGES (MC/MCH) — FACILITY TYPE BREAKUP"
+            "MEDICAL COLLEGE — DASHBOARD CLASSIFICATION",
+
+        "NAMMA CLINIC":
+            "NAMMA CLINIC — DASHBOARD CLASSIFICATION"
 
     };
 
@@ -8332,7 +8814,7 @@ function showAllFacilityKPIs() {
     if (header) {
 
         header.textContent =
-            "FACILITY TYPE KPIs — GROUPED BY FACILITY FAMILY";
+    "DASHBOARD CLASSIFICATION";
 
     }
 }
@@ -8840,7 +9322,7 @@ function renderPlanningFacilityDetails(data) {
 
 
     const displayData =
-        matchingData.slice(0, 500);
+    matchingData;
 
 
     tableBody.innerHTML = "";
@@ -11251,21 +11733,11 @@ checkReconDuplicates();
     }).length;
 
 
-    // MC
-    const mcCount =
-    data.filter(row => {
-
-        const formatType =
-            text(row["Format Type"])
-                .trim()
-                .toUpperCase();
-
-        return (
-            formatType === "MC" ||
-            formatType === "MC FORMAT"
-        );
-
-    }).length;
+    // MEDICAL COLLEGE
+const mcCount =
+    data.filter(row =>
+        baseCategoryName(row) === "MEDICAL COLLEGE"
+    ).length;
 
 
     // ------------------------------------------------------
@@ -11421,25 +11893,33 @@ document.getElementById(
     // ------------------------------------------------------
 
     const district =
-        document.getElementById("districtFilter").value;
+    document.getElementById("districtFilter").value;
 
-    const subdistrict =
-        document.getElementById("subdistrictFilter").value;
+const subdistrict =
+    document.getElementById("subdistrictFilter").value;
 
-    const formatType =
-        document.getElementById("formatFilter").value;
+const baseCategory =
+    document.getElementById("baseCategoryFilter").value;
 
-    const facility =
-        document.getElementById("facilityFilter").value;
+const dashboardClassification =
+    document.getElementById(
+        "dashboardClassificationFilter"
+    ).value;
 
-    document.getElementById("hrFilterSummary").innerHTML =
-        "<strong>District:</strong> " + district +
-        " &nbsp; | &nbsp; " +
-        "<strong>Subdistrict:</strong> " + subdistrict +
-        " &nbsp; | &nbsp; " +
-        "<strong>Format Type:</strong> " + formatType +
-        " &nbsp; | &nbsp; " +
-        "<strong>Facility:</strong> " + facility;
+const facility =
+    document.getElementById("facilityFilter").value;
+
+document.getElementById("hrFilterSummary").innerHTML =
+    "<strong>District:</strong> " + district +
+    " &nbsp; | &nbsp; " +
+    "<strong>Subdistrict:</strong> " + subdistrict +
+    " &nbsp; | &nbsp; " +
+    "<strong>Base Category:</strong> " + baseCategory +
+    " &nbsp; | &nbsp; " +
+    "<strong>Dashboard Classification:</strong> " +
+    dashboardClassification +
+    " &nbsp; | &nbsp; " +
+    "<strong>Facility:</strong> " + facility;
 
 
     // ------------------------------------------------------
@@ -11454,96 +11934,63 @@ document.getElementById(
 // KEY FACILITY TYPE KPIs
 // ------------------------------------------------------
 
-function facilityTypeName(row) {
-    return text(row["Facility Type"])
+// ------------------------------------------------------
+// MAIN FACILITY KPIs — BASE CATEGORY
+// ------------------------------------------------------
+
+function baseCategoryName(row) {
+    return text(row["Base Category"])
         .trim()
-        .toLowerCase();
+        .toUpperCase();
 }
 
 
 // SC
-const scCount = data.filter(row => {
-    const name = facilityTypeName(row);
-
-    return (
-        name.includes("aam-shc") ||
-        name.includes("uaam-shc")
-    );
-}).length;
+const scCount =
+    data.filter(row =>
+        baseCategoryName(row) === "SC"
+    ).length;
 
 
 // PHC
-const phcCount = data.filter(row => {
-    const name = facilityTypeName(row);
-
-    return (
-        name.includes("phc-aam") ||
-        name.includes("aam-phc") ||
-        name.includes("uphc")
-    );
-}).length;
+const phcCount =
+    data.filter(row =>
+        baseCategoryName(row) === "PHC"
+    ).length;
 
 
 // CHC
-const chcCount = data.filter(row => {
-    const name = facilityTypeName(row);
-
-    return (
-        name.includes("chc") ||
-        name.includes("uchc")
-    );
-}).length;
+const chcCount =
+    data.filter(row =>
+        baseCategoryName(row) === "CHC"
+    ).length;
 
 
 // SDH
-const sdhCount = data.filter(row => {
-    const name = facilityTypeName(row);
-
-    return name === "sdh";
-}).length;
+const sdhCount =
+    data.filter(row =>
+        baseCategoryName(row) === "SDH"
+    ).length;
 
 
 // DH
-const dhCount = data.filter(row => {
-    const name = facilityTypeName(row);
-
-    return (
-        name === "dh" ||
-        name.startsWith("dh ")
-    );
-}).length;
+const dhCount =
+    data.filter(row =>
+        baseCategoryName(row) === "DH"
+    ).length;
 
 
-// MC
-// Main MC family is determined by Format Type.
-// Associated (part) Hospital is excluded.
+// MEDICAL COLLEGE
 const mcCount =
-    data.filter(row => {
+    data.filter(row =>
+        baseCategoryName(row) === "MEDICAL COLLEGE"
+    ).length;
 
-        const formatType =
-            text(row["Format Type"])
-                .trim()
-                .toUpperCase();
-
-        const facilityType =
-            text(row["Facility Type"])
-                .trim()
-                .toLowerCase();
-
-        const isMC =
-            formatType === "MC" ||
-            formatType === "MC FORMAT";
-
-        const isAssociatedHospital =
-            facilityType ===
-            "associated (part) hospital with mc/mch";
-
-        return (
-            isMC &&
-            !isAssociatedHospital
-        );
-
-    }).length;
+// NAMMA CLINIC
+const nammaClinicCount =
+    data.filter(row =>
+        baseCategoryName(row) === "NAMMA CLINIC"
+    ).length;
 
 
 // UPDATE CARDS
@@ -11577,6 +12024,10 @@ document.getElementById(
     "districtMC"
 ).textContent =
     formatNumber(mcCount);
+    document.getElementById(
+    "districtNammaClinic"
+).textContent =
+    formatNumber(nammaClinicCount);
 
     const buildingAvailable =
         data.filter(row => {
@@ -11874,27 +12325,77 @@ renderFacilityDetails(data);
 // SHOW FACILITIES FOR CLICKED FACILITY TYPE KPI
 // ==========================================================
 
-function showFacilitiesForKPI(facilityType) {
+function showFacilitiesForKPI(classification) {
 
     const data = getFilteredData();
 
-    const facilityTypeData =
-        data.filter(row =>
-            text(row["Facility Type"]).trim() ===
-            text(facilityType).trim()
+
+    const baseCategoryMap = {
+        SC: "SC",
+        PHC: "PHC",
+        CHC: "CHC",
+        SDH: "SDH",
+        DH: "DH",
+        MC: "MEDICAL COLLEGE",
+        "NAMMA CLINIC": "NAMMA CLINIC"
+    };
+
+
+    let filteredData = data;
+
+
+    // Keep selected top Base Category
+    if (
+        selectedFacilityFamily &&
+        selectedFacilityFamily !== "ALL"
+    ) {
+
+        const selectedBaseCategory =
+            baseCategoryMap[selectedFacilityFamily] ||
+            text(selectedFacilityFamily)
+                .trim()
+                .toUpperCase();
+
+
+        filteredData =
+            filteredData.filter(row =>
+                baseCategoryName(row) ===
+                selectedBaseCategory
+            );
+
+    }
+
+
+    // Exact Dashboard Classification component
+    filteredData =
+        filteredData.filter(row =>
+            hasDashboardClassification(
+                row,
+                classification
+            )
         );
 
-    renderFacilityDetails(facilityTypeData);
+
+    renderFacilityDetails(
+        filteredData
+    );
+
 
     const facilityDetails =
-        document.getElementById("facilityDetailsBody");
+        document.getElementById(
+            "facilityDetailsBody"
+        );
+
 
     if (facilityDetails) {
+
         facilityDetails.scrollIntoView({
             behavior: "smooth",
             block: "start"
         });
+
     }
+
 }
 // ==========================================================
 // SHOW FACILITIES FOR CLICKED KPI — TESTING DASHBOARD
@@ -12090,6 +12591,237 @@ if (testingFacilitySearch) {
     );
 }
 // ==========================================================
+// FACILITY DETAILS — SORTING
+// ==========================================================
+
+let hmisFacilitySort = {
+    column: "",
+    direction: "asc"
+};
+
+let planningFacilitySort = {
+    column: "",
+    direction: "asc"
+};
+
+
+function sortFacilityRows(data, sortState) {
+
+    if (!sortState.column) {
+        return [...data];
+    }
+
+    const column = sortState.column;
+    const direction = sortState.direction;
+
+    return [...data].sort((a, b) => {
+
+        let valueA = a[column];
+        let valueB = b[column];
+
+        // Numeric sorting for Beds
+        if (column === "No. of Beds") {
+
+            valueA = numberValue(valueA);
+            valueB = numberValue(valueB);
+
+            return direction === "asc"
+                ? valueA - valueB
+                : valueB - valueA;
+        }
+
+        // Text sorting
+        valueA = text(valueA).trim();
+        valueB = text(valueB).trim();
+
+        const result = valueA.localeCompare(
+            valueB,
+            undefined,
+            {
+                numeric: true,
+                sensitivity: "base"
+            }
+        );
+
+        return direction === "asc"
+            ? result
+            : -result;
+    });
+}
+
+
+function sortHMISFacilityDetails(column) {
+
+    if (hmisFacilitySort.column === column) {
+
+        hmisFacilitySort.direction =
+            hmisFacilitySort.direction === "asc"
+                ? "desc"
+                : "asc";
+
+    } else {
+
+        hmisFacilitySort.column = column;
+        hmisFacilitySort.direction = "asc";
+
+    }
+
+    renderFacilityDetails(
+        getFilteredData()
+    );
+}
+
+
+function sortPlanningFacilityDetails(column) {
+
+    if (planningFacilitySort.column === column) {
+
+        planningFacilitySort.direction =
+            planningFacilitySort.direction === "asc"
+                ? "desc"
+                : "asc";
+
+    } else {
+
+        planningFacilitySort.column = column;
+        planningFacilitySort.direction = "asc";
+
+    }
+
+    renderPlanningDashboardFacilityDetails(
+        getPlanningDashboardFilteredData()
+    );
+}
+
+
+function facilitySortArrow(sortState, column) {
+
+    if (sortState.column !== column) {
+        return " ↕";
+    }
+
+    return sortState.direction === "asc"
+        ? " ▲"
+        : " ▼";
+}
+// ==========================================================
+// UPDATE FACILITY DETAILS SORT ARROWS
+// ==========================================================
+
+function updateFacilitySortArrows(
+    table,
+    sortState
+) {
+
+    if (!table) return;
+
+    const columns = [
+        "District Name",
+        "Subdistrict Name",
+        "Format Type",
+        "Facility Type",
+        "Facility Name",
+        "Ownership",
+        "Rural/Urban",
+        "No. of Beds",
+        "Building Status",
+        "NIN",
+        "HFR ID"
+    ];
+
+    const headers =
+        table.querySelectorAll("thead th");
+
+    headers.forEach((header, index) => {
+
+        const column = columns[index];
+
+        if (!column) return;
+
+        // Remove previous arrow
+        const oldArrow =
+            header.querySelector(
+                ".facility-sort-arrow"
+            );
+
+        if (oldArrow) {
+            oldArrow.remove();
+        }
+
+        // Create current arrow
+        const arrow =
+            document.createElement("span");
+
+        arrow.className =
+            "facility-sort-arrow";
+
+        arrow.textContent =
+            facilitySortArrow(
+                sortState,
+                column
+            );
+
+        header.appendChild(arrow);
+    });
+}
+// ==========================================================
+// INITIALIZE HMIS FACILITY DETAILS SORTING
+// ==========================================================
+
+function initializeHMISFacilitySorting() {
+
+    const table =
+        document.querySelector(
+            "#facilityTab .facility-details-table"
+        );
+
+    if (!table) return;
+
+    const columns = [
+        "District Name",
+        "Subdistrict Name",
+        "Format Type",
+        "Facility Type",
+        "Facility Name",
+        "Ownership",
+        "Rural/Urban",
+        "No. of Beds",
+        "Building Status",
+        "NIN",
+        "HFR ID"
+    ];
+
+    const headers =
+        table.querySelectorAll(
+            "thead th"
+        );
+
+    headers.forEach((header, index) => {
+
+        const column =
+            columns[index];
+
+        if (!column) return;
+
+        header.style.cursor =
+            "pointer";
+
+        header.onclick =
+            function () {
+
+                sortHMISFacilityDetails(
+                    column
+                );
+
+            };
+    });
+
+    updateFacilitySortArrows(
+        table,
+        hmisFacilitySort
+    );
+}
+// ==========================================================
 // FACILITY DETAILS TABLE
 // ==========================================================
 
@@ -12133,11 +12865,27 @@ function renderFacilityDetails(data) {
 
         });
 
-    // Show maximum 500 rows for browser performance
-    const displayData =
-        matchingData.slice(0, 500);
+    // Sort ALL matching rows before applying 500-row display limit
+const sortedData =
+    sortFacilityRows(
+        matchingData,
+        hmisFacilitySort
+    );
+
+const displayData =
+    sortedData;
 
     tableBody.innerHTML = "";
+    const hmisTable =
+    tableBody.closest(
+        ".facility-details-table"
+    );
+
+updateFacilitySortArrows(
+    hmisTable,
+    hmisFacilitySort
+);
+
 
     displayData.forEach(row => {
 
@@ -12169,14 +12917,9 @@ tableBody.appendChild(tr);
     });
 
     rowNote.textContent =
-        "Showing " +
-        formatNumber(displayData.length) +
-        " of " +
-        formatNumber(matchingData.length) +
-        " matching facilities" +
-        (matchingData.length > 500
-            ? " (first 500 shown for performance)"
-            : "");
+    "Showing " +
+    formatNumber(matchingData.length) +
+    " matching facilities";
 }
 
 
@@ -13190,6 +13933,7 @@ document
 
 // Create Planning Facility Dashboard
 createPlanningFacilityDashboard();
+initializeHMISFacilitySorting();
 
 // Connect Planning Facility Dashboard filters
 setupPlanningDashboardFilterEvents();
