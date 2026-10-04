@@ -1185,6 +1185,136 @@ button {
     color: #64748b;
     margin-top: 3px;
 }
+/* =========================================================
+   HMIS + PLANNING — MAIN KPI FONT COLORS
+   White cards remain unchanged
+   ========================================================= */
+
+/* TOTAL FACILITIES */
+#facilityTab #districtTotalFacilities,
+#planningFacilityTab #planningDash_districtTotalFacilities {
+    color: #0875d1 !important;
+}
+
+/* SC */
+#facilityTab #districtSC,
+#planningFacilityTab #planningDash_districtSC {
+    color: #0097a7 !important;
+}
+
+/* PHC */
+#facilityTab #districtPHC,
+#planningFacilityTab #planningDash_districtPHC {
+    color: #2e7d32 !important;
+}
+
+/* CHC */
+#facilityTab #districtCHC,
+#planningFacilityTab #planningDash_districtCHC {
+    color: #7b1fa2 !important;
+}
+
+/* SDH */
+#facilityTab #districtSDH,
+#planningFacilityTab #planningDash_districtSDH {
+    color: #ef6c00 !important;
+}
+
+/* DH */
+#facilityTab #districtDH,
+#planningFacilityTab #planningDash_districtDH {
+    color: #1565c0 !important;
+}
+
+/* MEDICAL COLLEGE */
+#facilityTab #districtMC,
+#planningFacilityTab #planningDash_districtMC {
+    color: #d81b60 !important;
+}
+/* UPHC — Planning */
+#planningFacilityTab #planningDash_districtUPHC {
+    color: #0277bd !important;
+}
+/* NAMMA CLINIC */
+#facilityTab #districtNammaClinic,
+#planningFacilityTab #planningDash_districtNammaClinic {
+    color: #00838f !important;
+}
+
+/* AYUSH — Planning */
+#planningFacilityTab #planningDash_districtAyush {
+    color: #f59e0b !important;
+}
+
+/* AAK — Planning */
+#planningFacilityTab #planningDash_districtAAK {
+    color: #238636 !important;
+}
+
+/* MCH — Planning */
+#planningFacilityTab #planningDash_districtMCH {
+    color: #e40046 !important;
+}
+/* Match KPI heading color with KPI number */
+
+#facilityTab .district-summary-kpi:has(#districtTotalFacilities) .district-summary-label,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtTotalFacilities) .district-summary-label {
+    color: #0875d1;
+}
+
+#facilityTab .district-summary-kpi:has(#districtSC) .district-summary-label,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtSC) .district-summary-label {
+    color: #0097a7;
+}
+
+#facilityTab .district-summary-kpi:has(#districtPHC) .district-summary-label,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtPHC) .district-summary-label {
+    color: #2e7d32;
+}
+
+#facilityTab .district-summary-kpi:has(#districtCHC) .district-summary-label,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtCHC) .district-summary-label {
+    color: #7b1fa2;
+}
+
+#facilityTab .district-summary-kpi:has(#districtSDH) .district-summary-label,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtSDH) .district-summary-label {
+    color: #ef6c00;
+}
+
+#facilityTab .district-summary-kpi:has(#districtDH) .district-summary-label,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtDH) .district-summary-label {
+    color: #1565c0;
+}
+
+#facilityTab .district-summary-kpi:has(#districtMC) .district-summary-label,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMC) .district-summary-label {
+    color: #d81b60;
+}
+/* UPHC — Planning */
+#planningFacilityTab
+.district-summary-kpi:has(#planningDash_districtUPHC)
+.district-summary-label {
+    color: #0277bd;
+}
+
+#facilityTab .district-summary-kpi:has(#districtNammaClinic) .district-summary-label,
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtNammaClinic) .district-summary-label {
+    color: #00838f;
+}
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAyush) .district-summary-label {
+    color: #f59e0b;
+}
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAAK) .district-summary-label {
+    color: #238636;
+}
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMCH) .district-summary-label {
+    color: #e40046;
+}
 .population-kpi {
     margin-bottom: 16px;
     padding: 14px 20px;
@@ -2047,15 +2177,180 @@ z-index: 10;
    FACILITY FAMILY POPUP
 ========================================================= */
 
-.clickable-family-kpi {
+/* =========================================================
+   HMIS + PLANNING — MAIN KPI HOVER EFFECT
+   ========================================================= */
+
+.clickable-family-kpi,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAAK),
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMCH) {
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    transition:
+        transform 0.20s ease,
+        box-shadow 0.20s ease;
 }
 
-.clickable-family-kpi:hover {
+
+/* COMMON MOVEMENT */
+
+.clickable-family-kpi:hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAAK):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMCH):hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.15);
-    border-color: #1976d2;
+}
+
+
+/* TOTAL FACILITIES */
+
+#facilityTab .district-summary-kpi:has(#districtTotalFacilities):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtTotalFacilities):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #0875d1 !important;
+}
+
+
+/* SC */
+
+#facilityTab .district-summary-kpi:has(#districtSC):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtSC):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #0097a7 !important;
+}
+
+
+/* PHC */
+
+#facilityTab .district-summary-kpi:has(#districtPHC):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtPHC):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #2e7d32 !important;
+}
+
+
+/* CHC */
+
+#facilityTab .district-summary-kpi:has(#districtCHC):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtCHC):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #7b1fa2 !important;
+}
+
+
+/* SDH */
+
+#facilityTab .district-summary-kpi:has(#districtSDH):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtSDH):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #ef6c00 !important;
+}
+
+
+/* DH */
+
+#facilityTab .district-summary-kpi:has(#districtDH):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtDH):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #1565c0 !important;
+}
+
+
+/* MEDICAL COLLEGE */
+
+#facilityTab .district-summary-kpi:has(#districtMC):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMC):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #d81b60 !important;
+}
+/* UPHC */
+
+#planningFacilityTab
+.district-summary-kpi:has(#planningDash_districtUPHC):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #0277bd !important;
+}
+
+
+/* NAMMA CLINIC */
+
+#facilityTab .district-summary-kpi:has(#districtNammaClinic):hover,
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtNammaClinic):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #00838f !important;
+}
+
+
+/* AYUSH */
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAyush):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #f59e0b !important;
+}
+
+
+/* AAK */
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAAK):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #238636 !important;
+}
+
+
+/* MCH */
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMCH):hover {
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 3px #e40046 !important;
+}
+/* =========================================================
+   PLANNING — AAK & MCH HOVER
+   Same bold effect as other main KPI cards
+   ========================================================= */
+
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAAK),
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMCH) {
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+/* AAK */
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtAAK):hover {
+    transform: translateY(-5px);
+
+    border: 2px solid #238636 !important;
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,0.15),
+        0 0 0 2px #238636 !important;
+}
+
+
+/* MCH */
+#planningFacilityTab .district-summary-kpi:has(#planningDash_districtMCH):hover {
+    transform: translateY(-5px);
+
+    border: 2px solid #e40046 !important;
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,0.15),
+        0 0 0 2px #e40046 !important;
 }
 
 .facility-family-popup {
@@ -2683,7 +2978,7 @@ z-index: 10;
         </div>
 
         <div>
-            03-10-2026 02:04 PM
+            04-10-2026 06:56 PM
         </div>
 
         <div class="meta-source">
@@ -3593,6 +3888,53 @@ target.innerHTML =
 
         });
         // ======================================================
+// PLANNING ONLY — ADD UPHC TOP KPI CARD
+// Insert before Namma Clinic
+// ======================================================
+
+const planningNammaCardForUPHC =
+    document.getElementById(
+        "planningDash_districtNammaClinic"
+    )?.closest(
+        ".district-summary-kpi"
+    );
+
+if (
+    planningNammaCardForUPHC &&
+    !document.getElementById(
+        "planningDash_districtUPHC"
+    )
+) {
+
+    const uphcCard =
+        document.createElement("div");
+
+    uphcCard.className =
+        "district-summary-kpi clickable-family-kpi";
+
+    uphcCard.innerHTML = `
+
+        <div class="district-summary-label">
+            UPHC
+        </div>
+
+        <div id="planningDash_districtUPHC"
+             class="district-summary-value">
+            0
+        </div>
+
+        <div class="district-summary-small">
+            Urban Primary Health Centres
+        </div>
+
+    `;
+
+    planningNammaCardForUPHC.insertAdjacentElement(
+        "beforebegin",
+        uphcCard
+    );
+}
+        // ======================================================
 // PLANNING ONLY — ADD AYUSH TOP KPI CARD
 // ======================================================
 
@@ -3920,8 +4262,11 @@ const planningTopKPIs = {
     planningDash_districtDH: "DH",
     planningDash_districtMC: "MC",
 
-    planningDash_districtNammaClinic:
-        "NAMMA CLINIC",
+planningDash_districtUPHC:
+    "UPHC",
+
+planningDash_districtNammaClinic:
+    "NAMMA CLINIC",
 
     planningDash_districtAyush:
         "AYUSH"
@@ -4415,6 +4760,10 @@ function getPlanningFamilyData(data, family) {
     if (!family || family === "ALL") {
         return data;
     }
+    // UPHC uses separate UPHCs sheet
+if (family === "UPHC") {
+    return uphcData;
+}
     // Namma Clinic uses separate Namma Clinics sheet
 if (family === "NAMMA CLINIC") {
     return nammaClinicData;
@@ -4518,6 +4867,9 @@ document
 
     MC:
     "MEDICAL COLLEGES — DASHBOARD CLASSIFICATION",
+
+UPHC:
+    "URBAN PRIMARY HEALTH CENTRES (UPHC) — DASHBOARD CLASSIFICATION",
 
 "NAMMA CLINIC":
     "NAMMA CLINICS — DASHBOARD CLASSIFICATION",
@@ -4733,7 +5085,69 @@ card.onclick = function () {
 
         });
 
+// ======================================================
+// SHOW ALL FILTERED AAK FACILITIES IN FACILITY DETAILS
+// ======================================================
 
+const tableBody =
+    document.getElementById(
+        "planningDash_facilityDetailsBody"
+    );
+
+const rowNote =
+    document.getElementById(
+        "planningDash_facilityRowNote"
+    );
+
+if (tableBody) {
+
+    tableBody.innerHTML = "";
+
+    filteredAAKData.forEach(row => {
+
+        const tr =
+            document.createElement("tr");
+
+        tr.innerHTML = `
+
+            <td>${text(row["District Name"])}</td>
+
+            <td>${text(row["Subdistrict Name"])}</td>
+
+            <td>AAK</td>
+
+            <td>${text(row["Facility Type"])}</td>
+
+            <td>${text(row["Facility Name"])}</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>${text(row["NIN"])}</td>
+
+            <td>—</td>
+
+        `;
+
+        tableBody.appendChild(tr);
+
+    });
+
+}
+
+if (rowNote) {
+
+    rowNote.textContent =
+        "Showing " +
+        formatNumber(filteredAAKData.length) +
+        " AAK facilities";
+
+}
     // Scroll to KPI section
     container.scrollIntoView({
         behavior: "smooth",
@@ -4782,10 +5196,390 @@ function showAllStandalonePlanningFacilityKPIs() {
 // ==========================================================
 // PLANNING — DETAILED KPI CLICK
 // ==========================================================
+// ==========================================================
+// PLANNING — UPHC FACILITY DETAILS
+// ==========================================================
+
+function showPlanningUPHCFacilityDetails(
+    classification
+) {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+    const selectedHealthBlock =
+        document.getElementById(
+            "planningDash_healthblockFilter"
+        )?.value || "All";
+
+
+    const filteredData =
+        uphcData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            const healthBlockMatch =
+                selectedHealthBlock === "All" ||
+                text(row["Healthblock Name"]).trim() ===
+                    selectedHealthBlock;
+
+            const classificationMatch =
+                text(
+                    row["Dashboard Classification"]
+                )
+                .trim()
+                .toUpperCase() ===
+                text(classification)
+                .trim()
+                .toUpperCase();
+
+
+            return (
+                districtMatch &&
+                subdistrictMatch &&
+                healthBlockMatch &&
+                classificationMatch
+            );
+
+        });
+
+
+    renderPlanningDashboardFacilityDetails(
+        filteredData
+    );
+
+
+    const rowNote =
+        document.getElementById(
+            "planningDash_facilityRowNote"
+        );
+
+    if (rowNote) {
+
+        rowNote.textContent =
+            "Showing " +
+            formatNumber(filteredData.length) +
+            " " +
+            classification +
+            " facilities";
+
+    }
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+// ==========================================================
+// PLANNING — AYUSH HOSPITAL / DISPENSARY FACILITY DETAILS
+// ==========================================================
+
+function showPlanningAyushFacilityDetails(
+    baseCategory,
+    classification
+) {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+    const selectedHealthBlock =
+        document.getElementById(
+            "planningDash_healthblockFilter"
+        )?.value || "All";
+
+
+    const filteredData =
+        ayushData.filter(row => {
+
+            // ------------------------------------------
+            // Existing Planning filters
+            // ------------------------------------------
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+
+            const healthBlockMatch =
+                selectedHealthBlock === "All" ||
+                text(row["Healthblock Name"]).trim() ===
+                    selectedHealthBlock;
+
+
+            // ------------------------------------------
+            // AYUSH Hospital / Dispensary
+            // ------------------------------------------
+
+            const baseCategoryMatch =
+                text(row["Base Category"])
+                    .trim()
+                    .toUpperCase() ===
+                text(baseCategory)
+                    .trim()
+                    .toUpperCase();
+
+
+            // ------------------------------------------
+            // Ayurveda / Unani / Homeopathy /
+            // Nature Cure & Yoga
+            // ------------------------------------------
+
+            const classificationMatch =
+                text(row["Dashboard Classification"])
+                    .trim()
+                    .toUpperCase() ===
+                text(classification)
+                    .trim()
+                    .toUpperCase();
+
+
+            return (
+                districtMatch &&
+                subdistrictMatch &&
+                healthBlockMatch &&
+                baseCategoryMatch &&
+                classificationMatch
+            );
+
+        });
+
+
+    // ======================================================
+    // SHOW FACILITIES
+    // ======================================================
+
+    renderPlanningDashboardFacilityDetails(
+        filteredData
+    );
+
+
+    // ======================================================
+    // UPDATE FACILITY ROW NOTE
+    // ======================================================
+
+    const rowNote =
+        document.getElementById(
+            "planningDash_facilityRowNote"
+        );
+
+    if (rowNote) {
+
+        rowNote.textContent =
+            "Showing " +
+            formatNumber(filteredData.length) +
+            " " +
+            baseCategory +
+            " — " +
+            classification +
+            " facilities";
+
+    }
+
+
+    // ======================================================
+    // SCROLL TO FACILITY DETAILS
+    // ======================================================
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
 
 function showStandalonePlanningFacilitiesForKPI(
     classification
 ) {
+// ======================================================
+// UPHC — SEPARATE SOURCE
+// ======================================================
+
+if (
+    selectedPlanningFacilityFamily === "ALL" &&
+    text(classification)
+        .trim()
+        .toUpperCase() === "UPHC"
+) {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+    const selectedHealthBlock =
+        document.getElementById(
+            "planningDash_healthblockFilter"
+        )?.value || "All";
+
+
+    const filteredUPHCData =
+        uphcData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            const healthBlockMatch =
+                selectedHealthBlock === "All" ||
+                text(row["Healthblock Name"]).trim() ===
+                    selectedHealthBlock;
+
+            return (
+                districtMatch &&
+                subdistrictMatch &&
+                healthBlockMatch
+            );
+
+        });
+
+
+    renderPlanningDashboardFacilityDetails(
+        filteredUPHCData
+    );
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    return;
+}
+// ======================================================
+// NAMMA CLINIC — SEPARATE SOURCE
+// ======================================================
+
+if (
+    text(classification)
+        .trim()
+        .toUpperCase() === "NAMMA CLINIC"
+) {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+
+    const filteredNammaClinicData =
+        nammaClinicData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            return (
+                districtMatch &&
+                subdistrictMatch
+            );
+
+        });
+
+
+    renderPlanningDashboardFacilityDetails(
+        filteredNammaClinicData
+    );
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    return;
+}
 
     let data =
         getPlanningDashboardFilteredData();
@@ -4882,7 +5676,7 @@ function showPlanningAAKFacilityDetails(
 
 
     const displayData =
-        data.slice(0, 500);
+    data;
 
 
     displayData.forEach(row => {
@@ -4924,21 +5718,14 @@ function showPlanningAAKFacilityDetails(
 
     if (rowNote) {
 
-        rowNote.textContent =
-            "Showing " +
-            formatNumber(displayData.length) +
-            " of " +
-            formatNumber(data.length) +
-            " " +
-            facilityType +
-            " facilities" +
-            (
-                data.length > 500
-                    ? " (first 500 shown for performance)"
-                    : ""
-            );
+    rowNote.textContent =
+        "Showing " +
+        formatNumber(data.length) +
+        " " +
+        facilityType +
+        " facilities";
 
-    }
+}
 
 
     const facilityDetails =
@@ -5377,7 +6164,40 @@ const filteredMCHData =
 const mchCount =
     filteredMCHData.length;
 
+// ======================================================
+// UPHC
+// Separate source: UPHCs
+// District + Subdistrict + Health Block filtering
+// ======================================================
 
+const filteredUPHCData =
+    uphcData.filter(row => {
+
+        const districtMatch =
+            selectedDistrict === "All" ||
+            text(row["District Name"]).trim() ===
+                selectedDistrict;
+
+        const talukMatch =
+            selectedSubdistrict === "All" ||
+            text(row["Subdistrict Name"]).trim() ===
+                selectedSubdistrict;
+
+        const blockMatch =
+            selectedHealthBlock === "All" ||
+            text(row["Healthblock Name"]).trim() ===
+                selectedHealthBlock;
+
+        return (
+            districtMatch &&
+            talukMatch &&
+            blockMatch
+        );
+
+    });
+
+const uphcCount =
+    filteredUPHCData.length;
 // ======================================================
 // NAMMA CLINIC
 // Separate source: Namma Clinics
@@ -5466,7 +6286,11 @@ const topValues = {
 
         planningDash_districtMC:
     mcCount,
-    planningDash_districtNammaClinic:
+
+planningDash_districtUPHC:
+    uphcCount,
+
+planningDash_districtNammaClinic:
     nammaClinicCount,
 
 planningDash_districtAyush:
@@ -5547,6 +6371,317 @@ renderPlanningDashboardFacilityDetails(
                 data,
                 selectedPlanningFacilityFamily
             );
+            // ======================================================
+// UPHC — DASHBOARD CLASSIFICATION
+// Separate source: UPHCs
+// ======================================================
+
+if (
+    selectedPlanningFacilityFamily === "UPHC"
+) {
+
+    container.innerHTML = "";
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+    const selectedHealthBlock =
+        document.getElementById(
+            "planningDash_healthblockFilter"
+        )?.value || "All";
+
+
+    const filteredUPHCData =
+        uphcData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            const healthBlockMatch =
+                selectedHealthBlock === "All" ||
+                text(row["Healthblock Name"]).trim() ===
+                    selectedHealthBlock;
+
+            return (
+                districtMatch &&
+                subdistrictMatch &&
+                healthBlockMatch
+            );
+
+        });
+
+
+    const counts = {};
+
+
+    filteredUPHCData.forEach(row => {
+
+        const classification =
+            text(
+                row["Dashboard Classification"]
+            ).trim();
+
+        if (!classification) return;
+
+
+        counts[classification] =
+            (counts[classification] || 0) + 1;
+
+    });
+
+
+    Object.keys(counts)
+        .sort((a, b) =>
+            a.localeCompare(
+                b,
+                undefined,
+                {
+                    sensitivity: "base"
+                }
+            )
+        )
+        .forEach(classification => {
+
+            const card =
+                document.createElement("div");
+
+
+            let className =
+                "family-phc";
+
+            const upperClassification =
+                classification.toUpperCase();
+
+
+            if (
+                upperClassification.includes(
+                    "DISPENSARY"
+                )
+            ) {
+                className =
+                    "family-dispensary";
+            }
+
+
+            if (
+                upperClassification.includes(
+                    "MATERNITY"
+                )
+            ) {
+                className =
+                    "family-mch";
+            }
+
+
+            card.className =
+                "facility-kpi-card " +
+                className +
+                " family-highlight";
+
+
+            card.style.cursor =
+                "pointer";
+
+
+            card.innerHTML = `
+
+                <div class="facility-kpi-name">
+                    ${classification}
+                </div>
+
+                <div class="facility-kpi-value">
+                    ${formatNumber(
+                        counts[classification]
+                    )}
+                </div>
+
+            `;
+
+
+            card.onclick =
+                function () {
+
+                    showPlanningUPHCFacilityDetails(
+                        classification
+                    );
+
+                };
+
+
+            container.appendChild(
+                card
+            );
+
+        });
+
+
+    return;
+}
+            // ======================================================
+// AYUSH — HOSPITAL / DISPENSARY BREAKUP
+// ======================================================
+
+if (
+    selectedPlanningFacilityFamily === "AYUSH"
+) {
+
+    container.innerHTML = "";
+
+    const ayushGroups = [
+        {
+            key: "AYUSH HOSPITAL",
+            title: "AYUSH HOSPITAL",
+            className: "family-mch"
+        },
+        {
+            key: "AYUSH DISPENSARY",
+            title: "AYUSH DISPENSARY",
+            className: "family-dispensary"
+        }
+    ];
+
+
+    ayushGroups.forEach(group => {
+
+        const groupData =
+            sourceData.filter(row =>
+                text(row["Base Category"])
+                    .trim()
+                    .toUpperCase() ===
+                group.key
+            );
+
+
+        // ----------------------------------------------
+        // Group heading
+        // ----------------------------------------------
+
+        const heading =
+            document.createElement("div");
+
+        heading.style.gridColumn = "1 / -1";
+
+        heading.style.cssText += `
+            padding: 9px 14px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #17365d;
+            background: #f4f7fb;
+            border-top: 1px solid #dbe4ef;
+            border-bottom: 1px solid #dbe4ef;
+        `;
+
+        heading.textContent =
+            group.title +
+            " — " +
+            formatNumber(groupData.length);
+
+        container.appendChild(
+            heading
+        );
+
+
+        // ----------------------------------------------
+        // Dashboard Classification counts
+        // ----------------------------------------------
+
+        const counts = {};
+
+
+        groupData.forEach(row => {
+
+            const classification =
+                text(
+                    row["Dashboard Classification"]
+                )
+                .trim();
+
+            if (!classification) return;
+
+
+            counts[classification] =
+                (counts[classification] || 0) + 1;
+
+        });
+
+
+        Object.keys(counts)
+            .sort((a, b) =>
+                a.localeCompare(
+                    b,
+                    undefined,
+                    {
+                        sensitivity: "base"
+                    }
+                )
+            )
+            .forEach(classification => {
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className =
+                    "facility-kpi-card " +
+                    group.className +
+                    " family-highlight";
+
+
+                card.style.cursor =
+                    "pointer";
+
+
+                card.innerHTML = `
+
+                    <div class="facility-kpi-name">
+                        ${classification}
+                    </div>
+
+                    <div class="facility-kpi-value">
+                        ${formatNumber(
+                            counts[classification]
+                        )}
+                    </div>
+
+                `;
+
+
+                card.onclick =
+                    function () {
+
+                        showPlanningAyushFacilityDetails(
+                            group.key,
+                            classification
+                        );
+
+                    };
+
+
+                container.appendChild(
+                    card
+                );
+
+            });
+
+    });
+
+
+    return;
+}
 
 
     // ======================================================
@@ -5572,6 +6707,101 @@ sourceData.forEach(row => {
         });
 
 });
+// ======================================================
+// PLANNING — UPHC FROM SEPARATE SHEET
+// ======================================================
+
+if (selectedPlanningFacilityFamily === "ALL") {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+    const selectedHealthBlock =
+        document.getElementById(
+            "planningDash_healthblockFilter"
+        )?.value || "All";
+
+
+    const filteredUPHCData =
+        uphcData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            const healthBlockMatch =
+                selectedHealthBlock === "All" ||
+                text(row["Healthblock Name"]).trim() ===
+                    selectedHealthBlock;
+
+            return (
+                districtMatch &&
+                subdistrictMatch &&
+                healthBlockMatch
+            );
+
+        });
+
+
+    counts["UPHC"] =
+        filteredUPHCData.length;
+
+}
+// ======================================================
+// PLANNING — NAMMA CLINIC FROM SEPARATE SHEET
+// ======================================================
+
+if (selectedPlanningFacilityFamily === "ALL") {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+
+    const filteredNammaClinicData =
+        nammaClinicData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            return (
+                districtMatch &&
+                subdistrictMatch
+            );
+
+        });
+
+
+    counts["Namma Clinic"] =
+        filteredNammaClinicData.length;
+
+}
 
 
     // ======================================================
@@ -5681,7 +6911,14 @@ if (
             ? baseCategoryName(matchingRow)
             : "";
 
+if (
+    facilityType === "UPHC" &&
+    selectedPlanningFacilityFamily === "ALL"
+) {
+    familyClass = "family-phc";
+}
 
+else
     if (baseCategory === "SC") {
         familyClass = "family-shc";
     }
@@ -5845,8 +7082,7 @@ function renderPlanningDashboardFacilityDetails(data) {
     );
 
 const displayData =
-    sortedData.slice(0, 500);
-
+    sortedData;
 
     tableBody.innerHTML = "";
     const planningTable =
@@ -5904,21 +7140,14 @@ updateFacilitySortArrows(
     });
 
 
-    if (rowNote) {
+   if (rowNote) {
 
-        rowNote.textContent =
-            "Showing " +
-            formatNumber(displayData.length) +
-            " of " +
-            formatNumber(matchingData.length) +
-            " matching facilities" +
-            (
-                matchingData.length > 500
-                    ? " (first 500 shown for performance)"
-                    : ""
-            );
+    rowNote.textContent =
+        "Showing " +
+        formatNumber(matchingData.length) +
+        " matching facilities";
 
-    }
+}
 
 }
     
@@ -6762,6 +7991,7 @@ let aakData = [];
 let mchData = [];
 
 // Planning separate facility datasets
+let uphcData = [];
 let nammaClinicData = [];
 let ayushData = [];
 
@@ -6805,11 +8035,15 @@ aakData =
 mchData =
     result.mchData || [];
 
-// Planning — Namma Clinic data
+// Planning — UPHC
+uphcData =
+    result.uphcData || [];
+
+// Planning — Namma Clinics
 nammaClinicData =
     result.nammaClinicData || [];
 
-// Planning — AYUSH data
+// Planning — AYUSH
 ayushData =
     result.ayushData || [];
 
@@ -6827,6 +8061,10 @@ console.log(
 console.log(
     "MCH records loaded:",
     mchData.length
+);
+console.log(
+    "Planning UPHC records:",
+    uphcData.length
 );
 console.log(
     "Namma Clinic records loaded:",
@@ -7101,14 +8339,48 @@ const filterConfig = [
 // ==========================================================
 
 const testingFilterConfig = [
-    { id: "test_districtFilter", column: "District Name" },
-    { id: "test_subdistrictFilter", column: "Subdistrict Name" },
-    { id: "test_healthblockFilter", column: "Healthblock Name" },
-    { id: "test_formatFilter", column: "Format Type" },
-    { id: "test_facilityTypeFilter", column: "Facility Type" },
-    { id: "test_ownershipFilter", column: "Ownership" },
-    { id: "test_ruralUrbanFilter", column: "Rural/Urban" },
-    { id: "test_facilityFilter", column: "Facility Name" }
+
+    {
+        id: "test_districtFilter",
+        column: "District Name"
+    },
+
+    {
+        id: "test_subdistrictFilter",
+        column: "Subdistrict Name"
+    },
+
+    {
+        id: "test_healthblockFilter",
+        column: "Healthblock Name"
+    },
+
+    {
+        id: "test_baseCategoryFilter",
+        column: "Base Category"
+    },
+
+    {
+        id: "test_dashboardClassificationFilter",
+        column: "Dashboard Classification",
+        splitValues: true
+    },
+
+    {
+        id: "test_ownershipFilter",
+        column: "Ownership"
+    },
+
+    {
+        id: "test_ruralUrbanFilter",
+        column: "Rural/Urban"
+    },
+
+    {
+        id: "test_facilityFilter",
+        column: "Facility Name"
+    }
+
 ];
 
 // ====================================================
@@ -7593,10 +8865,19 @@ function getTestingFilteredData() {
                 return true;
             }
 
-            return (
-                text(row[filter.column]).trim() ===
-                selectedValue
-            );
+            if (filter.splitValues) {
+
+    return hasDashboardClassification(
+        row,
+        selectedValue
+    );
+
+}
+
+return (
+    text(row[filter.column]).trim() ===
+    selectedValue
+);
         });
 
     });
