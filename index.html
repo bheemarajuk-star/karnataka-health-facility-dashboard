@@ -14,6 +14,7 @@
 
 <style>
 
+
 * {
     box-sizing: border-box;
 }
@@ -1735,6 +1736,18 @@ tr:hover td {
 
     text-align: right;
 }
+/* =========================================================
+   RECONCILIATION — COMPARISON ALIGNMENT
+   ========================================================= */
+
+.recon-table th:nth-child(2),
+.recon-table th:nth-child(3),
+.recon-table th:nth-child(4),
+.recon-table td:nth-child(2),
+.recon-table td:nth-child(3),
+.recon-table td:nth-child(4) {
+    text-align: center !important;
+}
 .vacancy-low {
     background-color: #e8f5e9;
     color: #2e7d32;
@@ -2669,7 +2682,7 @@ z-index: 10;
 
 .recon-summary-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0,1fr));
     gap: 10px;
     padding: 12px;
     background: #f7f9fc;
@@ -2978,7 +2991,7 @@ z-index: 10;
         </div>
 
         <div>
-            04-10-2026 06:56 PM
+            04-10-2026 10:13 PM
         </div>
 
         <div class="meta-source">
@@ -7673,14 +7686,23 @@ facilityDetailsToggle.onclick = function () {
     }
 };
 
-// Put common filter first
+// ==========================================================
+// FACILITY RECONCILIATION TAB LAYOUT
+// Filters + Reconciliation only
+// ==========================================================
+
 target.innerHTML = "";
 
+
+// Common reconciliation filters
 if (testingFilterPanel) {
     target.appendChild(testingFilterPanel);
 }
 
-target.appendChild(compareGrid);
+
+// Do NOT display duplicate HMIS / Planning dashboards here.
+// HMIS and Planning already have their own main dashboard tabs.
+// compareGrid is intentionally not appended.
 // ==========================================================
 // HMIS vs PLANNING — FACILITY RECONCILIATION
 // ==========================================================
@@ -7699,7 +7721,7 @@ reconciliationSection.innerHTML = `
         </div>
     </div>
 
-    <div class="recon-summary-grid">
+        <div class="recon-summary-grid">
 
         <div class="recon-summary-card recon-blue">
             <div class="recon-summary-label">HMIS Facilities</div>
@@ -7711,19 +7733,9 @@ reconciliationSection.innerHTML = `
             <div class="recon-summary-value" id="reconTotalPlanning">0</div>
         </div>
 
-        <div class="recon-summary-card recon-purple">
-            <div class="recon-summary-label">Facility Categories</div>
-            <div class="recon-summary-value" id="reconTotalCategories">0</div>
-        </div>
-
-        <div class="recon-summary-card recon-orange">
-            <div class="recon-summary-label">Categories with Difference</div>
-            <div class="recon-summary-value" id="reconMismatchCategories">0</div>
-        </div>
-
     </div>
 
-
+    
     <div class="recon-table-section">
 
         <div class="recon-table-title recon-table-title-row">
@@ -7800,9 +7812,7 @@ reconciliationSection.innerHTML = `
         </div>
 
     </div>
-
-
-    <div class="recon-details-section">
+<div class="recon-details-section">
 
         <div class="recon-details-header">
 
@@ -7813,7 +7823,7 @@ reconciliationSection.innerHTML = `
 
                 <div class="recon-details-subtitle"
                      id="reconSelectedCategory">
-                    Select a facility category above to view facility-level differences.
+                    Select a Dashboard Classification below to view facility-level differences.
                 </div>
             </div>
 
@@ -7860,7 +7870,7 @@ reconciliationSection.innerHTML = `
 
                     <tr>
                         <td colspan="8" class="recon-empty">
-                            Select a category to view details.
+                            Select a Dashboard Classification below to view details.
                         </td>
                     </tr>
 
@@ -10106,128 +10116,180 @@ function showAllFacilityKPIs() {
 function updateTestingFacilityTypeKPIs(data) {
 
     const container =
-        document.getElementById("test_facilityTypeKPIs");
+        document.getElementById(
+            "test_facilityTypeKPIs"
+        );
 
     if (!container) return;
 
     container.innerHTML = "";
 
 
-    // SAME FAMILY CLASSIFICATION AS ORIGINAL DASHBOARD
-    function getTestingFacilityFamily(facilityType) {
+    // ======================================================
+    // DASHBOARD CLASSIFICATION COUNTS
+    // ======================================================
+
+    const counts = {};
+
+
+    data.forEach(row => {
+
+        dashboardClassifications(row)
+            .forEach(classification => {
+
+                counts[classification] =
+                    (counts[classification] || 0) + 1;
+
+            });
+
+    });
+
+
+    // ======================================================
+    // CLASSIFICATION CARD COLOR
+    // ======================================================
+
+    function getTestingClassificationFamily(
+        classification
+    ) {
 
         const name =
-            text(facilityType).toLowerCase();
+            text(classification)
+                .trim()
+                .toLowerCase();
 
-        // AAM-SHC
+
         if (
-            name.includes("aam-shc") ||
-            name.includes("uaam-shc")
+            name.includes("shc") ||
+            name.includes("sub centre")
         ) {
             return "family-shc";
         }
 
-        // PHC / AAM-PHC / UPHC
+
         if (
-            name.includes("phc-aam") ||
-            name.includes("aam-phc") ||
+            name.includes("phc") ||
             name.includes("uphc")
         ) {
             return "family-phc";
         }
 
-        // SDH / DH
+
         if (
             name === "sdh" ||
-            name.startsWith("dh ")
+            name.startsWith("dh ") ||
+            name === "dh"
         ) {
             return "family-hospital";
         }
 
-        // CHC / UCHC
+
         if (
             name.includes("chc") ||
-            name.includes("uchc")
+            name.includes("uchc") ||
+            name === "fru" ||
+            name === "non fru"
         ) {
             return "family-chc";
         }
 
-        // DISPENSARIES
+
         if (
-            name.includes("dispensaries") ||
-            name.includes("dispensary")
+            name.includes("dispensary") ||
+            name.includes("dispensaries")
         ) {
             return "family-dispensary";
         }
 
-        // MC / MCH
+
         if (
-            name.includes("mc/mch")
+            name.includes("mc") ||
+            name.includes("mch") ||
+            name.includes("medical college")
         ) {
             return "family-mch";
         }
 
-        // OTHER PRIMARY CARE
+
         if (
             name.includes("primary care")
         ) {
             return "family-primary";
         }
 
-        // OTHER TERTIARY CARE
+
         if (
             name.includes("tertiary care")
         ) {
             return "family-tertiary";
         }
 
+
         return "family-other";
     }
 
 
-    // CREATE SAME KPI CARDS
-    facilityTypeKPIList.forEach(facilityType => {
+    // ======================================================
+    // CREATE CLASSIFICATION CARDS
+    // ======================================================
 
-        const familyClass =
-            getTestingFacilityFamily(facilityType);
+    Object.entries(counts)
+        .sort((a, b) =>
+            a[0].localeCompare(b[0])
+        )
+        .forEach(
+            ([classification, count]) => {
 
-        const count =
-            data.filter(row =>
-                text(row["Facility Type"]).trim() ===
-                text(facilityType).trim()
-            ).length;
+                const card =
+                    document.createElement("div");
 
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "facility-kpi-card " + familyClass;
-            card.onclick = function () {
-
-    showTestingFacilitiesForKPI(
-        facilityType
-    );
-
-};
+                card.className =
+                    "facility-kpi-card " +
+                    getTestingClassificationFamily(
+                        classification
+                    );
 
 
-        card.innerHTML = `
+                card.innerHTML = `
 
-            <div class="facility-kpi-name">
-                ${facilityType}
-            </div>
+                    <div class="facility-kpi-name">
+                        ${classification}
+                    </div>
 
-            <div class="facility-kpi-value">
-                ${formatNumber(count)}
-            </div>
+                    <div class="facility-kpi-value">
+                        ${formatNumber(count)}
+                    </div>
 
-        `;
+                `;
 
 
-        container.appendChild(card);
+                card.onclick = function () {
 
-    });
+                    const filtered =
+                        data.filter(row =>
+                            hasDashboardClassification(
+                                row,
+                                classification
+                            )
+                        );
+
+                    renderTestingFacilityDetails(
+                        filtered
+                    );
+
+                };
+
+
+                card.style.cursor =
+                    "pointer";
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
 
 }
 // ==========================================================
@@ -10240,7 +10302,7 @@ function updateTestingFacilityTypeKPIs(data) {
 
 function getFilteredPlanningData() {
 
-    let data = [...planningData];
+    let data = [...planningFacilityData];
 
     testingFilterConfig.forEach(config => {
 
@@ -10257,10 +10319,23 @@ function getFilteredPlanningData() {
             selectedValue !== "All"
         ) {
 
-            data = data.filter(row =>
-                text(row[config.column]).trim() ===
-                text(selectedValue).trim()
-            );
+            data = data.filter(row => {
+
+    if (config.splitValues) {
+
+        return hasDashboardClassification(
+            row,
+            selectedValue
+        );
+
+    }
+
+    return (
+        text(row[config.column]).trim() ===
+        text(selectedValue).trim()
+    );
+
+});
 
         }
 
@@ -10718,92 +10793,72 @@ function updatePlanningDashboard() {
 
     const data =
         getFilteredPlanningData();
-renderPlanningFacilityDetails(data);
+
+    renderPlanningFacilityDetails(data);
+
 
     // ======================================================
-    // TOP KPI COUNTS
+    // TOP KPI COUNTS — BASE CATEGORY
     // ======================================================
 
-    let sc = 0;
-    let phc = 0;
-    let chc = 0;
-    let sdh = 0;
-    let dh = 0;
-    let mc = 0;
+    const sc =
+        data.filter(row =>
+            baseCategoryName(row) === "SC"
+        ).length;
+
+    const phc =
+        data.filter(row =>
+            baseCategoryName(row) === "PHC"
+        ).length;
+
+    const chc =
+        data.filter(row =>
+            baseCategoryName(row) === "CHC"
+        ).length;
+
+    const sdh =
+        data.filter(row =>
+            baseCategoryName(row) === "SDH"
+        ).length;
+
+    const dh =
+        data.filter(row =>
+            baseCategoryName(row) === "DH"
+        ).length;
+
+    const mc =
+        data.filter(row =>
+            baseCategoryName(row) ===
+                "MEDICAL COLLEGE"
+        ).length;
 
 
-    data.forEach(row => {
-
-        const name =
-            text(row["Facility Type"])
-                .trim()
-                .toLowerCase();
-
-
-        // SC
-        if (
-            name.includes("aam-shc") ||
-            name.includes("uaam-shc")
-        ) {
-            sc++;
-        }
-
-
-        // PHC
-        if (
-            name.includes("phc-aam") ||
-            name.includes("aam-phc") ||
-            name.includes("uphc")
-        ) {
-            phc++;
-        }
-
-
-        // CHC
-        if (
-            name.includes("chc") ||
-            name.includes("uchc")
-        ) {
-            chc++;
-        }
-
-
-        // SDH
-        if (name === "sdh") {
-            sdh++;
-        }
-
-
-        // DH
-        if (
-            name === "dh" ||
-            name.startsWith("dh ")
-        ) {
-            dh++;
-        }
-
-
-        // MC
-        if (
-            name.includes("mc/mch")
-        ) {
-            mc++;
-        }
-
-    });
-
+    // ======================================================
+    // UPDATE PLANNING TOP KPI CARDS
+    // ======================================================
 
     const values = {
 
         planningTotalFacilities:
             data.length,
 
-        planningSC: sc,
-        planningPHC: phc,
-        planningCHC: chc,
-        planningSDH: sdh,
-        planningDH: dh,
-        planningMC: mc
+        planningSC:
+            sc,
+
+        planningPHC:
+            phc,
+
+        planningCHC:
+            chc,
+
+        planningSDH:
+            sdh,
+
+        planningDH:
+            dh,
+
+        planningMC:
+            mc
 
     };
 
@@ -10825,7 +10880,7 @@ renderPlanningFacilityDetails(data);
 
 
     // ======================================================
-    // FACILITY TYPE KPI CARDS
+    // DASHBOARD CLASSIFICATION COUNTS
     // ======================================================
 
     const container =
@@ -10838,26 +10893,46 @@ renderPlanningFacilityDetails(data);
     container.innerHTML = "";
 
 
-    function getPlanningFamilyClass(
-        facilityType
+    const counts = {};
+
+
+    data.forEach(row => {
+
+        dashboardClassifications(row)
+            .forEach(classification => {
+
+                counts[classification] =
+                    (counts[classification] || 0) + 1;
+
+            });
+
+    });
+
+
+    // ======================================================
+    // CLASSIFICATION CARD COLOR
+    // ======================================================
+
+    function getPlanningClassificationFamily(
+        classification
     ) {
 
         const name =
-            text(facilityType)
+            text(classification)
+                .trim()
                 .toLowerCase();
 
 
         if (
-            name.includes("aam-shc") ||
-            name.includes("uaam-shc")
+            name.includes("shc") ||
+            name.includes("sub centre")
         ) {
             return "family-shc";
         }
 
 
         if (
-            name.includes("phc-aam") ||
-            name.includes("aam-phc") ||
+            name.includes("phc") ||
             name.includes("uphc")
         ) {
             return "family-phc";
@@ -10866,8 +10941,8 @@ renderPlanningFacilityDetails(data);
 
         if (
             name === "sdh" ||
-            name === "dh" ||
-            name.startsWith("dh ")
+            name.startsWith("dh ") ||
+            name === "dh"
         ) {
             return "family-hospital";
         }
@@ -10875,22 +10950,26 @@ renderPlanningFacilityDetails(data);
 
         if (
             name.includes("chc") ||
-            name.includes("uchc")
+            name.includes("uchc") ||
+            name === "fru" ||
+            name === "non fru"
         ) {
             return "family-chc";
         }
 
 
         if (
-            name.includes("dispensaries") ||
-            name.includes("dispensary")
+            name.includes("dispensary") ||
+            name.includes("dispensaries")
         ) {
             return "family-dispensary";
         }
 
 
         if (
-            name.includes("mc/mch")
+            name.includes("mc") ||
+            name.includes("mch") ||
+            name.includes("medical college")
         ) {
             return "family-mch";
         }
@@ -10914,60 +10993,84 @@ renderPlanningFacilityDetails(data);
     }
 
 
-    facilityTypeKPIList
-        .forEach(facilityType => {
+    // ======================================================
+    // CREATE CLASSIFICATION CARDS
+    // ======================================================
 
-            const count =
-                data.filter(row =>
+    Object.entries(counts)
+        .sort((a, b) =>
+            a[0].localeCompare(b[0])
+        )
+        .forEach(
+            ([classification, count]) => {
 
-                    text(
-                        row["Facility Type"]
-                    ).trim() ===
+                const card =
+                    document.createElement("div");
 
-                    text(
-                        facilityType
-                    ).trim()
+                card.className =
+                    "facility-kpi-card " +
+                    getPlanningClassificationFamily(
+                        classification
+                    );
 
-                ).length;
+
+                card.innerHTML = `
+
+                    <div class="facility-kpi-name">
+                        ${classification}
+                    </div>
+
+                    <div class="facility-kpi-value">
+                        ${formatNumber(count)}
+                    </div>
+
+                `;
 
 
-            const card =
-                document.createElement(
-                    "div"
+                card.onclick = function () {
+
+                    const filtered =
+                        data.filter(row =>
+                            hasDashboardClassification(
+                                row,
+                                classification
+                            )
+                        );
+
+                    renderPlanningFacilityDetails(
+                        filtered
+                    );
+
+                };
+
+
+                card.style.cursor =
+                    "pointer";
+
+
+                container.appendChild(
+                    card
                 );
 
-
-            card.className =
-                "facility-kpi-card " +
-                getPlanningFamilyClass(
-                    facilityType
-                );
+            }
+        );
 
 
-            card.innerHTML = `
+    // ======================================================
+    // HEADING
+    // ======================================================
 
-                <div class="facility-kpi-name">
-                    ${facilityType}
-                </div>
+    const header =
+        document.querySelector(
+            ".testing-planning-side .facility-kpi-header"
+        );
 
-                <div class="facility-kpi-value">
-                    ${formatNumber(count)}
-                </div>
+    if (header) {
 
-            `;
-card.onclick = function () {
+        header.textContent =
+            "DASHBOARD CLASSIFICATION";
 
-    showPlanningFacilitiesForKPI(
-        facilityType
-    );
-
-};
-
-card.style.cursor = "pointer";
-
-            container.appendChild(card);
-
-        });
+    }
 
 }
 // ==========================================================
@@ -11073,7 +11176,207 @@ function checkReconDuplicates() {
 );
 
 }
+function toggleReconciliationCHCChildren(
+    parentRow,
+    hmisCounts,
+    planningCounts
+) {
 
+    const existingRows =
+        document.querySelectorAll(
+            ".recon-chc-child"
+        );
+
+
+    // ======================================================
+    // COLLAPSE
+    // ======================================================
+
+    if (existingRows.length > 0) {
+
+        existingRows.forEach(
+            row => row.remove()
+        );
+
+        const icon =
+            parentRow.querySelector(
+                ".recon-expand-icon"
+            );
+
+        if (icon) {
+            icon.textContent = "▶";
+        }
+
+        return;
+    }
+
+
+    // ======================================================
+    // EXPAND
+    // ======================================================
+
+    const icon =
+        parentRow.querySelector(
+            ".recon-expand-icon"
+        );
+
+    if (icon) {
+        icon.textContent = "▼";
+    }
+
+
+    const childClassifications = [
+        "FRU",
+        "Non FRU"
+    ];
+
+
+    let insertAfter =
+        parentRow;
+
+
+    childClassifications.forEach(
+        classification => {
+
+            const target =
+                normalizeReconText(
+                    classification
+                );
+
+
+            const hmisName =
+                Object.keys(hmisCounts)
+                    .find(name =>
+                        normalizeReconText(name) ===
+                        target
+                    );
+
+
+            const planningName =
+                Object.keys(planningCounts)
+                    .find(name =>
+                        normalizeReconText(name) ===
+                        target
+                    );
+
+
+            const hmisCount =
+                hmisName
+                    ? hmisCounts[hmisName]
+                    : 0;
+
+
+            const planningCount =
+                planningName
+                    ? planningCounts[planningName]
+                    : 0;
+
+
+            const difference =
+                hmisCount -
+                planningCount;
+
+
+            const matched =
+                difference === 0;
+
+
+            const differenceText =
+                difference > 0
+                    ? `+${formatNumber(difference)}`
+                    : formatNumber(difference);
+
+
+            const childRow =
+                document.createElement(
+                    "tr"
+                );
+
+
+            childRow.className =
+                "recon-chc-child";
+
+
+            childRow.style.cursor =
+                "pointer";
+
+
+            childRow.innerHTML = `
+
+                <td style="padding-left:45px;">
+                    ↳ ${classification}
+                </td>
+
+                <td class="number">
+                    ${formatNumber(hmisCount)}
+                </td>
+
+                <td class="number">
+                    ${formatNumber(planningCount)}
+                </td>
+
+                <td
+                    class="number"
+                    style="
+                        font-weight:800;
+                        color:${
+                            matched
+                                ? "#15803d"
+                                : "#d84315"
+                        };
+                    "
+                >
+                    ${differenceText}
+                </td>
+
+                <td
+                    style="
+                        font-weight:800;
+                        color:${
+                            matched
+                                ? "#15803d"
+                                : "#d84315"
+                        };
+                    "
+                >
+                    ${
+                        matched
+                            ? "✓ Matched"
+                            : "⚠ Difference"
+                    }
+                </td>
+
+            `;
+
+
+            childRow.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                    showReconciliationCategoryDetails(
+                        classification,
+                        "all"
+                    );
+
+                }
+            );
+
+
+            insertAfter.insertAdjacentElement(
+                "afterend",
+                childRow
+            );
+
+
+            insertAfter =
+                childRow;
+
+        }
+    );
+
+}
 function buildFacilityReconciliation() {
 
     const hmisData =
@@ -11083,141 +11386,166 @@ function buildFacilityReconciliation() {
         getFilteredPlanningData();
 
 
-    // ------------------------------------------------------
-    // SUMMARY COUNTS
-    // ------------------------------------------------------
+    // ======================================================
+    // SUMMARY — TOTAL PHYSICAL FACILITIES
+    // ======================================================
 
     const hmisTotal =
-        document.getElementById("reconTotalHmis");
+        document.getElementById(
+            "reconTotalHmis"
+        );
 
     const planningTotal =
-        document.getElementById("reconTotalPlanning");
+        document.getElementById(
+            "reconTotalPlanning"
+        );
+
 
     if (hmisTotal) {
+
         hmisTotal.textContent =
-            hmisData.length.toLocaleString();
+            formatNumber(
+                hmisData.length
+            );
+
     }
+
 
     if (planningTotal) {
+
         planningTotal.textContent =
-            planningFilteredData.length.toLocaleString();
+            formatNumber(
+                planningFilteredData.length
+            );
+
     }
 
 
-    // ------------------------------------------------------
-    // GET ALL FACILITY TYPES
-    // ------------------------------------------------------
+    // ======================================================
+    // DASHBOARD CLASSIFICATION COUNTS
+    // ======================================================
 
-    const categorySet = new Set();
+    const hmisCounts = {};
+    const planningCounts = {};
+
 
     hmisData.forEach(row => {
 
-        const type =
-            text(row["Facility Type"]).trim();
+        dashboardClassifications(row)
+            .forEach(classification => {
 
-        if (type) {
-            categorySet.add(type);
-        }
+                const name =
+                    text(classification)
+                        .trim();
+
+                if (!name) return;
+
+
+                hmisCounts[name] =
+                    (hmisCounts[name] || 0) + 1;
+
+            });
 
     });
 
 
     planningFilteredData.forEach(row => {
 
-        const type =
-            text(row["Facility Type"]).trim();
+        dashboardClassifications(row)
+            .forEach(classification => {
 
-        if (type) {
-            categorySet.add(type);
-        }
+                const name =
+                    text(classification)
+                        .trim();
+
+                if (!name) return;
+
+
+                planningCounts[name] =
+                    (planningCounts[name] || 0) + 1;
+
+            });
 
     });
 
 
-    // Keep reconciliation categories in the same order
-// as the Facility Type KPI cards
+    // ======================================================
+    // BUILD COMMON CLASSIFICATION LIST
+    // Case-insensitive matching between HMIS and Planning
+    // ======================================================
 
-const facilityKPIOrder = [
-
-    "AAM-SHC (R)",
-    "Nonfunctional as AAM-SHC",
-    "UAAM-SHC",
-
-    "PHC-AAM (R)",
-    "24X7 AAM-PHC (R)",
-    "Non-functional as AAM-PHC",
-    "24X7 PHC Non functional as AAM",
-    "UPHC-AAM",
-    "24X7 UPHC-AAM",
-
-    "SDH",
-
-    "DH 100-199 Bedded",
-    "DH 200-299 Bedded",
-    "DH 300-399 Bedded",
-    "DH 400-499 Bedded",
-    "DH more than 499 Bedded",
-
-    "FRU CHC",
-    "Non-FRU CHC",
-    "UCHC-FRU",
-
-    "ESI Dispensaries/Hospitals",
-    "Railways Dispensaries/Hospitals",
-    "CGHS Dispensaries/Hospitals",
-    "Ayush Dispensaries/Hospitals",
-
-    "Other Primary Care Facility",
-    "Other Tertiary Care Facility",
-    "State-owned MC/MCH",
-    "Other MC/MCH",
-    "ESI MC/MCH",
-    "Ayush MC/MCH",
-    "Associated (part) Hospital with MC/MCH",
-
-    "CRPF 50 Bedded CH"
-];
+    const classificationMap =
+        new Map();
 
 
-const categories = [
+    Object.keys(hmisCounts)
+        .forEach(name => {
 
-    // First: categories in our KPI order
-    ...facilityKPIOrder.filter(type =>
-        [...categorySet].some(
-            category =>
-                normalizeReconText(category) ===
-                normalizeReconText(type)
-        )
-    ),
+            const key =
+                normalizeReconText(name);
 
-    // Then: any new/unexpected category
-    ...[...categorySet].filter(category =>
-        !facilityKPIOrder.some(
-            type =>
-                normalizeReconText(type) ===
-                normalizeReconText(category)
-        )
-    )
+            if (!classificationMap.has(key)) {
 
-];
+                classificationMap.set(
+                    key,
+                    name
+                );
 
+            }
+
+        });
+
+
+    Object.keys(planningCounts)
+        .forEach(name => {
+
+            const key =
+                normalizeReconText(name);
+
+            if (!classificationMap.has(key)) {
+
+                classificationMap.set(
+                    key,
+                    name
+                );
+
+            }
+
+        });
+
+
+    const classifications =
+        [...classificationMap.values()]
+            .sort((a, b) =>
+                a.localeCompare(b)
+            );
+
+
+    // ======================================================
+    // SUMMARY — CLASSIFICATION COUNTS
+    // ======================================================
 
     const categoryElement =
-        document.getElementById(
-            "reconTotalCategories"
-        );
+    document.getElementById(
+        "reconTotalCategories"
+    );
 
     if (categoryElement) {
 
         categoryElement.textContent =
-            categories.length.toLocaleString();
+            formatNumber(
+                classifications.length
+            );
 
     }
 
 
-    // ------------------------------------------------------
-    // BUILD CATEGORY COMPARISON
-    // ------------------------------------------------------
+    let differenceCount = 0;
+
+
+    // ======================================================
+    // TABLE
+    // ======================================================
 
     const body =
         document.getElementById(
@@ -11226,819 +11554,303 @@ const categories = [
 
     if (!body) return;
 
+
     body.innerHTML = "";
 
-    let mismatchCategoryCount = 0;
 
+    classifications.forEach(
+        classification => {
+        // FRU and Non FRU will be shown
+// underneath the parent CHC row.
+if (
+    normalizeReconText(classification) ===
+        normalizeReconText("FRU") ||
+    normalizeReconText(classification) ===
+        normalizeReconText("Non FRU")
+) {
+    return;
+}
 
-    categories.forEach(category => {
-
-        const hmisRows =
-            hmisData.filter(row =>
+            const target =
                 normalizeReconText(
-                    row["Facility Type"]
-                ) ===
-                normalizeReconText(category)
-            );
+                    classification
+                );
 
 
-        const planningRows =
-            planningFilteredData.filter(row =>
-                normalizeReconText(
-                    row["Facility Type"]
-                ) ===
-                normalizeReconText(category)
-            );
+            // ----------------------------------------------
+            // Find equivalent HMIS classification
+            // ----------------------------------------------
+
+            const hmisName =
+                Object.keys(hmisCounts)
+                    .find(name =>
+                        normalizeReconText(name) ===
+                        target
+                    );
 
 
-        const hmisCount =
-            hmisRows.length;
+            // ----------------------------------------------
+            // Find equivalent Planning classification
+            // ----------------------------------------------
 
-        const planningCount =
-            planningRows.length;
-
-        const difference =
-            hmisCount - planningCount;
-
-
-        // --------------------------------------------------
-        // ALSO CHECK ACTUAL FACILITY LIST
-        // --------------------------------------------------
-
-        const hmisKeys =
-            new Set(
-                hmisRows.map(
-                    getReconFacilityKey
-                )
-            );
-
-        const planningKeys =
-            new Set(
-                planningRows.map(
-                    getReconFacilityKey
-                )
-            );
+            const planningName =
+                Object.keys(planningCounts)
+                    .find(name =>
+                        normalizeReconText(name) ===
+                        target
+                    );
 
 
-        const hmisOnly =
-            [...hmisKeys].filter(
-                key =>
-                    !planningKeys.has(key)
-            );
+            const hmisCount =
+                hmisName
+                    ? hmisCounts[hmisName]
+                    : 0;
 
 
-        const planningOnly =
-            [...planningKeys].filter(
-                key =>
-                    !hmisKeys.has(key)
-            );
+            const planningCount =
+                planningName
+                    ? planningCounts[planningName]
+                    : 0;
 
 
-        const hasMismatch =
-            difference !== 0 ||
-            hmisOnly.length > 0 ||
-            planningOnly.length > 0;
+            const difference =
+                hmisCount -
+                planningCount;
 
 
-        if (hasMismatch) {
-            mismatchCategoryCount++;
-        }
+            const matched =
+                difference === 0;
 
 
-        const row =
-            document.createElement("tr");
-
-        row.style.cursor = "pointer";
-
-
-        let differenceText = "0";
-
-        if (difference > 0) {
-            differenceText =
-                "+" + difference;
-        }
-
-        if (difference < 0) {
-            differenceText =
-                difference.toString();
-        }
+            if (!matched) {
+                differenceCount++;
+            }
 
 
-        const statusHTML =
-            hasMismatch
-
-            ? `<span style="
-                    color:#c2410c;
-                    font-weight:900;
-               ">
-                   ⚠ Difference
-               </span>`
-
-            : `<span style="
-                    color:#15803d;
-                    font-weight:900;
-               ">
-                   ✓ Matched
-               </span>`;
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
 
-        row.innerHTML = `
-
-            <td>
-                <strong>${category}</strong>
-            </td>
-
-            <td>
-                ${hmisCount.toLocaleString()}
-            </td>
-
-            <td>
-                ${planningCount.toLocaleString()}
-            </td>
-
-            <td style="
-                font-weight:900;
-                color:${
-                    difference === 0
-                    ? "#15803d"
-                    : "#c2410c"
-                };
-            ">
-                ${differenceText}
-            </td>
-
-            <td>
-                ${statusHTML}
-            </td>
-
-        `;
+            const differenceText =
+                difference > 0
+                    ? `+${formatNumber(difference)}`
+                    : formatNumber(difference);
 
 
+            row.innerHTML = `
 
-// ------------------------------------------------------
-// CLICKABLE FACILITY TYPE DIFFERENCE
-// ------------------------------------------------------
-
-const cells = row.children;
-
-
-// Difference column
-cells[3].style.cursor = "pointer";
-cells[3].title = "Show mismatched facilities only";
-
-cells[3].addEventListener(
-    "click",
-    function (event) {
-
-        event.stopPropagation();
-
-        showReconciliationCategoryDetails(
-    category,
-    "mismatch"
-);
-
-        document
-            .querySelector(".recon-details-section")
-            ?.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+                <td>
+    ${
+        normalizeReconText(classification) ===
+        normalizeReconText("CHC")
+            ? `<span class="recon-expand-icon">▶</span>
+               <strong>CHC</strong>`
+            : classification
     }
-);
+</td>
+
+                <td class="number">
+                    ${formatNumber(hmisCount)}
+                </td>
+
+                <td class="number">
+                    ${formatNumber(planningCount)}
+                </td>
+
+                <td
+                    class="number"
+                    style="
+                        font-weight:800;
+                        color:${
+                            matched
+                                ? "#15803d"
+                                : "#d84315"
+                        };
+                    "
+                >
+                    ${differenceText}
+                </td>
+
+                <td
+                    style="
+                        font-weight:800;
+                        color:${
+                            matched
+                                ? "#15803d"
+                                : "#d84315"
+                        };
+                    "
+                >
+                    ${
+                        matched
+                            ? "✓ Matched"
+                            : "⚠ Difference"
+                    }
+                </td>
+
+            `;
 
 
-// Status column
-cells[4].style.cursor = "pointer";
-
-cells[4].addEventListener(
-    "click",
-    function (event) {
-
-        event.stopPropagation();
-
-        if (hasMismatch) {
-
-            showReconciliationCategoryDetails(
-                category,
-                "mismatch"
-            );
-
-        } else {
-
-            showReconciliationCategoryDetails(
-                category,
-                "all"
-            );
-
-        }
-
-    }
-);
+            row.style.cursor =
+                "pointer";
 
 
-// Normal row click = show all
-row.addEventListener(
+            row.addEventListener(
     "click",
     function () {
 
+        // Always show facility-wise details
         showReconciliationCategoryDetails(
-            category,
+            classification,
             "all"
         );
+
+
+        // CHC also expands / collapses
+        if (
+            normalizeReconText(classification) ===
+            normalizeReconText("CHC")
+        ) {
+
+            toggleReconciliationCHCChildren(
+                row,
+                hmisCounts,
+                planningCounts
+            );
+
+        }
 
     }
 );
 
 
-body.appendChild(row);
+            body.appendChild(row);
 
-    });
+        }
+    );
 
 
-    const mismatchElement =
+    // ======================================================
+    // SUMMARY — CLASSIFICATIONS WITH DIFFERENCE
+    // ======================================================
+
+    const differenceElement =
         document.getElementById(
             "reconMismatchCategories"
         );
 
-    if (mismatchElement) {
+    if (differenceElement) {
 
-        mismatchElement.textContent =
-            mismatchCategoryCount
-                .toLocaleString();
+        differenceElement.textContent =
+            formatNumber(
+                differenceCount
+            );
 
     }
 
-}
-// ==========================================================
-// RECONCILIATION VIEW SWITCHING
-// ==========================================================
 
-function setReconciliationViewButton(view) {
+    // ======================================================
+    // CORRECT TABLE TITLE / HEADER
+    // ======================================================
 
-    const facilityBtn =
+    const title =
+        document.getElementById(
+            "reconComparisonTitle"
+        );
+
+    if (title) {
+
+        title.textContent =
+            "DASHBOARD CLASSIFICATION COMPARISON";
+
+    }
+
+
+    const header =
+        document.getElementById(
+            "reconciliationTableHeader"
+        );
+
+    if (header) {
+
+        header.innerHTML = `
+
+            <th>
+                Dashboard Classification
+            </th>
+
+            <th>
+                HMIS
+            </th>
+
+            <th>
+                Planning
+            </th>
+
+            <th>
+                Difference
+            </th>
+
+            <th>
+                Status
+            </th>
+
+        `;
+
+    }
+
+
+    // ======================================================
+    // RENAME VIEW BUTTON
+    // ======================================================
+
+    const facilityButton =
         document.getElementById(
             "reconFacilityTypeBtn"
         );
 
-    const districtBtn =
-        document.getElementById(
-            "reconDistrictBtn"
-        );
+    if (facilityButton) {
 
-    if (facilityBtn) {
-        facilityBtn.classList.toggle(
-            "active",
-            view === "facility"
-        );
-    }
+        facilityButton.textContent =
+            "Dashboard Classification View";
 
-    if (districtBtn) {
-        districtBtn.classList.toggle(
-            "active",
-            view === "district"
-        );
     }
 
 }
-
-
 // ==========================================================
-// FACILITY TYPE VIEW
+// SHOW FACILITY-LEVEL DIFFERENCES
 // ==========================================================
 
-function showReconciliationFacilityTypeView() {
-
-    setReconciliationViewButton(
-        "facility"
-    );
-
-    const title =
-        document.getElementById(
-            "reconComparisonTitle"
-        );
-
-    if (title) {
-        title.textContent =
-            "FACILITY CATEGORY COMPARISON";
-    }
-
-
-    const header =
-        document.getElementById(
-            "reconciliationTableHeader"
-        );
-
-    if (header) {
-
-        header.innerHTML = `
-            <th>Facility Category</th>
-            <th>HMIS</th>
-            <th>Planning</th>
-            <th>Difference</th>
-            <th>Status</th>
-        `;
-
-    }
-
-
-    // Rebuild existing Facility Type comparison
-    buildFacilityReconciliation();
-
-}
-
-
-// ==========================================================
-// DISTRICT VIEW
-// ==========================================================
-
-function showReconciliationDistrictView() {
-
-    setReconciliationViewButton(
-        "district"
-    );
-
-
-    const title =
-        document.getElementById(
-            "reconComparisonTitle"
-        );
-
-    if (title) {
-        title.textContent =
-            "DISTRICT-WISE FACILITY RECONCILIATION";
-    }
-
-
-    const header =
-        document.getElementById(
-            "reconciliationTableHeader"
-        );
-
-    if (header) {
-
-        header.innerHTML = `
-            <th>District</th>
-            <th>HMIS</th>
-            <th>Planning</th>
-            <th>Difference</th>
-            <th>HMIS Only</th>
-            <th>Planning Only</th>
-            <th>Status</th>
-        `;
-
-    }
-
-
-    const body =
-        document.getElementById(
-            "reconciliationCategoryBody"
-        );
-
-    if (!body) return;
-
-    body.innerHTML = "";
-
-
-    const hmisData =
-        getTestingFilteredData();
-
-    const planningData =
-        getFilteredPlanningData();
-
-
-    // ------------------------------------------------------
-    // GET ALL DISTRICTS
-    // ------------------------------------------------------
-
-    const districtMap =
-        new Map();
-
-
-    hmisData.forEach(row => {
-
-        const district =
-            text(
-                row["District Name"]
-            ).trim();
-
-        if (!district) return;
-
-
-        const key =
-            normalizeReconText(
-                district
-            );
-
-
-        if (!districtMap.has(key)) {
-
-            districtMap.set(
-                key,
-                district
-            );
-
-        }
-
-    });
-
-
-    planningData.forEach(row => {
-
-        const district =
-            text(
-                row["District Name"]
-            ).trim();
-
-        if (!district) return;
-
-
-        const key =
-            normalizeReconText(
-                district
-            );
-
-
-        if (!districtMap.has(key)) {
-
-            districtMap.set(
-                key,
-                district
-            );
-
-        }
-
-    });
-
-
-    const districtResults = [];
-
-
-    districtMap.forEach(
-        (districtName, districtKey) => {
-
-
-        const hmisRows =
-            hmisData.filter(row =>
-
-                normalizeReconText(
-                    row["District Name"]
-                ) === districtKey
-
-            );
-
-
-        const planningRows =
-            planningData.filter(row =>
-
-                normalizeReconText(
-                    row["District Name"]
-                ) === districtKey
-
-            );
-
-
-        // ----------------------------------------------
-        // FACILITY MATCHING
-        // District + Facility Name
-        // ----------------------------------------------
-
-        const reconciliation =
-    reconcileFacilityRows(
-        hmisRows,
-        planningRows
-    );
-
-const matched =
-    reconciliation.matched.length;
-
-const hmisOnly =
-    reconciliation.hmisOnly.length;
-
-const planningOnly =
-    reconciliation.planningOnly.length;
-
-
-        const difference =
-            hmisRows.length -
-            planningRows.length;
-
-
-        const hasMismatch =
-            hmisOnly > 0 ||
-            planningOnly > 0;
-
-
-        districtResults.push({
-
-            districtName:
-                districtName,
-
-            hmisCount:
-                hmisRows.length,
-
-            planningCount:
-                planningRows.length,
-
-            difference:
-                difference,
-
-            matched:
-                matched,
-
-            hmisOnly:
-                hmisOnly,
-
-            planningOnly:
-                planningOnly,
-
-            hasMismatch:
-                hasMismatch
-
-        });
-
-    });
-
-
-    // ------------------------------------------------------
-    // SHOW BIGGEST PROBLEM DISTRICTS FIRST
-    // ------------------------------------------------------
-
-    districtResults.sort(
-        (a, b) => {
-
-            const problemA =
-                a.hmisOnly +
-                a.planningOnly;
-
-            const problemB =
-                b.hmisOnly +
-                b.planningOnly;
-
-            return problemB -
-                   problemA;
-
-        }
-    );
-
-
-    // ------------------------------------------------------
-    // BUILD TABLE
-    // ------------------------------------------------------
-
-    districtResults.forEach(item => {
-
-        const row =
-            document.createElement(
-                "tr"
-            );
-
-        row.style.cursor =
-            "pointer";
-
-
-        let differenceText =
-            "0";
-
-
-        if (item.difference > 0) {
-
-            differenceText =
-                "+" +
-                item.difference;
-
-        } else if (
-            item.difference < 0
-        ) {
-
-            differenceText =
-                item.difference
-                    .toString();
-
-        }
-
-
-        const statusHTML =
-            item.hasMismatch
-
-            ? `<span style="
-                    color:#c2410c;
-                    font-weight:900;
-               ">
-                   ⚠ Mismatch
-               </span>`
-
-            : `<span style="
-                    color:#15803d;
-                    font-weight:900;
-               ">
-                   ✓ Matched
-               </span>`;
-
-
-        row.innerHTML = `
-
-            <td>
-                <strong>
-                    ${item.districtName}
-                </strong>
-            </td>
-
-            <td>
-                ${item.hmisCount.toLocaleString()}
-            </td>
-
-            <td>
-                ${item.planningCount.toLocaleString()}
-            </td>
-
-            <td style="
-                font-weight:900;
-                color:${
-                    item.difference === 0
-                    ? "#15803d"
-                    : "#c2410c"
-                };
-            ">
-                ${differenceText}
-            </td>
-
-            <td style="
-                font-weight:900;
-                color:#0758b7;
-            ">
-                ${item.hmisOnly.toLocaleString()}
-            </td>
-
-            <td style="
-                font-weight:900;
-                color:#138a45;
-            ">
-                ${item.planningOnly.toLocaleString()}
-            </td>
-
-            <td>
-                ${statusHTML}
-            </td>
-
-        `;
-// ------------------------------------------------------
-// CLICKABLE RECONCILIATION NUMBERS
-// ------------------------------------------------------
-
-const cells = row.children;
-
-
-// Difference
-cells[3].style.cursor = "pointer";
-cells[3].title = "Show all mismatched facilities";
-
-cells[3].addEventListener(
-    "click",
-    function (event) {
-
-        event.stopPropagation();
-
-        showReconciliationDistrictDetails(
-            item.districtName,
-            "mismatch"
-        );
-document
-    .querySelector(".recon-details-section")
-    ?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-    }
-);
-
-
-// HMIS Only
-cells[4].style.cursor = "pointer";
-cells[4].title = "Show HMIS Only facilities";
-
-cells[4].addEventListener(
-    "click",
-    function (event) {
-
-        event.stopPropagation();
-
-        showReconciliationDistrictDetails(
-            item.districtName,
-            "hmis"
-        );
-
-    }
-);
-
-
-// Planning Only
-cells[5].style.cursor = "pointer";
-cells[5].title = "Show Planning Only facilities";
-
-cells[5].addEventListener(
-    "click",
-    function (event) {
-
-        event.stopPropagation();
-
-        showReconciliationDistrictDetails(
-            item.districtName,
-            "planning"
-        );
-
-    }
-);
-
-
-// Status
-cells[6].style.cursor = "pointer";
-cells[6].title = "Show mismatched facilities";
-
-cells[6].addEventListener(
-    "click",
-    function (event) {
-
-        event.stopPropagation();
-
-        if (item.hasMismatch) {
-
-            showReconciliationDistrictDetails(
-                item.districtName,
-                "mismatch"
-            );
-
-        } else {
-
-            showReconciliationDistrictDetails(
-                item.districtName,
-                "all"
-            );
-
-        }
-
-    }
-);
-
-        row.addEventListener(
-            "click",
-            function () {
-
-                showReconciliationDistrictDetails(
-                    item.districtName
-                );
-
-            }
-        );
-
-
-        body.appendChild(row);
-
-    });
-
-}
-
-
-// ==========================================================
-// DISTRICT FACILITY-LEVEL DETAILS
-// ==========================================================
-
-function showReconciliationDistrictDetails(
-    districtName,
+function showReconciliationCategoryDetails(
+    category,
     filterType = "all"
 ) {
-
-    const districtKey =
-        normalizeReconText(
-            districtName
+const hmisData =
+    getTestingFilteredData()
+        .filter(row =>
+            hasDashboardClassification(
+                row,
+                category
+            )
         );
 
 
-    const hmisData =
-        getTestingFilteredData()
-            .filter(row =>
-
-                normalizeReconText(
-                    row["District Name"]
-                ) === districtKey
-
-            );
-
-
-    const planningData =
-        getFilteredPlanningData()
-            .filter(row =>
-
-                normalizeReconText(
-                    row["District Name"]
-                ) === districtKey
-
-            );
+const planningFilteredData =
+    getFilteredPlanningData()
+        .filter(row =>
+            hasDashboardClassification(
+                row,
+                category
+            )
+        );
 
 
     const reconciliation =
     reconcileFacilityRows(
         hmisData,
-        planningData
+        planningFilteredData
     );
 
 const matched =
@@ -12049,30 +11861,7 @@ const hmisOnly =
 
 const planningOnly =
     reconciliation.planningOnly;
-
-            
-
-
-    document.getElementById(
-        "reconMatchedCount"
-    ).textContent =
-        matched.length
-            .toLocaleString();
-
-
-    document.getElementById(
-        "reconHmisOnlyCount"
-    ).textContent =
-        hmisOnly.length
-            .toLocaleString();
-
-
-    document.getElementById(
-        "reconPlanningOnlyCount"
-    ).textContent =
-        planningOnly.length
-            .toLocaleString();
-            const matchedCard =
+    const matchedCard =
     document.getElementById(
         "reconMatchedCount"
     ).closest(
@@ -12097,6 +11886,16 @@ const planningCard =
 matchedCard.style.cursor = "pointer";
 hmisCard.style.cursor = "pointer";
 planningCard.style.cursor = "pointer";
+
+
+matchedCard.title =
+    "Show matched facilities";
+
+hmisCard.title =
+    "Show HMIS Only facilities";
+
+planningCard.title =
+    "Show Planning Only facilities";
 
 
 matchedCard.onclick = function () {
@@ -12133,417 +11932,6 @@ planningCard.onclick = function () {
     );
 
 };
-
-
-    const selected =
-        document.getElementById(
-            "reconSelectedCategory"
-        );
-
-
-    if (selected) {
-
-        selected.textContent =
-            districtName +
-            " — facility-level reconciliation";
-
-    }
-
-
-    showReconciliationFilteredRows(
-    matched,
-    hmisOnly,
-    planningOnly,
-    filterType
-);
-
-}
-// ==========================================================
-// EXPORT CURRENT RECONCILIATION DETAILS
-// ==========================================================
-
-function exportReconciliationDetails() {
-
-    const tableBody =
-        document.getElementById(
-            "reconciliationDetailsBody"
-        );
-
-    if (!tableBody) {
-        alert(
-            "Reconciliation details are not available."
-        );
-        return;
-    }
-
-
-    const rows =
-        Array.from(
-            tableBody.querySelectorAll("tr")
-        );
-
-
-    // ------------------------------------------------------
-    // CHECK WHETHER DETAIL DATA EXISTS
-    // ------------------------------------------------------
-
-    const validRows =
-        rows.filter(row => {
-
-            const cells =
-                row.querySelectorAll("td");
-
-            return cells.length === 8;
-
-        });
-
-
-    if (validRows.length === 0) {
-
-        alert(
-            "Please select a Facility Type or District before exporting."
-        );
-
-        return;
-    }
-
-
-    // ------------------------------------------------------
-    // CSV HEADINGS
-    // ------------------------------------------------------
-
-    const csvRows = [];
-
-    csvRows.push([
-        "Status",
-        "District",
-        "HMIS Facility Name",
-        "Planning Facility Name",
-        "HMIS Facility Type",
-        "Planning Facility Type",
-        "NIN",
-        "HFR ID"
-    ]);
-
-
-    // ------------------------------------------------------
-    // GET CURRENT DETAIL TABLE ROWS
-    // ------------------------------------------------------
-
-    validRows.forEach(row => {
-
-        const cells =
-            Array.from(
-                row.querySelectorAll("td")
-            );
-
-        csvRows.push(
-            cells.map(cell =>
-                cell.innerText.trim()
-            )
-        );
-
-    });
-
-
-    // ------------------------------------------------------
-    // ESCAPE VALUES FOR EXCEL / CSV
-    // ------------------------------------------------------
-
-    const csvContent =
-        csvRows
-            .map(row =>
-                row.map(value => {
-
-                    const safeValue =
-                        String(value)
-                            .replace(
-                                /"/g,
-                                '""'
-                            );
-
-                    return `"${safeValue}"`;
-
-                }).join(",")
-            )
-            .join("\r\n");
-
-
-    // ------------------------------------------------------
-    // CREATE DOWNLOAD FILE
-    // ------------------------------------------------------
-
-    const blob =
-        new Blob(
-            [
-                "\uFEFF",
-                csvContent
-            ],
-            {
-                type:
-                    "text/csv;charset=utf-8;"
-            }
-        );
-
-
-    const url =
-        URL.createObjectURL(blob);
-
-
-    const link =
-        document.createElement("a");
-
-
-    // ------------------------------------------------------
-    // FILE NAME
-    // ------------------------------------------------------
-
-    const selected =
-        document.getElementById(
-            "reconSelectedCategory"
-        );
-
-    let scopeName =
-        selected
-            ? selected.textContent.trim()
-            : "Reconciliation";
-
-
-    scopeName =
-        scopeName
-            .replace(
-                /[^a-zA-Z0-9]+/g,
-                "_"
-            )
-            .replace(
-                /^_+|_+$/g,
-                ""
-            );
-
-
-    const today =
-        new Date()
-            .toISOString()
-            .slice(0, 10);
-
-
-    link.href = url;
-
-    link.download =
-        "Facility_Reconciliation_" +
-        scopeName +
-        "_" +
-        today +
-        ".csv";
-
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
-
-    URL.revokeObjectURL(url);
-
-}
-// ==========================================================
-// ONE-TO-ONE FACILITY MATCHING
-// Keeps repeated facilities instead of collapsing them
-// ==========================================================
-
-function reconcileFacilityRows(
-    hmisRows,
-    planningRows
-) {
-
-    const hmisGroups = new Map();
-    const planningGroups = new Map();
-
-
-    // ------------------------------------------------------
-    // GROUP HMIS RECORDS
-    // ------------------------------------------------------
-
-    hmisRows.forEach(row => {
-
-        const key =
-            getReconFacilityKey(row);
-
-        if (!hmisGroups.has(key)) {
-            hmisGroups.set(key, []);
-        }
-
-        hmisGroups.get(key).push(row);
-
-    });
-
-
-    // ------------------------------------------------------
-    // GROUP PLANNING RECORDS
-    // ------------------------------------------------------
-
-    planningRows.forEach(row => {
-
-        const key =
-            getReconFacilityKey(row);
-
-        if (!planningGroups.has(key)) {
-            planningGroups.set(key, []);
-        }
-
-        planningGroups.get(key).push(row);
-
-    });
-
-
-    const matched = [];
-    const hmisOnly = [];
-    const planningOnly = [];
-
-
-    // ------------------------------------------------------
-    // ALL UNIQUE MATCHING KEYS
-    // ------------------------------------------------------
-
-    const allKeys = new Set([
-        ...hmisGroups.keys(),
-        ...planningGroups.keys()
-    ]);
-
-
-    allKeys.forEach(key => {
-
-        const hmisList =
-            hmisGroups.get(key) || [];
-
-        const planningList =
-            planningGroups.get(key) || [];
-
-
-        // Number that can be matched one-to-one
-        const matchedCount =
-            Math.min(
-                hmisList.length,
-                planningList.length
-            );
-
-
-        // --------------------------------------------------
-        // MATCH RECORDS ONE-TO-ONE
-        // --------------------------------------------------
-
-        for (
-            let i = 0;
-            i < matchedCount;
-            i++
-        ) {
-
-            matched.push({
-
-                hmis: hmisList[i],
-
-                planning:
-                    planningList[i]
-
-            });
-
-        }
-
-
-        // --------------------------------------------------
-        // EXTRA HMIS RECORDS
-        // --------------------------------------------------
-
-        for (
-            let i = matchedCount;
-            i < hmisList.length;
-            i++
-        ) {
-
-            hmisOnly.push({
-
-                hmis: hmisList[i],
-                planning: null
-
-            });
-
-        }
-
-
-        // --------------------------------------------------
-        // EXTRA PLANNING RECORDS
-        // --------------------------------------------------
-
-        for (
-            let i = matchedCount;
-            i < planningList.length;
-            i++
-        ) {
-
-            planningOnly.push({
-
-                hmis: null,
-                planning: planningList[i]
-
-            });
-
-        }
-
-    });
-
-
-    return {
-
-        matched,
-        hmisOnly,
-        planningOnly
-
-    };
-
-}
-// ==========================================================
-// SHOW FACILITY-LEVEL DIFFERENCES
-// ==========================================================
-
-function showReconciliationCategoryDetails(
-    category,
-    filterType = "all"
-) {
-
-    const hmisData =
-        getTestingFilteredData()
-            .filter(row =>
-                normalizeReconText(
-                    row["Facility Type"]
-                ) ===
-                normalizeReconText(category)
-            );
-
-
-    const planningFilteredData =
-        getFilteredPlanningData()
-            .filter(row =>
-                normalizeReconText(
-                    row["Facility Type"]
-                ) ===
-                normalizeReconText(category)
-            );
-
-
-    const reconciliation =
-    reconcileFacilityRows(
-        hmisData,
-        planningFilteredData
-    );
-
-const matched =
-    reconciliation.matched;
-
-const hmisOnly =
-    reconciliation.hmisOnly;
-
-const planningOnly =
-    reconciliation.planningOnly;
 
     // ------------------------------------------------------
     // UPDATE MINI KPIs
