@@ -507,8 +507,20 @@ body {
     padding: 12px 16px;
 
     box-shadow: 0 3px 10px rgba(140, 70, 20, 0.08);
-}
+    cursor: pointer;
 
+transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+.hr-kpi-card:hover {
+    transform: translateY(-3px);
+    border-color: #ef8c45;
+    box-shadow:
+        0 7px 16px
+        rgba(140, 70, 20, 0.16);
+}
 .hr-kpi-icon {
     width: 58px;
     height: 58px;
@@ -548,13 +560,15 @@ body {
 
 .hr-details-header {
     display: grid;
-    grid-template-columns: 1fr 370px 120px;
-    gap: 12px;
+    grid-template-columns: minmax(250px, 1fr) 330px auto;
+    gap: 10px;
     align-items: center;
 
     padding: 10px 14px;
 
     background: #fff1e2;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .hr-section-title {
@@ -891,6 +905,29 @@ body {
     overflow-x: auto;
     overflow-y: auto;
     max-height: 420px;
+}
+/* =========================================================
+   HR FACILITY DETAILS — SORTABLE HEADERS
+   ========================================================= */
+
+.hr-facility-table thead th {
+    cursor: pointer;
+    user-select: none;
+}
+
+.hr-facility-table thead th:first-child {
+    cursor: default;
+}
+
+.hr-facility-table thead th:hover {
+    background: #ffd4ae;
+}
+
+.hr-sort-arrow {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 10px;
+    font-weight: 900;
 }
 .hr-facility-table thead th {
     position: sticky;
@@ -2246,6 +2283,190 @@ tr:hover td {
     position: relative;
 }
 /* =========================================================
+   MCH DASHBOARD CLASSIFICATION KPI CARDS
+   COLOURS + RUNNING BORDER LIGHT
+   ========================================================= */
+
+/* MCH card base */
+.facility-kpi-card.mch-kpi-card {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+
+    margin: 3px;
+    border-radius: 10px;
+
+    border: none;
+
+    min-height: 95px;
+
+    transition:
+        transform 0.20s ease,
+        box-shadow 0.20s ease;
+}
+
+
+/* =========================================================
+   RUNNING LIGHT AROUND BORDER
+   ========================================================= */
+
+@property --mch-border-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.facility-kpi-card.mch-kpi-card::before {
+
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+
+    padding: 2px;
+
+    background:
+        conic-gradient(
+            from var(--mch-border-angle),
+
+            transparent 0deg,
+            transparent 275deg,
+
+            #00e5ff 305deg,
+            #ffffff 325deg,
+            #00b8d4 345deg,
+
+            transparent 360deg
+        );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite: xor;
+
+    mask-composite: exclude;
+
+    pointer-events: none;
+
+    animation:
+        mchRunningBorder 2.3s linear infinite;
+
+    z-index: 2;
+}
+
+
+@keyframes mchRunningBorder {
+
+    from {
+        --mch-border-angle: 0deg;
+    }
+
+    to {
+        --mch-border-angle: 360deg;
+    }
+
+}
+
+
+/* Keep card text above animation */
+.facility-kpi-card.mch-kpi-card
+.facility-kpi-name,
+
+.facility-kpi-card.mch-kpi-card
+.facility-kpi-value {
+
+    position: relative;
+    z-index: 3;
+}
+
+
+/* Hover */
+.facility-kpi-card.mch-kpi-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+
+/* =========================================================
+   MCH CLASSIFICATION COLOURS
+   ========================================================= */
+
+.mch-color-1 {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.mch-color-2 {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.mch-color-3 {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.mch-color-4 {
+    background: #f3e5f5;
+    color: #6a1b9a;
+}
+
+.mch-color-5 {
+    background: #e0f7fa;
+    color: #006064;
+}
+
+.mch-color-6 {
+    background: #fce4ec;
+    color: #ad1457;
+}
+
+.mch-color-7 {
+    background: #fff8e1;
+    color: #8d6e00;
+}
+
+.mch-color-8 {
+    background: #ede7f6;
+    color: #4527a0;
+}
+
+.mch-color-9 {
+    background: #e8eaf6;
+    color: #283593;
+}
+
+
+/* Number */
+.facility-kpi-card.mch-kpi-card
+.facility-kpi-value {
+
+    font-size: 23px;
+    font-weight: 900;
+
+    margin-top: 7px;
+
+    color: inherit;
+}
+
+
+/* Classification heading */
+.facility-kpi-card.mch-kpi-card
+.facility-kpi-name {
+
+    font-weight: 800;
+
+    color: inherit;
+
+    line-height: 1.25;
+}
+/* =========================================================
    SELECTED FAMILY KPI — RUNNING BORDER LIGHT
    ========================================================= */
 
@@ -3556,7 +3777,7 @@ z-index: 10;
         </div>
 
         <div>
-            07-10-2026 05:29 PM
+            07-10-2026 11:15 PM
         </div>
 
         <div class="meta-source">
@@ -4137,7 +4358,9 @@ z-index: 10;
 
         <div class="hr-kpi-grid">
 
-            <div class="hr-kpi-card">
+            <div class="hr-kpi-card"
+     onclick="showHRKPIFacilities('ALL')"
+     title="Click to view all CHC facilities">
                 <div class="hr-kpi-icon">🏥</div>
                 <div>
                     <div id="hrTotalChcs" class="hr-kpi-value">0</div>
@@ -4145,7 +4368,9 @@ z-index: 10;
                 </div>
             </div>
 
-            <div class="hr-kpi-card">
+            <div class="hr-kpi-card"
+     onclick="showHRKPIFacilities('FRU')"
+     title="Click to view FRU CHCs">
                 <div class="hr-kpi-icon">🏥</div>
                 <div>
                     <div id="hrFruChcs" class="hr-kpi-value">0</div>
@@ -4153,7 +4378,9 @@ z-index: 10;
                 </div>
             </div>
 
-            <div class="hr-kpi-card">
+            <div class="hr-kpi-card"
+     onclick="showHRKPIFacilities('NON FRU')"
+     title="Click to view Non-FRU CHCs">
                 <div class="hr-kpi-icon">🏥</div>
                 <div>
                     <div id="hrNonFruChcs" class="hr-kpi-value">0</div>
@@ -4161,7 +4388,9 @@ z-index: 10;
                 </div>
             </div>
 
-            <div class="hr-kpi-card">
+            <div class="hr-kpi-card"
+     onclick="showHRKPIFacilities('30 BED')"
+     title="Click to view 30-Bed CHCs">
                 <div class="hr-kpi-icon">🛏️</div>
                 <div>
                     <div id="hr30BedChcs" class="hr-kpi-value">0</div>
@@ -4169,7 +4398,9 @@ z-index: 10;
                 </div>
             </div>
 
-            <div class="hr-kpi-card">
+            <div class="hr-kpi-card"
+     onclick="showHRKPIFacilities('50 BED')"
+     title="Click to view 50-Bed CHCs">
                 <div class="hr-kpi-icon">🛏️</div>
                 <div>
                     <div id="hr50BedChcs" class="hr-kpi-value">0</div>
@@ -4224,9 +4455,12 @@ z-index: 10;
 
             <div class="hr-details-header">
 
-                <div class="hr-section-title">
-                    CHC Facility Details
-                </div>
+                <div
+    class="hr-section-title"
+    id="hrFacilityDetailsTitle"
+>
+    CHC Facility Details
+</div>
 
                 <input
     type="text"
@@ -4235,9 +4469,25 @@ z-index: 10;
     placeholder="Search CHC name, district or taluk..."
 >
 
-                <button id="hrExportButton" class="hr-export-button">
-    Export
-</button>
+                <div style="display:flex; gap:8px;">
+
+    <button
+        id="hrFacilityClearButton"
+        class="hr-clear-button"
+        type="button"
+    >
+        Clear Filter
+    </button>
+
+    <button
+        id="hrExportButton"
+        class="hr-export-button"
+        type="button"
+    >
+        Export
+    </button>
+
+</div>
 
             </div>
 
@@ -4247,17 +4497,44 @@ z-index: 10;
 
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>District</th>
-                            <th>Taluk</th>
-                            <th>CHC Name</th>
-                            <th>FRU Status</th>
-                            <th>Bed Strength</th>
-                            <th>Total Posts</th>
-                            <th>Working</th>
-                            <th>Vacant</th>
-                            <th>Vacancy %</th>
-                        </tr>
+    <th>#</th>
+
+    <th onclick="sortHRFacilityDetails('district', this)">
+        District <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('taluk', this)">
+        Taluk <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('facility', this)">
+        CHC Name <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('fru', this)">
+        FRU Status <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('beds', this)">
+        Bed Strength <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('sanctioned', this)">
+        Total Posts <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('working', this)">
+        Working <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('vacant', this)">
+        Vacant <span class="hr-sort-arrow">↕</span>
+    </th>
+
+    <th onclick="sortHRFacilityDetails('vacancy', this)">
+        Vacancy % <span class="hr-sort-arrow">↕</span>
+    </th>
+</tr>
                     </thead>
 
                     <tbody id="hrFacilityTableBody">
@@ -6094,6 +6371,73 @@ if (
     return;
 }
 // ======================================================
+// MCH — SEPARATE SOURCE
+// ======================================================
+
+if (
+    selectedPlanningFacilityFamily === "ALL" &&
+    text(classification)
+        .trim()
+        .toUpperCase() === "MCH"
+) {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+
+    const filteredMCHData =
+        mchData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            return (
+                districtMatch &&
+                subdistrictMatch
+            );
+
+        });
+
+
+    showPlanningMCHFacilityDetails(
+        filteredMCHData,
+        "All MCH Facilities"
+    );
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    return;
+}
+// ======================================================
 // NAMMA CLINIC — SEPARATE SOURCE
 // ======================================================
 
@@ -6323,7 +6667,11 @@ function showPlanningAAKFacilityDetails(
 
 }
 // ==========================================================
-// PLANNING — SHOW MCH KPI
+// PLANNING — SHOW MCH KPI BREAKUP
+// MCH Dashboard Classification is treated as ONE complete value
+// Example:
+// "Functional / Integrated Facility"
+// must NOT be split at "/"
 // ==========================================================
 
 function showPlanningMCHKPIs() {
@@ -6339,7 +6687,10 @@ function showPlanningMCHKPIs() {
         )?.value || "All";
 
 
-    // Filter MCH using District and Subdistrict
+    // ======================================================
+    // FILTER MCH DATA
+    // ======================================================
+
     const filteredMCHData =
         mchData.filter(row => {
 
@@ -6368,54 +6719,100 @@ function showPlanningMCHKPIs() {
 
     if (!container) return;
 
-
     container.innerHTML = "";
 
 
-    // ------------------------------------------------------
-    // MCH KPI CARD
-    // ------------------------------------------------------
+    // ======================================================
+    // GET COMPLETE MCH DASHBOARD CLASSIFICATIONS
+    // IMPORTANT: DO NOT SPLIT BY "/"
+    // ======================================================
 
-    const card =
-        document.createElement("div");
-
-    card.className =
-        "facility-kpi-card family-mc";
-        card.classList.add("mch-running-border");
-
-    card.style.cursor =
-        "pointer";
-
-    card.innerHTML = `
-        <div class="facility-kpi-name">
-            MCH WINGS
-        </div>
-
-        <div class="facility-kpi-value">
-            ${formatNumber(filteredMCHData.length)}
-        </div>
-    `;
+    const classifications = [
+        ...new Set(
+            filteredMCHData
+                .map(row =>
+                    text(
+                        row["Dashboard Classification"]
+                    ).trim()
+                )
+                .filter(Boolean)
+        )
+    ].sort();
 
 
-    card.onclick =
-        function () {
+    // ======================================================
+    // CREATE MCH CLASSIFICATION KPI CARDS
+    // ======================================================
+
+    classifications.forEach(
+    (classification, index) => {
+
+        const classificationData =
+            filteredMCHData.filter(row =>
+
+                text(
+                    row["Dashboard Classification"]
+                )
+                    .trim()
+                    .toUpperCase() ===
+
+                text(classification)
+                    .trim()
+                    .toUpperCase()
+
+            );
+
+
+        const card =
+            document.createElement("div");
+
+        const colorIndex =
+    (index % 9) + 1;
+
+card.className =
+    "facility-kpi-card mch-kpi-card mch-color-" +
+    colorIndex;
+
+        card.style.cursor = "pointer";
+
+
+        card.innerHTML = `
+
+            <div class="facility-kpi-name">
+                ${classification}
+            </div>
+
+            <div class="facility-kpi-value">
+                ${formatNumber(
+                    classificationData.length
+                )}
+            </div>
+
+        `;
+
+
+        // --------------------------------------------------
+        // CLICK CLASSIFICATION
+        // --------------------------------------------------
+
+        card.onclick = function () {
 
             showPlanningMCHFacilityDetails(
-                filteredMCHData
+                classificationData,
+                classification
             );
 
         };
 
 
-    container.appendChild(card);
+        container.appendChild(card);
+
+    });
 
 
-    
-
-
-    // ------------------------------------------------------
-    // CHANGE KPI HEADING
-    // ------------------------------------------------------
+    // ======================================================
+    // SECTION HEADING
+    // ======================================================
 
     const header =
         document.querySelector(
@@ -6428,7 +6825,7 @@ function showPlanningMCHKPIs() {
         header.innerHTML = `
 
             <span>
-                MATERNAL AND CHILD HEALTH (MCH) — FACILITY BREAKUP
+                MATERNAL AND CHILD HEALTH (MCH) — DASHBOARD CLASSIFICATION
             </span>
 
             <button
@@ -6450,9 +6847,20 @@ function showPlanningMCHKPIs() {
             >
                 × Show All
             </button>
+
         `;
 
     }
+
+
+    // ======================================================
+    // SHOW ALL FILTERED MCH FACILITIES
+    // ======================================================
+
+    showPlanningMCHFacilityDetails(
+        filteredMCHData,
+        "All MCH Facilities"
+    );
 
 
     container.scrollIntoView({
@@ -6461,12 +6869,15 @@ function showPlanningMCHKPIs() {
     });
 
 }
+
+
 // ==========================================================
 // PLANNING — SHOW MCH FACILITY DETAILS
 // ==========================================================
 
 function showPlanningMCHFacilityDetails(
-    filteredMCHData
+    filteredMCHData,
+    selectedClassification = "All MCH Facilities"
 ) {
 
     const tableBody =
@@ -6486,8 +6897,12 @@ function showPlanningMCHFacilityDetails(
     tableBody.innerHTML = "";
 
 
+    // ======================================================
+    // SHOW ALL RECORDS
+    // ======================================================
+
     const displayData =
-        filteredMCHData.slice(0, 500);
+        filteredMCHData;
 
 
     displayData.forEach(row => {
@@ -6496,17 +6911,42 @@ function showPlanningMCHFacilityDetails(
             document.createElement("tr");
 
 
+        // Keep the existing Planning Facility Details
+        // table structure intact.
+        //
+        // District
+        // Subdistrict
+        // Format Type
+        // Facility Type
+        // Facility Name
+        // Ownership
+        // Rural/Urban
+        // Beds
+        // Building Status
+        // NIN
+        // HFR ID
+
         tr.innerHTML = `
 
-            <td>${text(row["District Name"])}</td>
+            <td>
+                ${text(row["District Name"])}
+            </td>
 
-            <td>${text(row["Subdistrict Name"])}</td>
+            <td>
+                ${text(row["Subdistrict Name"])}
+            </td>
 
-            <td>MCH</td>
+            <td>
+                MCH
+            </td>
 
-            <td>MCH Wing</td>
+            <td>
+                ${text(row["Base Category"])}
+            </td>
 
-            <td>${text(row["Facility Name"])}</td>
+            <td>
+                ${text(row["Facility Name"])}
+            </td>
 
             <td>—</td>
 
@@ -6514,7 +6954,11 @@ function showPlanningMCHFacilityDetails(
 
             <td>—</td>
 
-            <td>—</td>
+            <td>
+                ${text(
+                    row["Dashboard Classification"]
+                )}
+            </td>
 
             <td>—</td>
 
@@ -6528,14 +6972,17 @@ function showPlanningMCHFacilityDetails(
     });
 
 
+    // ======================================================
+    // ROW NOTE
+    // ======================================================
+
     if (rowNote) {
 
         rowNote.textContent =
-            "Showing " +
+            selectedClassification +
+            " — Showing " +
             formatNumber(displayData.length) +
-            " of " +
-            formatNumber(filteredMCHData.length) +
-            " MCH Wings";
+            " facilities";
 
     }
 
@@ -6724,12 +7171,12 @@ const filteredMCHData =
 
         const districtMatch =
             selectedDistrict === "All" ||
-            text(row["District"]).trim() ===
+            text(row["District Name"]).trim() ===
                 selectedDistrict;
 
         const talukMatch =
             selectedSubdistrict === "All" ||
-            text(row["Taluka"]).trim() ===
+            text(row["Subdistrict Name"]).trim() ===
                 selectedSubdistrict;
 
         return (
@@ -7380,7 +7827,49 @@ if (selectedPlanningFacilityFamily === "ALL") {
         filteredNammaClinicData.length;
 
 }
+// ======================================================
+// PLANNING — MCH FROM SEPARATE MCH SHEET
+// Show MCH as a normal Dashboard Classification KPI
+// ======================================================
 
+if (selectedPlanningFacilityFamily === "ALL") {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+
+    const filteredMCHData =
+        mchData.filter(row => {
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                text(row["District Name"]).trim() ===
+                    selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                text(row["Subdistrict Name"]).trim() ===
+                    selectedSubdistrict;
+
+            return (
+                districtMatch &&
+                subdistrictMatch
+            );
+
+        });
+
+
+    counts["MCH"] =
+        filteredMCHData.length;
+
+}
 
     // ======================================================
 // ARRANGE DASHBOARD CLASSIFICATIONS
@@ -7494,6 +7983,13 @@ if (
     selectedPlanningFacilityFamily === "ALL"
 ) {
     familyClass = "family-phc";
+}
+
+else if (
+    facilityType === "MCH" &&
+    selectedPlanningFacilityFamily === "ALL"
+) {
+    familyClass = "family-mch";
 }
 
 else
@@ -10190,9 +10686,33 @@ function updateHRCadreCards(data) {
         `;
 
 
-        container.appendChild(
-            card
+        // --------------------------------------
+// CLICK CADRE → FACILITY-WISE DETAILS
+// --------------------------------------
+
+card.style.cursor =
+    "pointer";
+
+
+card.title =
+    "Click to view " +
+    cadre +
+    " facility-wise details";
+
+
+card.onclick =
+    function () {
+
+        showHRFacilitiesForCadre(
+            cadre
         );
+
+    };
+
+
+container.appendChild(
+    card
+);
 
     });
 
@@ -17846,6 +18366,45 @@ refreshDashboard();
 
 }
 // ==========================================================
+// HR FACILITY DETAILS — CLEAR SEARCH FILTER
+// ==========================================================
+
+document
+    .getElementById("hrFacilityClearButton")
+    .addEventListener("click", function () {
+
+        const searchBox =
+            document.getElementById(
+                "hrFacilitySearch"
+            );
+
+        if (searchBox) {
+            searchBox.value = "";
+        }
+
+
+        const data =
+            getFilteredHRData();
+
+
+        if (selectedHRCadre) {
+
+            updateHRCadreFacilityTable(
+                data,
+                selectedHRCadre
+            );
+
+        }
+        else {
+
+            updateHRFacilityTable(
+                data
+            );
+
+        }
+
+    });
+// ==========================================================
 // HR FACILITY SEARCH
 // ==========================================================
 
@@ -17853,7 +18412,28 @@ document
     .getElementById("hrFacilitySearch")
     .addEventListener("input", function () {
 
-        refreshHRDashboard();
+        const data =
+            getFilteredHRData();
+
+
+        // If a cadre card is currently selected,
+        // keep showing that cadre's facility-wise data
+        if (selectedHRCadre) {
+
+            updateHRCadreFacilityTable(
+                data,
+                selectedHRCadre
+            );
+
+        }
+        else {
+
+            // Normal CHC facility table
+            updateHRFacilityTable(
+                data
+            );
+
+        }
 
     });
 // ==========================================================
@@ -18286,7 +18866,718 @@ function updateHRKPIs(data) {
 
 }
 
+// ==========================================================
+// SHOW FACILITY-WISE DETAILS FOR CLICKED HR CADRE
+// ==========================================================
 
+let selectedHRCadre = null;
+let hrFacilitySortColumn = null;
+let hrFacilitySortDirection = "asc";
+
+// ==========================================================
+// HR FACILITY DETAILS — SORTING
+// ==========================================================
+
+function sortHRFacilityDetails(
+    column,
+    headerElement
+) {
+
+    if (hrFacilitySortColumn === column) {
+
+        hrFacilitySortDirection =
+            hrFacilitySortDirection === "asc"
+                ? "desc"
+                : "asc";
+
+    }
+    else {
+
+        hrFacilitySortColumn = column;
+        hrFacilitySortDirection = "asc";
+
+    }
+
+
+    // Reset all arrows
+    document
+        .querySelectorAll(
+            ".hr-facility-table .hr-sort-arrow"
+        )
+        .forEach(arrow => {
+
+            arrow.textContent = "↕";
+
+        });
+
+
+    // Active arrow
+    const arrow =
+        headerElement.querySelector(
+            ".hr-sort-arrow"
+        );
+
+    if (arrow) {
+
+        arrow.textContent =
+            hrFacilitySortDirection === "asc"
+                ? "▲"
+                : "▼";
+
+    }
+
+
+    const data =
+        getFilteredHRData();
+
+
+    if (selectedHRCadre) {
+
+        updateHRCadreFacilityTable(
+            data,
+            selectedHRCadre
+        );
+
+    }
+    else {
+
+        updateHRFacilityTable(
+            data
+        );
+
+    }
+
+}
+
+
+// ==========================================================
+// SORT HR FACILITY ROWS
+// ==========================================================
+
+function sortHRFacilityRows(
+    facilities,
+    cadre = null
+) {
+
+    if (!hrFacilitySortColumn) {
+        return facilities;
+    }
+
+
+    facilities.sort(
+        (a, b) => {
+
+            function getValue(row) {
+
+                switch (
+                    hrFacilitySortColumn
+                ) {
+
+                    case "district":
+
+                        return String(
+                            row["_DistrictSheet"] ||
+                            ""
+                        );
+
+
+                    case "taluk":
+
+                        return String(
+                            row["Taluk"] ||
+                            ""
+                        );
+
+
+                    case "facility":
+
+                        return String(
+                            row["Facility"] ||
+                            ""
+                        );
+
+
+                    case "fru":
+
+                        return String(
+                            row["FRU Status"] ||
+                            ""
+                        );
+
+
+                    case "beds":
+
+                        return numberValue(
+                            row["Beds Sanctioned"]
+                        );
+
+
+                    case "sanctioned":
+
+                        if (cadre) {
+
+                            return numberValue(
+                                row[
+                                    cadre +
+                                    " - Sanctioned"
+                                ]
+                            );
+
+                        }
+
+                        return getHRFacilityTotals(
+                            row
+                        ).sanctioned;
+
+
+                    case "working":
+
+                        if (cadre) {
+
+                            return numberValue(
+                                row[
+                                    cadre +
+                                    " - Working"
+                                ]
+                            );
+
+                        }
+
+                        return getHRFacilityTotals(
+                            row
+                        ).working;
+
+
+                    case "vacant":
+
+                        if (cadre) {
+
+                            return numberValue(
+                                row[
+                                    cadre +
+                                    " - Vacant"
+                                ]
+                            );
+
+                        }
+
+                        return getHRFacilityTotals(
+                            row
+                        ).vacant;
+
+
+                    case "vacancy":
+
+                        let sanctioned;
+                        let vacant;
+
+
+                        if (cadre) {
+
+                            sanctioned =
+                                numberValue(
+                                    row[
+                                        cadre +
+                                        " - Sanctioned"
+                                    ]
+                                );
+
+                            vacant =
+                                numberValue(
+                                    row[
+                                        cadre +
+                                        " - Vacant"
+                                    ]
+                                );
+
+                        }
+                        else {
+
+                            const totals =
+                                getHRFacilityTotals(
+                                    row
+                                );
+
+                            sanctioned =
+                                totals.sanctioned;
+
+                            vacant =
+                                totals.vacant;
+
+                        }
+
+
+                        return sanctioned > 0
+                            ? (
+                                vacant /
+                                sanctioned
+                            ) * 100
+                            : 0;
+
+                }
+
+
+                return "";
+
+            }
+
+
+            const valueA =
+                getValue(a);
+
+            const valueB =
+                getValue(b);
+
+
+            let comparison = 0;
+
+
+            if (
+                typeof valueA === "number" &&
+                typeof valueB === "number"
+            ) {
+
+                comparison =
+                    valueA - valueB;
+
+            }
+            else {
+
+                comparison =
+                    String(valueA)
+                        .localeCompare(
+                            String(valueB),
+                            undefined,
+                            {
+                                numeric: true,
+                                sensitivity: "base"
+                            }
+                        );
+
+            }
+
+
+            return (
+                hrFacilitySortDirection === "asc"
+                    ? comparison
+                    : -comparison
+            );
+
+        }
+    );
+
+
+    return facilities;
+
+}
+function showHRFacilitiesForCadre(cadre) {
+
+    selectedHRCadre = cadre;
+
+    const data =
+        getFilteredHRData();
+
+
+    // ------------------------------------------------------
+    // UPDATE HEADING
+    // ------------------------------------------------------
+
+    const title =
+        document.getElementById(
+            "hrFacilityDetailsTitle"
+        );
+
+    if (title) {
+
+        title.textContent =
+            "CHC Facility Details — " +
+            cadre;
+
+    }
+
+
+    // ------------------------------------------------------
+    // RENDER FACILITY TABLE FOR THIS CADRE
+    // ------------------------------------------------------
+
+    updateHRCadreFacilityTable(
+        data,
+        cadre
+    );
+
+
+    // ------------------------------------------------------
+    // SCROLL TO FACILITY DETAILS
+    // ------------------------------------------------------
+
+    const tbody =
+        document.getElementById(
+            "hrFacilityTableBody"
+        );
+
+    if (tbody) {
+
+        const panel =
+            tbody.closest(
+                ".hr-details-panel"
+            );
+
+        if (panel) {
+
+            panel.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+    }
+
+}
+
+
+// ==========================================================
+// FACILITY TABLE FOR SELECTED HR CADRE
+// ==========================================================
+
+function updateHRCadreFacilityTable(
+    data,
+    cadre
+) {
+
+    const tbody =
+        document.getElementById(
+            "hrFacilityTableBody"
+        );
+
+    if (!tbody) {
+        return;
+    }
+
+
+    let facilities =
+        getUniqueHRFacilities(data);
+
+
+    // ------------------------------------------------------
+    // SEARCH
+    // ------------------------------------------------------
+
+    const searchBox =
+        document.getElementById(
+            "hrFacilitySearch"
+        );
+
+    const searchText =
+        searchBox
+            ? searchBox.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    if (searchText) {
+
+        facilities =
+            facilities.filter(row => {
+
+                const combined = [
+
+                    row["_DistrictSheet"],
+                    row["Taluk"],
+                    row["Facility"]
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                return combined.includes(
+                    searchText
+                );
+
+            });
+
+    }
+facilities =
+    sortHRFacilityRows(
+        facilities,
+        cadre
+    );
+
+    tbody.innerHTML = "";
+
+
+    if (facilities.length === 0) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="10"
+                    style="
+                        text-align:center;
+                        padding:20px;
+                    "
+                >
+                    No facilities found for
+                    ${escapeHRHtml(cadre)}.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    // ------------------------------------------------------
+    // FACILITY ROWS
+    // ------------------------------------------------------
+
+    facilities.forEach(
+        (row, index) => {
+
+            const sanctioned =
+                numberValue(
+                    row[
+                        cadre +
+                        " - Sanctioned"
+                    ]
+                );
+
+
+            const working =
+                numberValue(
+                    row[
+                        cadre +
+                        " - Working"
+                    ]
+                );
+
+
+            const vacant =
+                numberValue(
+                    row[
+                        cadre +
+                        " - Vacant"
+                    ]
+                );
+
+
+            const vacancyPercent =
+                sanctioned > 0
+                    ? (
+                        vacant /
+                        sanctioned
+                    ) * 100
+                    : 0;
+
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHRHtml(
+                        row["_DistrictSheet"]
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHRHtml(
+                        row["Taluk"]
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHRHtml(
+                        row["Facility"]
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHRHtml(
+                        row["FRU Status"]
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHRHtml(
+                        row["Beds Sanctioned"]
+                    )}
+                </td>
+
+                <td>
+                    ${formatNumber(
+                        sanctioned
+                    )}
+                </td>
+
+                <td>
+                    ${formatNumber(
+                        working
+                    )}
+                </td>
+
+                <td>
+                    ${formatNumber(
+                        vacant
+                    )}
+                </td>
+
+                <td>
+                    ${formatPercent(
+                        vacancyPercent
+                    )}
+                </td>
+
+            `;
+
+
+            tbody.appendChild(
+                tr
+            );
+
+        }
+    );
+
+}
+// ==========================================================
+// HR KPI CARD → FACILITY DETAILS
+// ==========================================================
+
+function showHRKPIFacilities(type) {
+
+    // Leave cadre-specific view
+    selectedHRCadre = null;
+
+    // Clear facility-details text search
+    const searchBox =
+        document.getElementById(
+            "hrFacilitySearch"
+        );
+
+    if (searchBox) {
+        searchBox.value = "";
+    }
+
+
+    // Start with the data already filtered
+    // by District / Taluk / Facility Type /
+    // FRU Status / Bed Strength / Facility
+    let data =
+        getFilteredHRData();
+
+
+    // Apply KPI-specific condition
+    if (type === "FRU") {
+
+        data = data.filter(
+            row =>
+                normalizeHRFruStatus(
+                    row["FRU Status"]
+                ) === "FRU"
+        );
+
+    }
+    else if (type === "NON FRU") {
+
+        data = data.filter(
+            row =>
+                normalizeHRFruStatus(
+                    row["FRU Status"]
+                ) === "NON FRU"
+        );
+
+    }
+    else if (type === "30 BED") {
+
+        data = data.filter(
+            row =>
+                numberValue(
+                    row["Beds Sanctioned"]
+                ) === 30
+        );
+
+    }
+    else if (type === "50 BED") {
+
+        data = data.filter(
+            row =>
+                numberValue(
+                    row["Beds Sanctioned"]
+                ) === 50
+        );
+
+    }
+
+
+    // Update heading
+    const title =
+        document.querySelector(
+            ".hr-details-panel .hr-section-title"
+        );
+
+    if (title) {
+
+        const titles = {
+            "ALL":
+                "CHC Facility Details — Total CHCs",
+
+            "FRU":
+                "CHC Facility Details — FRU CHCs",
+
+            "NON FRU":
+                "CHC Facility Details — Non-FRU CHCs",
+
+            "30 BED":
+                "CHC Facility Details — 30-Bed CHCs",
+
+            "50 BED":
+                "CHC Facility Details — 50-Bed CHCs"
+        };
+
+        title.textContent =
+            titles[type] ||
+            "CHC Facility Details";
+
+    }
+
+
+    // Display concerned facilities
+    updateHRFacilityTable(
+        data
+    );
+
+
+    // Scroll directly to Facility Details
+    const detailsPanel =
+        document.querySelector(
+            ".hr-details-panel"
+        );
+
+    if (detailsPanel) {
+
+        detailsPanel.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
 // ==========================================================
 // HR FACILITY TABLE
 // ==========================================================
@@ -18390,7 +19681,11 @@ function updateHRFacilityTable(data) {
         );
 
     });
-
+facilities =
+    sortHRFacilityRows(
+        facilities,
+        null
+    );
 
     tbody.innerHTML = "";
 
