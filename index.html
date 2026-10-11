@@ -644,7 +644,527 @@ transition:
 .hr-cadre-toggle:hover {
     background: #ffc5a5;
 }
+/* =========================================================
+   CHC CADRE-WISE HR — TABLE FORMAT
+========================================================= */
 
+.hr-cadre-table-wrapper {
+    margin: 10px;
+    padding: 0;
+
+    max-height: 520px;
+    overflow-x: auto;
+    overflow-y: auto;
+
+    border: 1px solid #cddceb;
+    border-radius: 9px;
+
+    background: #ffffff;
+}
+
+.hr-cadre-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 14px;
+}
+
+
+/* HEADER */
+
+.hr-cadre-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+
+    background:
+        linear-gradient(
+            180deg,
+            #174f7f,
+            #14517f
+        );
+
+    color: #ffffff;
+
+    padding: 11px 12px;
+
+    border-right: 1px solid #8bb5d5;
+
+    text-align: center;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.hr-cadre-table thead th:hover {
+    background: #216792;
+}
+
+
+/* COLUMN WIDTHS */
+
+.hr-cadre-table th:nth-child(1),
+.hr-cadre-table td:nth-child(1) {
+    width: 70px;
+}
+
+.hr-cadre-table th:nth-child(2),
+.hr-cadre-table td:nth-child(2) {
+    width: 29%;
+    text-align: left;
+}
+
+.hr-cadre-table th:nth-child(3),
+.hr-cadre-table td:nth-child(3),
+.hr-cadre-table th:nth-child(4),
+.hr-cadre-table td:nth-child(4),
+.hr-cadre-table th:nth-child(5),
+.hr-cadre-table td:nth-child(5) {
+    width: 14%;
+}
+
+.hr-cadre-table th:nth-child(6),
+.hr-cadre-table td:nth-child(6) {
+    width: 27%;
+}
+
+
+/* BODY */
+
+.hr-cadre-table td {
+    padding: 8px 12px;
+
+    border-right: 1px solid #d8e3ed;
+    border-bottom: 1px solid #d8e3ed;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    font-size: 14px;
+}
+
+
+/* ALTERNATE ROW */
+
+.hr-cadre-table tbody tr:nth-child(even) td {
+    background: #f4f8fc;
+}
+
+
+/* ROW HOVER */
+
+.hr-cadre-table tbody tr:hover td {
+    background: #eaf4ff;
+}
+
+
+/* CADRE NAME */
+
+.hr-cadre-name {
+    color: #0B3B75;
+    font-weight: 800;
+    font-size: 14px;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        color 0.18s ease,
+        text-shadow 0.18s ease;
+}
+.hr-cadre-name:hover {
+    color: #1976d2;
+
+    transform: scale(1.04);
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.15);
+
+    text-decoration: underline;
+}
+
+/* NUMBERS */
+
+.hr-cadre-sanctioned-table {
+    color: #172033;
+    font-weight: 800;
+}
+
+.hr-cadre-working-table {
+    color: #07882d;
+    font-weight: 800;
+}
+/* =========================================================
+   FACILITY WORKING COUNT — CLICKABLE
+========================================================= */
+
+.hr-working-link {
+    display: inline-block;
+
+    color: #07882d;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    padding: 3px 9px;
+
+    border-radius: 6px;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.hr-working-link:hover {
+    transform: scale(1.12);
+
+    background: #e8f7ed;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.16);
+
+    text-decoration: underline;
+}
+/* =========================================================
+   HR STAFF DETAILS POPUP
+========================================================= */
+
+.hr-staff-popup {
+    position: absolute;
+    z-index: 99999;
+
+    width: 390px;
+    max-width: calc(100vw - 20px);
+
+    background: #ffffff;
+
+    border: 1px solid #9cc7df;
+    border-radius: 14px;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.25);
+
+    overflow: hidden;
+
+    animation:
+        hrStaffPopupOpen 0.18s ease-out;
+}
+
+
+@keyframes hrStaffPopupOpen {
+
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+.hr-staff-popup-header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 13px 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #075985,
+            #0891b2
+        );
+
+    color: white;
+}
+
+
+.hr-staff-popup-title {
+    font-size: 16px;
+    font-weight: 900;
+}
+
+
+.hr-staff-popup-subtitle {
+    margin-top: 4px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    opacity: 0.95;
+}
+
+
+.hr-staff-popup-close {
+
+    width: 28px;
+    height: 28px;
+
+    border: none;
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.20);
+
+    color: white;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    line-height: 25px;
+
+    cursor: pointer;
+}
+
+
+.hr-staff-popup-close:hover {
+    background:
+        rgba(255,255,255,0.35);
+
+    transform: scale(1.08);
+}
+
+
+.hr-staff-popup-body {
+
+    padding: 11px;
+
+    max-height: 330px;
+    overflow-y: auto;
+
+    background: #f8fbfd;
+}
+
+
+.hr-staff-person {
+
+    padding: 11px;
+
+    margin-bottom: 9px;
+
+    background: white;
+
+    border: 1px solid #d8e5ee;
+    border-radius: 10px;
+
+    box-shadow:
+        0 2px 7px rgba(0,0,0,0.07);
+}
+
+
+.hr-staff-person:last-child {
+    margin-bottom: 0;
+}
+
+
+.hr-staff-person-name {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #123c69;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    margin-bottom: 9px;
+}
+
+
+.hr-staff-number {
+
+    display: inline-flex;
+
+    width: 23px;
+    height: 23px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e0f2fe;
+    color: #0369a1;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+.hr-staff-info-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 7px;
+}
+
+
+.hr-staff-info {
+
+    padding: 7px 9px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+}
+
+
+.hr-staff-info span {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    opacity: 0.75;
+}
+
+
+.hr-staff-info strong {
+
+    display: block;
+
+    font-size: 12px;
+
+    word-break: break-word;
+}
+
+
+.hr-staff-info.hpr {
+    background: #e8f3ff;
+    color: #07549a;
+}
+
+
+.hr-staff-info.kgid {
+    background: #eaf8ef;
+    color: #16713a;
+}
+
+
+.hr-staff-info.date {
+
+    grid-column: 1 / -1;
+
+    background: #fff4df;
+    color: #9a5a00;
+}
+
+
+.hr-staff-empty {
+
+    padding: 20px;
+
+    text-align: center;
+
+    color: #6b7280;
+    font-weight: 700;
+}
+.hr-cadre-vacant-table {
+    color: #f01828;
+    font-weight: 800;
+}
+
+
+/* VACANCY CELL */
+
+.hr-cadre-vacancy-cell {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+/* PROGRESS TRACK */
+
+.hr-cadre-table-progress {
+    flex: 1;
+
+    height: 14px;
+
+    background: #e2e7ec;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+/* PROGRESS FILL */
+
+.hr-cadre-table-progress-fill {
+    height: 100%;
+
+    border-radius: 20px;
+
+    transition: width .3s ease;
+}
+
+.hr-cadre-table-progress-fill.low {
+    background: #1c963e;
+}
+
+.hr-cadre-table-progress-fill.medium {
+    background: #f39a16;
+}
+
+.hr-cadre-table-progress-fill.high {
+    background: #ed3d4d;
+}
+
+
+/* PERCENTAGE NUMBER */
+
+.hr-cadre-table-percent {
+    width: 55px;
+
+    text-align: right;
+
+    font-weight: 800;
+
+    color: #172033;
+
+    white-space: nowrap;
+}
+
+
+/* SORT ARROW */
+
+.hr-cadre-sort-arrow {
+    display: inline-block;
+
+    margin-left: 5px;
+
+    font-size: 11px;
+
+    color: #ffffff;
+
+    opacity: .9;
+}
 
 /* Cards area */
 
@@ -3837,7 +4357,7 @@ z-index: 10;
         </div>
 
         <div>
-            09-10-2026 03:20 PM
+            11-10-2026 09:38 AM
         </div>
 
         <div class="meta-source">
@@ -4495,17 +5015,29 @@ z-index: 10;
     </div>
 
     <div
-        id="hrCadreCardsWrapper"
-        class="hr-cadre-cards-wrapper"
-    >
+    id="hrCadreCardsWrapper"
+    class="hr-cadre-table-wrapper"
+>
 
-        <div
-            id="hrCadreCards"
-            class="hr-cadre-grid"
-        >
-        </div>
+    <table class="hr-cadre-table">
 
-    </div>
+        <thead>
+    <tr>
+        <th>Sl No.</th>
+        <th class="hr-cadre-left">Cadre</th>
+        <th>Sanctioned</th>
+        <th>Working</th>
+        <th>Vacant</th>
+        <th>Vacancy %</th>
+    </tr>
+</thead>
+
+        <tbody id="hrCadreCards">
+        </tbody>
+
+    </table>
+
+</div>
 
 </div>
 
@@ -9859,6 +10391,9 @@ let districtPopulation = {};
 const HR_API_URL = "https://script.google.com/macros/s/AKfycbwnV5BEZ-PMf1Z5dBtKe4Yl5HVUrXGwcY6Sa67Hxv8kYiGdA8RwhkvwfYnXVxaJLVApqg/exec";
 
 let hrLiveData = [];
+
+// Staff-wise HR line list
+let hrLineListData = [];
 async function loadHRData() {
 const hrLoadStart = performance.now();
 
@@ -9881,6 +10416,13 @@ const hrLoadStart = performance.now();
         }
 
         hrLiveData = result.data || [];
+        // Load staff-wise HR line list
+hrLineListData = result.lineListData || [];
+
+console.log(
+    "HR line list records loaded:",
+    hrLineListData.length
+);
 
 detectHRCadres();
 
@@ -10919,10 +11461,113 @@ if (
 
 }
 // ==========================================================
-// CADRE-WISE HR KPI CARDS
+// CADRE-WISE HR TABLE
 // ==========================================================
 
+let hrCadreTableData = [];
+
+let hrCadreSortState = {
+    key: "",
+    direction: "asc"
+};
+
+
 function updateHRCadreCards(data) {
+
+    const container =
+        document.getElementById(
+            "hrCadreCards"
+        );
+
+    if (!container) {
+        return;
+    }
+
+
+    // ======================================================
+    // BUILD CADRE DATA
+    // ======================================================
+
+    hrCadreTableData =
+        hrCadres.map(cadre => {
+
+            let sanctioned = 0;
+            let working = 0;
+            let vacant = 0;
+
+
+            data.forEach(row => {
+
+                sanctioned +=
+                    numberValue(
+                        row[
+                            cadre +
+                            " - Sanctioned"
+                        ]
+                    );
+
+
+                working +=
+                    numberValue(
+                        row[
+                            cadre +
+                            " - Working"
+                        ]
+                    );
+
+
+                vacant +=
+                    numberValue(
+                        row[
+                            cadre +
+                            " - Vacant"
+                        ]
+                    );
+
+            });
+
+
+            const vacancyPercent =
+                sanctioned > 0
+                    ? (
+                        vacant /
+                        sanctioned
+                      ) * 100
+                    : 0;
+
+
+            return {
+
+                cadre:
+                    cadre,
+
+                sanctioned:
+                    sanctioned,
+
+                working:
+                    working,
+
+                vacant:
+                    vacant,
+
+                vacancyPercent:
+                    vacancyPercent
+
+            };
+
+        });
+
+
+    renderHRCadreTable();
+
+}
+
+
+// ==========================================================
+// RENDER CADRE TABLE
+// ==========================================================
+
+function renderHRCadreTable() {
 
     const container =
         document.getElementById(
@@ -10937,279 +11582,308 @@ function updateHRCadreCards(data) {
     container.innerHTML = "";
 
 
-    // ------------------------------------------
-    // Calculate each cadre
-    // ------------------------------------------
-
-    hrCadres.forEach((cadre, index) => {
-
-        let sanctioned = 0;
-        let working = 0;
-        let vacant = 0;
+    hrCadreTableData.forEach(
+        (item, index) => {
 
 
-        data.forEach(row => {
+            // ==============================================
+            // VACANCY COLOUR
+            // ==============================================
 
-            sanctioned += numberValue(
-                row[
-                    cadre +
-                    " - Sanctioned"
-                ]
+            let vacancyClass =
+                "low";
+
+
+            if (
+                item.vacancyPercent > 40
+            ) {
+
+                vacancyClass =
+                    "high";
+
+            } else if (
+                item.vacancyPercent > 20
+            ) {
+
+                vacancyClass =
+                    "medium";
+
+            }
+
+
+            // ==============================================
+            // PROGRESS WIDTH
+            // ==============================================
+
+            const progressWidth =
+                Math.max(
+                    0,
+                    Math.min(
+                        item.vacancyPercent,
+                        100
+                    )
+                );
+
+
+            // ==============================================
+            // CREATE ROW
+            // ==============================================
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+
+                <td
+    class="hr-cadre-name"
+    title="Click to view facility details"
+>
+    ${escapeHRHtml(
+        item.cadre
+    )}
+</td>
+
+
+                <td
+                    class="
+                        hr-cadre-sanctioned-table
+                    "
+                >
+
+                    ${formatNumber(
+                        item.sanctioned
+                    )}
+
+                </td>
+
+
+                <td
+                    class="
+                        hr-cadre-working-table
+                    "
+                >
+
+                    ${formatNumber(
+                        item.working
+                    )}
+
+                </td>
+
+
+                <td
+                    class="
+                        hr-cadre-vacant-table
+                    "
+                >
+
+                    ${formatNumber(
+                        item.vacant
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <div
+                        class="
+                            hr-cadre-vacancy-cell
+                        "
+                    >
+
+                        <div
+                            class="
+                                hr-cadre-table-progress
+                            "
+                        >
+
+                            <div
+                                class="
+                                    hr-cadre-table-progress-fill
+                                    ${vacancyClass}
+                                "
+                                style="
+                                    width:
+                                    ${progressWidth}%;
+                                "
+                            >
+                            </div>
+
+                        </div>
+
+
+                        <span
+                            class="
+                                hr-cadre-table-percent
+                            "
+                        >
+
+                            ${item.vacancyPercent.toFixed(1)}%
+
+                        </span>
+
+                    </div>
+
+                </td>
+
+            `;
+// ==============================================
+// CLICK CADRE → SHOW FACILITY DETAILS
+// ==============================================
+
+const cadreCell =
+    tr.querySelector(
+        ".hr-cadre-name"
+    );
+
+if (cadreCell) {
+
+    cadreCell.addEventListener(
+        "click",
+        function () {
+
+            showHRFacilitiesForCadre(
+                item.cadre
             );
 
-            working += numberValue(
-                row[
-                    cadre +
-                    " - Working"
-                ]
+        }
+    );
+
+}
+
+            container.appendChild(
+                tr
             );
 
-            vacant += numberValue(
-                row[
-                    cadre +
-                    " - Vacant"
-                ]
-            );
+        }
+    );
+
+}
+
+
+// ==========================================================
+// SORT CADRE TABLE
+// ==========================================================
+
+function sortHRCadreTable(
+    key,
+    header
+) {
+
+    if (
+        hrCadreSortState.key === key
+    ) {
+
+        hrCadreSortState.direction =
+            hrCadreSortState.direction ===
+            "asc"
+                ? "desc"
+                : "asc";
+
+    } else {
+
+        hrCadreSortState.key =
+            key;
+
+        hrCadreSortState.direction =
+            "asc";
+
+    }
+
+
+    const direction =
+        hrCadreSortState.direction;
+
+
+    hrCadreTableData.sort(
+        (a, b) => {
+
+            let valueA =
+                a[key];
+
+            let valueB =
+                b[key];
+
+
+            if (
+                typeof valueA === "string"
+            ) {
+
+                valueA =
+                    valueA.toLowerCase();
+
+                valueB =
+                    valueB.toLowerCase();
+
+
+                return direction === "asc"
+                    ? valueA.localeCompare(
+                        valueB
+                      )
+                    : valueB.localeCompare(
+                        valueA
+                      );
+
+            }
+
+
+            return direction === "asc"
+                ? valueA - valueB
+                : valueB - valueA;
+
+        }
+    );
+
+
+    // ======================================================
+    // RESET ARROWS
+    // ======================================================
+
+    document
+        .querySelectorAll(
+            ".hr-cadre-sort-arrow"
+        )
+        .forEach(arrow => {
+
+            arrow.textContent =
+                "↕";
 
         });
 
 
-        const vacancyPercent =
-            sanctioned > 0
-                ? (
-                    vacant /
-                    sanctioned
-                  ) * 100
-                : 0;
+    // ======================================================
+    // ACTIVE ARROW
+    // ======================================================
+
+    if (header) {
+
+        const arrow =
+            header.querySelector(
+                ".hr-cadre-sort-arrow"
+            );
 
 
-        // --------------------------------------
-        // Vacancy colour
-        // --------------------------------------
+        if (arrow) {
 
-        let vacancyClass = "low";
-
-        if (vacancyPercent > 40) {
-
-            vacancyClass = "high";
-
-        } else if (
-            vacancyPercent > 20
-        ) {
-
-            vacancyClass = "medium";
+            arrow.textContent =
+                direction === "asc"
+                    ? "▲"
+                    : "▼";
 
         }
 
+    }
 
-        // Progress width cannot exceed 100
-        const progressWidth =
-            Math.max(
-                0,
-                Math.min(
-                    vacancyPercent,
-                    100
-                )
-            );
 
-
-        // --------------------------------------
-        // Icon rotation
-        // --------------------------------------
-
-        const icons = [
-            "🩺",
-            "👨‍⚕️",
-            "⚕️",
-            "💊",
-            "🧪",
-            "🏥",
-            "👥",
-            "📋"
-        ];
-
-        const icon =
-            icons[
-                index %
-                icons.length
-            ];
-
-
-        // --------------------------------------
-        // Create card
-        // --------------------------------------
-
-        const card =
-            document.createElement(
-                "div"
-            );
-
-        card.className =
-            "hr-cadre-card";
-
-
-        card.innerHTML = `
-
-            <div class="hr-cadre-card-title">
-
-                <div class="hr-cadre-icon">
-                    ${icon}
-                </div>
-
-                <div>
-                    ${escapeHRHtml(cadre)}
-                </div>
-
-            </div>
-
-
-            <div class="hr-cadre-values">
-
-                <div>
-
-                    <span class="hr-cadre-stat-label">
-                        Sanctioned
-                    </span>
-
-                    <span class="hr-cadre-stat-value">
-                        ${formatNumber(sanctioned)}
-                    </span>
-
-                </div>
-
-
-                <div>
-
-                    <span class="hr-cadre-stat-label">
-                        Working
-                    </span>
-
-                    <span class="
-                        hr-cadre-stat-value
-                        hr-cadre-working
-                    ">
-                        ${formatNumber(working)}
-                    </span>
-
-                </div>
-
-
-                <div>
-
-                    <span class="hr-cadre-stat-label">
-                        Vacant
-                    </span>
-
-                    <span class="
-                        hr-cadre-stat-value
-                        hr-cadre-vacant
-                    ">
-                        ${formatNumber(vacant)}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="hr-cadre-vacancy-row">
-
-                <span>
-                    Vacancy %
-                </span>
-
-                <span class="
-                    hr-cadre-vacancy-percent
-                ">
-                    ${formatPercent(
-                        vacancyPercent
-                    )}
-                </span>
-
-            </div>
-
-
-            <div class="hr-cadre-progress">
-
-                <div
-                    class="
-                        hr-cadre-progress-fill
-                        ${vacancyClass}
-                    "
-                    style="
-                        width:
-                        ${progressWidth}%;
-                    "
-                >
-                </div>
-
-            </div>
-
-        `;
-
-
-        // --------------------------------------
-// CLICK CADRE → FACILITY-WISE DETAILS
-// --------------------------------------
-
-card.style.cursor =
-    "pointer";
-
-
-card.title =
-    "Click to view " +
-    cadre +
-    " facility-wise details";
-
-
-card.onclick =
-    function () {
-
-        showHRFacilitiesForCadre(
-            cadre
-        );
-
-    };
-
-
-container.appendChild(
-    card
-);
-
-    });
-
-
-    // ------------------------------------------
-    // TOTAL CADRES CARD
-    // ------------------------------------------
-
-    const totalCard =
-        document.createElement(
-            "div"
-        );
-
-    totalCard.className =
-        "hr-cadre-card hr-total-cadres-card";
-
-
-    totalCard.innerHTML = `
-
-        <div class="hr-total-cadres-label">
-            Total Cadres
-        </div>
-
-        <div class="hr-total-cadres-value">
-            ${formatNumber(
-                hrCadres.length
-            )}
-        </div>
-
-    `;
-
-
-    container.appendChild(
-        totalCard
-    );
+    renderHRCadreTable();
 
 }
 // ==========================================================
@@ -19696,7 +20370,420 @@ function showHRFacilitiesForCadre(cadre) {
     }
 
 }
+// ==========================================================
+// SHOW STAFF DETAILS FOR SELECTED FACILITY + CADRE
+// ==========================================================
 
+// ==========================================================
+// SHOW STAFF DETAILS BESIDE WORKING NUMBER
+// ==========================================================
+
+function showHRStaffDetails(
+    row,
+    cadre,
+    anchorElement
+) {
+
+    const facilityNIN =
+        text(
+            row["Group D (AAYA,Attender,Cleaner,Cook,Cook Maty,DHOBHI,Gardener,Ot Attended,Peon,Ward Attendent,Ward Boy,Watchman,Group D ) - NIN No."]
+            ||
+            row["NIN No."]
+            ||
+            row["NIN no."]
+        );
+
+    const facilityName =
+        text(
+            row["CHC Name"] ||
+            row["Facility Name"] ||
+            row["Facility"]
+        );
+
+    const district =
+        text(
+            row["District"] ||
+            row["_DistrictSheet"]
+        );
+
+    const taluk =
+        text(row["Taluk"]);
+
+
+    // ======================================================
+    // FIND STAFF
+    // ======================================================
+
+    const staff =
+        hrLineListData.filter(item => {
+
+            const itemCadre =
+                text(item["Cadre"]);
+
+            const itemNIN =
+                text(
+                    item["NIN no."] ||
+                    item["NIN No."] ||
+                    item["NIN NO"]
+                );
+
+            const itemFacility =
+                text(item["Facility"]);
+
+            const itemDistrict =
+                text(item["District"]);
+
+            const itemTaluk =
+                text(item["Taluk"]);
+
+
+            if (
+                itemCadre.toLowerCase() !==
+                text(cadre).toLowerCase()
+            ) {
+                return false;
+            }
+
+
+            // Prefer NIN
+            if (
+                facilityNIN !== "" &&
+                itemNIN !== ""
+            ) {
+                return facilityNIN === itemNIN;
+            }
+
+
+            // Fallback
+            return (
+                itemFacility.toLowerCase() ===
+                    facilityName.toLowerCase()
+                &&
+                itemDistrict.toLowerCase() ===
+                    district.toLowerCase()
+                &&
+                itemTaluk.toLowerCase() ===
+                    taluk.toLowerCase()
+            );
+
+        });
+
+
+    // Remove old popup
+    const oldPopup =
+        document.getElementById(
+            "hrStaffPopup"
+        );
+
+    if (oldPopup) {
+        oldPopup.remove();
+    }
+
+
+    // ======================================================
+    // CREATE POPUP
+    // ======================================================
+
+    const popup =
+        document.createElement("div");
+
+    popup.id =
+        "hrStaffPopup";
+
+    popup.className =
+        "hr-staff-popup";
+
+
+    let staffHTML = "";
+
+
+    if (staff.length === 0) {
+
+        staffHTML = `
+
+            <div class="hr-staff-empty">
+                No staff line-list details available.
+            </div>
+
+        `;
+
+    }
+    else {
+
+        staff.forEach(
+            (person, index) => {
+
+                const staffName =
+                    person["Name of the Staff"] ||
+                    person["Name of the Doctor"] ||
+                    "-";
+
+                const hpr =
+                    person["HPRID No."] ||
+                    person["HPR ID"] ||
+                    "-";
+
+                const kgid =
+                    person["KGID NO"] ||
+                    person["KGID No."] ||
+                    "-";
+
+                const workingSince =
+                    person[
+                        "Date since working in the present place"
+                    ] || "-";
+
+
+                staffHTML += `
+
+                    <div class="hr-staff-person">
+
+                        <div class="hr-staff-person-name">
+
+                            <span class="hr-staff-number">
+                                ${index + 1}
+                            </span>
+
+                            ${escapeHRHtml(
+                                staffName
+                            )}
+
+                        </div>
+
+
+                        <div class="hr-staff-info-grid">
+
+                            <div class="hr-staff-info hpr">
+
+                                <span>
+                                    HPR ID
+                                </span>
+
+                                <strong>
+                                    ${escapeHRHtml(hpr)}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="hr-staff-info kgid">
+
+                                <span>
+                                    KGID
+                                </span>
+
+                                <strong>
+                                    ${escapeHRHtml(kgid)}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="hr-staff-info date">
+
+                                <span>
+                                    Working Since
+                                </span>
+
+                                <strong>
+                                    ${escapeHRHtml(
+                                        workingSince
+                                    )}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    popup.innerHTML = `
+
+        <div class="hr-staff-popup-header">
+
+            <div>
+
+                <div class="hr-staff-popup-title">
+                    Staff Details
+                </div>
+
+                <div class="hr-staff-popup-subtitle">
+
+                    ${escapeHRHtml(
+                        facilityName
+                    )}
+
+                    &nbsp;•&nbsp;
+
+                    ${escapeHRHtml(
+                        cadre
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="hr-staff-popup-close"
+                title="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="hr-staff-popup-body">
+
+            ${staffHTML}
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        popup
+    );
+
+
+    // ======================================================
+    // POSITION BESIDE WORKING NUMBER
+    // ======================================================
+
+    const rect =
+        anchorElement.getBoundingClientRect();
+
+
+    const popupWidth = 390;
+
+
+    let left =
+        rect.right + 12;
+
+
+    // If insufficient space on right,
+    // show on left
+    if (
+        left + popupWidth >
+        window.innerWidth - 15
+    ) {
+
+        left =
+            rect.left -
+            popupWidth -
+            12;
+
+    }
+
+
+    // Prevent going outside left edge
+    if (left < 10) {
+        left = 10;
+    }
+
+
+    let top =
+        rect.top +
+        window.scrollY -
+        20;
+
+
+    popup.style.left =
+        left + "px";
+
+    popup.style.top =
+        top + "px";
+
+
+    // ======================================================
+    // CLOSE BUTTON
+    // ======================================================
+
+    const closeButton =
+        popup.querySelector(
+            ".hr-staff-popup-close"
+        );
+
+
+    closeButton.addEventListener(
+        "click",
+        function () {
+
+            popup.remove();
+
+        }
+    );
+
+
+    // ======================================================
+    // CLOSE WHEN CLICKING OUTSIDE
+    // ======================================================
+
+    setTimeout(
+        function () {
+
+            document.addEventListener(
+                "click",
+                closeHRStaffPopupOutside
+            );
+
+        },
+        0
+    );
+
+}
+
+
+// ==========================================================
+// CLOSE STAFF POPUP WHEN CLICKING OUTSIDE
+// ==========================================================
+
+function closeHRStaffPopupOutside(event) {
+
+    const popup =
+        document.getElementById(
+            "hrStaffPopup"
+        );
+
+    if (!popup) {
+
+        document.removeEventListener(
+            "click",
+            closeHRStaffPopupOutside
+        );
+
+        return;
+    }
+
+
+    if (
+        !popup.contains(event.target) &&
+        !event.target.closest(
+            ".hr-working-link"
+        )
+    ) {
+
+        popup.remove();
+
+        document.removeEventListener(
+            "click",
+            closeHRStaffPopupOutside
+        );
+
+    }
+
+}
 
 // ==========================================================
 // FACILITY TABLE FOR SELECTED HR CADRE
@@ -19888,10 +20975,19 @@ facilities =
                 </td>
 
                 <td>
-                    ${formatNumber(
-                        working
-                    )}
-                </td>
+    ${
+        working > 0
+            ? `
+                <span
+                    class="hr-working-link"
+                    title="Click to view staff details"
+                >
+                    ${formatNumber(working)}
+                </span>
+              `
+            : formatNumber(working)
+    }
+</td>
 
                 <td>
                     ${formatNumber(
@@ -19911,7 +21007,31 @@ facilities =
             tbody.appendChild(
                 tr
             );
+// ======================================================
+// CLICK WORKING COUNT → STAFF DETAILS
+// ======================================================
 
+const workingLink =
+    tr.querySelector(
+        ".hr-working-link"
+    );
+
+if (workingLink) {
+
+    workingLink.addEventListener(
+        "click",
+        function () {
+
+            showHRStaffDetails(
+    row,
+    cadre,
+    workingLink
+);
+
+        }
+    );
+
+}
         }
     );
 
