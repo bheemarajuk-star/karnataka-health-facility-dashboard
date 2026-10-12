@@ -388,35 +388,131 @@ body {
 }
 
 
-/* MOBILE HEADER */
+/* ==========================================================
+   RESPONSIVE GOVERNMENT HEADER
+   ========================================================== */
 
 @media (max-width: 900px) {
 
     .main-header {
-        grid-template-columns: 1fr;
-        gap: 12px;
-        padding: 15px 18px;
+        width: 100%;
+        max-width: 100%;
+
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+
+        gap: 10px;
+        padding: 12px;
+
+        box-sizing: border-box;
     }
 
     .header-government {
-        justify-content: center;
-    }
+        width: 100%;
+        max-width: 100%;
 
-    .header-center {
-        padding: 0;
-    }
+        height: auto;
+        min-height: 65px;
 
-    .dashboard-main-title {
-        font-size: 22px;
-    }
+        padding: 8px 15px;
 
-    .header-meta {
-        text-align: center;
+        justify-content: flex-start;
+
+        border-radius: 10px;
+        clip-path: none;
     }
 
     .government-logo {
-        width: 58px;
-        height: 58px;
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+    }
+
+    .government-text {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .government-department {
+        font-size: clamp(11px, 3vw, 14px);
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .government-name {
+        font-size: clamp(10px, 2.8vw, 13px);
+        white-space: normal;
+    }
+
+    .header-center {
+        min-width: 0;
+        width: 100%;
+
+        padding: 0;
+        text-align: center;
+    }
+
+    .dashboard-main-title {
+        font-size: clamp(17px, 4vw, 24px);
+        line-height: 1.3;
+
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .dashboard-subtitle {
+        font-size: clamp(11px, 2.5vw, 13px);
+        line-height: 1.4;
+
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .header-meta {
+        width: 100%;
+        text-align: center;
+
+        font-size: 11px;
+        line-height: 1.5;
+    }
+}
+
+
+/* ==========================================================
+   LANDSCAPE MOBILE
+   ========================================================== */
+
+@media (orientation: landscape)
+       and (max-width: 900px) {
+
+    .main-header {
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1.5fr);
+
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-government {
+        min-width: 0;
+    }
+
+    .header-center {
+        text-align: center;
+    }
+
+    .dashboard-main-title {
+        font-size: clamp(15px, 2.5vw, 21px);
+    }
+
+    .dashboard-subtitle {
+        font-size: 11px;
+    }
+
+    .header-meta {
+        grid-column: 1 / -1;
+        text-align: center;
     }
 }
 /* ==========================================================
@@ -4297,6 +4393,505 @@ z-index: 10;
     }
 
 }
+/* ==========================================================
+   FINAL RESPONSIVE DASHBOARD
+   Portrait + Landscape + Tablet
+   Desktop remains unchanged
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px 8px;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    .tab-content,
+    #facilityTab,
+    #planningFacilityTab,
+    #hrDataTab,
+    #testingTab {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+
+    /* ======================================================
+       DASHBOARD TABS — WRAP, DO NOT HIDE
+       ====================================================== */
+
+    .dashboard-tabs {
+        width: 100%;
+        max-width: 100%;
+
+        display: flex;
+        flex-wrap: wrap;
+
+        gap: 4px;
+
+        overflow: visible;
+
+        padding-bottom: 5px;
+    }
+
+    .dashboard-tab {
+        flex: 1 1 180px;
+
+        min-width: 0;
+
+        padding: 10px 8px;
+
+        font-size: 12px;
+        line-height: 1.25;
+
+        white-space: normal;
+
+        text-align: center;
+    }
+
+
+    /* ======================================================
+       FILTERS
+       ====================================================== */
+
+    .filters,
+    .filter-grid,
+    .dashboard-filters,
+    .hr-filter-panel {
+        width: 100%;
+
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 10px !important;
+    }
+
+    select,
+    input {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+
+    /* ======================================================
+       MAIN TOP KPI ROW
+       THIS FIXES THE MISSING SC / PHC / CHC CARDS
+       ====================================================== */
+
+    #facilityTab .district-kpi-row,
+    #planningFacilityTab .district-kpi-row,
+    .district-kpi-row {
+        width: 100%;
+        max-width: 100%;
+
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+
+        gap: 8px !important;
+
+        overflow: visible;
+    }
+
+    #facilityTab .population-kpi,
+    #planningFacilityTab .population-kpi,
+    .population-kpi,
+    .district-summary-kpi {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+
+        padding: 10px 8px !important;
+
+        overflow: hidden;
+    }
+
+    #facilityTab .population-kpi-value,
+    #planningFacilityTab .population-kpi-value,
+    .population-kpi-value {
+        font-size: 20px !important;
+
+        white-space: normal !important;
+
+        overflow-wrap: anywhere;
+    }
+
+    .district-summary-label {
+        font-size: 11px;
+        overflow-wrap: anywhere;
+    }
+
+    .district-summary-value {
+        font-size: 23px;
+    }
+
+
+    /* ======================================================
+       DASHBOARD CLASSIFICATION
+       ====================================================== */
+
+    .facility-kpi-section {
+        width: 100%;
+        max-width: 100%;
+
+        overflow: hidden;
+    }
+
+    .facility-kpi-grid {
+        width: 100%;
+        max-width: 100%;
+
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+
+        gap: 6px !important;
+    }
+
+    .facility-kpi-card {
+        width: 100%;
+        min-width: 0 !important;
+        max-width: 100%;
+
+        min-height: 85px;
+
+        padding: 8px 5px;
+
+        overflow: hidden;
+    }
+
+    .facility-kpi-name {
+        font-size: 10px;
+
+        white-space: normal;
+
+        overflow-wrap: anywhere;
+    }
+
+    .facility-kpi-value {
+        font-size: 20px;
+    }
+
+
+    /* ======================================================
+       OTHER KPI GRIDS
+       ====================================================== */
+
+    .kpi-grid,
+    .district-summary-grid,
+    .recon-summary-grid,
+    .hr-kpi-grid {
+        width: 100%;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+
+        gap: 8px !important;
+    }
+
+    .kpi-card,
+    .hr-kpi-card {
+        min-width: 0 !important;
+        max-width: 100%;
+    }
+
+
+    /* ======================================================
+       DASHBOARD CONTENT
+       ====================================================== */
+
+    .dashboard-grid,
+    .planning-grid,
+    .hr-grid,
+    .recon-details-header,
+    .hr-details-header {
+        width: 100%;
+        max-width: 100%;
+
+        grid-template-columns:
+            1fr !important;
+    }
+
+    .panel,
+    .card {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+
+    /* ======================================================
+       TABLES — ONLY TABLES MAY SCROLL
+       ====================================================== */
+
+    .table-container,
+    .table-responsive,
+    .facility-table-container,
+    .recon-table-container,
+    .recon-details-table-wrap,
+    .hr-table-wrapper,
+    .panel:has(table) {
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto !important;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        max-width: none;
+    }
+
+    .recon-detail-table {
+        min-width: 900px;
+    }
+
+
+    /* ======================================================
+       FACILITY DETAILS
+       ====================================================== */
+
+    .facility-details-title-row {
+        flex-wrap: wrap;
+    }
+
+    .facility-export-btn {
+        max-width: 100%;
+    }
+}
+
+
+/* ==========================================================
+   PHONE PORTRAIT
+   ========================================================== */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding: 8px;
+    }
+
+
+    /* TABS — 2 PER ROW */
+
+    .dashboard-tabs {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 4px;
+    }
+
+    .dashboard-tab {
+        width: 100%;
+        min-width: 0;
+
+        padding: 9px 5px;
+
+        font-size: 10px;
+
+        white-space: normal;
+    }
+
+
+    /* FILTERS — 1 COLUMN */
+
+    .filters,
+    .filter-grid,
+    .dashboard-filters,
+    .hr-filter-panel {
+        grid-template-columns:
+            1fr !important;
+    }
+
+
+    /* TOP KPI — 2 PER ROW */
+
+    #facilityTab .district-kpi-row,
+    #planningFacilityTab .district-kpi-row,
+    .district-kpi-row {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 7px !important;
+    }
+
+    #facilityTab .population-kpi,
+    #planningFacilityTab .population-kpi,
+    .population-kpi,
+    .district-summary-kpi {
+        min-width: 0 !important;
+
+        min-height: 92px;
+
+        padding: 10px 8px !important;
+    }
+
+    #facilityTab .population-kpi-value,
+    #planningFacilityTab .population-kpi-value,
+    .population-kpi-value {
+        font-size: 20px !important;
+    }
+
+    .district-summary-value {
+        font-size: 22px;
+    }
+
+
+    /* CLASSIFICATION — 2 PER ROW */
+
+    .facility-kpi-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 6px !important;
+    }
+
+    .facility-kpi-card {
+        min-width: 0 !important;
+        min-height: 80px;
+
+        padding: 8px 5px;
+    }
+
+    .facility-kpi-name {
+        font-size: 9px;
+        line-height: 1.25;
+    }
+
+    .facility-kpi-value {
+        font-size: 20px;
+    }
+
+
+    /* OTHER KPI GRIDS */
+
+    .kpi-grid,
+    .district-summary-grid,
+    .recon-summary-grid,
+    .hr-kpi-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+
+/* ==========================================================
+   VERY SMALL PHONE
+   ========================================================== */
+
+@media (max-width: 380px) {
+
+    .dashboard-tab {
+        font-size: 9px;
+    }
+
+    .district-summary-label {
+        font-size: 10px;
+    }
+
+    .district-summary-value {
+        font-size: 20px;
+    }
+
+    .facility-kpi-name {
+        font-size: 8.5px;
+    }
+}
+
+
+/* ==========================================================
+   LANDSCAPE PHONE
+   ========================================================== */
+
+@media (orientation: landscape)
+       and (max-width: 900px) {
+
+    .container {
+        padding: 8px 12px;
+    }
+
+    .dashboard-tabs {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 4px;
+    }
+
+    .dashboard-tab {
+        min-width: 0;
+
+        font-size: 10px;
+
+        white-space: normal;
+    }
+
+
+    /* FILTERS — 4 PER ROW */
+
+    .filters,
+    .filter-grid,
+    .dashboard-filters,
+    .hr-filter-panel {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+
+
+    /* TOP KPI — 5 PER ROW */
+
+    #facilityTab .district-kpi-row,
+    #planningFacilityTab .district-kpi-row,
+    .district-kpi-row {
+        grid-template-columns:
+            repeat(5, minmax(0, 1fr)) !important;
+
+        gap: 8px !important;
+    }
+
+
+    /* CLASSIFICATION — 4 PER ROW */
+
+    .facility-kpi-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+
+
+    /* OTHER KPI */
+
+    .kpi-grid,
+    .district-summary-grid,
+    .recon-summary-grid,
+    .hr-kpi-grid {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+}
 </style>
 
 </head>
@@ -4357,7 +4952,7 @@ z-index: 10;
         </div>
 
         <div>
-            12-10-2026 01:02 PM
+            12-10-2026 09:52 PM
         </div>
 
         <div class="meta-source">
