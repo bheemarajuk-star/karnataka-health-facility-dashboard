@@ -4357,7 +4357,7 @@ z-index: 10;
         </div>
 
         <div>
-            11-10-2026 09:38 AM
+            12-10-2026 01:02 PM
         </div>
 
         <div class="meta-source">
@@ -4390,6 +4390,7 @@ z-index: 10;
         HR Data
     </button>
     <button
+    id="facilityReconciliationTabButton"
     class="dashboard-tab"
     onclick="openDashboardTab('testingTab', this)">
     Facility Reconciliation
@@ -5950,7 +5951,18 @@ const planningDashFilterConfig = [
 // ==========================================================
 function getPlanningDashboardFilteredData() {
 
+    const userDistrict =
+        getUserDistrictAccess();
+
     return planningFacilityData.filter(row => {
+
+        // DISTRICT ACCESS FILTER
+        if (
+            userDistrict &&
+            text(row["District Name"]).trim() !== userDistrict
+        ) {
+            return false;
+        }
 
         return planningDashFilterConfig.every(config => {
 
@@ -6001,7 +6013,19 @@ function getPlanningDashboardFilteredData() {
 function populatePlanningDashboardFilters() {
 
     let availableData =
-        planningFacilityData;
+    planningFacilityData;
+
+const userDistrict =
+    getUserDistrictAccess();
+
+if (userDistrict) {
+
+    availableData =
+        availableData.filter(row =>
+            text(row["District Name"]).trim() ===
+            userDistrict
+        );
+}
 
     planningDashFilterConfig.forEach(config => {
 
@@ -6184,8 +6208,20 @@ function clearPlanningDashboardFilters() {
             document.getElementById(config.id);
 
         if (select) {
-            select.value = "All";
-        }
+
+    const userDistrict =
+        getUserDistrictAccess();
+
+    if (
+        config.id === "planningDash_districtFilter" &&
+        userDistrict
+    ) {
+        select.value = userDistrict;
+    }
+    else {
+        select.value = "All";
+    }
+}
 
     });
 
@@ -6207,29 +6243,72 @@ function getPlanningFamilyData(data, family) {
     if (!family || family === "ALL") {
         return data;
     }
-    // UPHC uses separate UPHCs sheet
-if (family === "UPHC") {
-    return uphcData;
-}
-    // Namma Clinic uses separate Namma Clinics sheet
-if (family === "NAMMA CLINIC") {
-    return nammaClinicData;
-}
 
-// AYUSH uses separate Ayush sheet
-if (family === "AYUSH") {
-    return ayushData;
-}
+    const userDistrict =
+        getUserDistrictAccess();
+
+    // ======================================================
+    // HELPER — RESTRICT SEPARATE DATASET TO USER DISTRICT
+    // ======================================================
+
+    function restrictToUserDistrict(sourceData) {
+
+        let result =
+            Array.isArray(sourceData)
+                ? [...sourceData]
+                : [];
+
+        if (userDistrict) {
+
+            result =
+                result.filter(row =>
+                    text(
+                        row["District Name"]
+                    ).trim() === userDistrict
+                );
+
+        }
+
+        return result;
+    }
+
+
+    // ======================================================
+    // SEPARATE PLANNING DATASETS
+    // ======================================================
+
+    if (family === "UPHC") {
+        return restrictToUserDistrict(
+            uphcData
+        );
+    }
+
+    if (family === "NAMMA CLINIC") {
+        return restrictToUserDistrict(
+            nammaClinicData
+        );
+    }
+
+    if (family === "AYUSH") {
+        return restrictToUserDistrict(
+            ayushData
+        );
+    }
+
+
+    // ======================================================
+    // NORMAL PLANNING MASTER DATA
+    // ======================================================
 
     const baseCategoryMap = {
+
         SC: "SC",
         PHC: "PHC",
         CHC: "CHC",
         SDH: "SDH",
         DH: "DH",
-        MC: "MEDICAL COLLEGE",
-        "NAMMA CLINIC": "NAMMA CLINIC",
-        AYUSH: "AYUSH"
+        MC: "MEDICAL COLLEGE"
+
     };
 
     const targetBaseCategory =
@@ -6380,10 +6459,15 @@ AYUSH:
 
 function showPlanningAAKKPIs() {
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -6651,10 +6735,15 @@ function showPlanningUPHCFacilityDetails(
     classification
 ) {
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -6752,10 +6841,15 @@ function showPlanningAyushFacilityDetails(
     classification
 ) {
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -7268,10 +7362,15 @@ function showPlanningAAKFacilityDetails(
 
 function showPlanningMCHKPIs() {
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -7605,10 +7704,14 @@ function refreshPlanningFacilityDashboard() {
         );
 
 
-    const selectedDistrict =
-        districtSelect
-            ? districtSelect.value
-            : "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    (districtSelect
+        ? districtSelect.value
+        : "All");
 
 
     let populationValue = 0;
@@ -7999,10 +8102,15 @@ if (
 
     container.innerHTML = "";
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -8732,10 +8840,15 @@ sourceData.forEach(row => {
 
 if (selectedPlanningFacilityFamily === "ALL") {
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -8785,10 +8898,15 @@ if (selectedPlanningFacilityFamily === "ALL") {
 
 if (selectedPlanningFacilityFamily === "ALL") {
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -8828,10 +8946,15 @@ if (selectedPlanningFacilityFamily === "ALL") {
 
 if (selectedPlanningFacilityFamily === "ALL") {
 
-    const selectedDistrict =
-        document.getElementById(
-            "planningDash_districtFilter"
-        )?.value || "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    document.getElementById(
+        "planningDash_districtFilter"
+    )?.value ||
+    "All";
 
     const selectedSubdistrict =
         document.getElementById(
@@ -10725,6 +10848,18 @@ function populateAllFilters() {
 
     let availableData = facilityData;
 
+const userDistrict =
+    getUserDistrictAccess();
+
+if (userDistrict) {
+
+    availableData =
+        availableData.filter(row =>
+            text(row["District Name"]).trim() ===
+            userDistrict
+        );
+}
+
 
     filterConfig.forEach((config, index) => {
 
@@ -11016,12 +11151,40 @@ function setupTestingFilterEvents() {
     });
 }
 // ==========================================================
+// LOGGED-IN DISTRICT ACCESS
+// ==========================================================
+
+function getUserDistrictAccess() {
+
+    const access = window.HMIS_USER_ACCESS || {};
+
+    if (access.role !== "DISTRICT_USER") {
+        return null;
+    }
+
+    const district =
+        String(access.district || "").trim();
+
+    return district || null;
+}
+// ==========================================================
 // APPLY FILTERS
 // ==========================================================
 
 function getFilteredData() {
 
+    const userDistrict =
+        getUserDistrictAccess();
+
     return facilityData.filter(row => {
+
+        // SECURITY / DISTRICT ACCESS FILTER
+        if (
+            userDistrict &&
+            text(row["District Name"]).trim() !== userDistrict
+        ) {
+            return false;
+        }
 
         return filterConfig.every(config => {
 
@@ -16795,8 +16958,12 @@ function updateReconciliationSubdistrictFilter() {
     }
 
 
-    const selectedDistrict =
-        districtFilter.value;
+    const userDistrict =
+    getUserDistrictAccess();
+
+const selectedDistrict =
+    userDistrict ||
+    districtFilter.value;
 
 
     let rows =
@@ -16914,9 +17081,13 @@ function applyReconciliationDetailFilters() {
             .toLowerCase();
 
 
-    const district =
-        districtFilter?.value ||
-        "All";
+    const userDistrict =
+    getUserDistrictAccess();
+
+const district =
+    userDistrict ||
+    districtFilter?.value ||
+    "All";
 
 
     const subdistrict =
@@ -17254,9 +17425,25 @@ function exportReconciliationDetails() {
 
 
     const rows =
-        Array.from(
-            tableBody.querySelectorAll("tr")
+    Array.from(
+        table.querySelectorAll("tr")
+    ).filter(row => {
+
+        // Always keep table heading
+        if (row.querySelector("th")) {
+            return true;
+        }
+
+        const style =
+            window.getComputedStyle(row);
+
+        return (
+            style.display !== "none" &&
+            style.visibility !== "hidden" &&
+            !row.hidden
         );
+
+    });
 
 
     // ------------------------------------------------------
@@ -19459,9 +19646,21 @@ function clearFilters() {
 
     filterConfig.forEach(config => {
 
-        document.getElementById(
-            config.id
-        ).value = "All";
+        const select =
+    document.getElementById(config.id);
+
+const userDistrict =
+    getUserDistrictAccess();
+
+if (
+    config.id === "districtFilter" &&
+    userDistrict
+) {
+    select.value = userDistrict;
+}
+else {
+    select.value = "All";
+}
 
     });
 
@@ -19619,6 +19818,21 @@ function populateAllHRFilters() {
 
     let availableData = hrLiveData;
 
+    const userDistrict =
+        getUserDistrictAccess();
+
+    // DISTRICT USER ACCESS
+    if (userDistrict) {
+
+        availableData =
+            availableData.filter(row =>
+                String(
+                    row["_DistrictSheet"] || ""
+                ).trim() === userDistrict
+            );
+
+    }
+
     hrFilterConfig.forEach((config, index) => {
 
         const select =
@@ -19769,7 +19983,19 @@ hrFilterConfig.forEach((config, index) => {
 
 function getFilteredHRData() {
 
+    const userDistrict =
+        getUserDistrictAccess();
+
     return hrLiveData.filter(row => {
+
+        // DISTRICT USER ACCESS
+        if (
+            userDistrict &&
+            String(row["_DistrictSheet"] || "").trim() !==
+                userDistrict
+        ) {
+            return false;
+        }
 
         return hrFilterConfig.every(config => {
 
@@ -21716,19 +21942,20 @@ function exportCurrentFacilityDetails() {
         document.getElementById("planningFacilityTab");
 
     const planningVisible =
-        planningTab &&
-        planningTab.style.display !== "none";
+    planningTab &&
+    window.getComputedStyle(planningTab).display !== "none";
 
 
-    const tableBodyId =
-        planningVisible
-            ? "planningDash_facilityDetailsBody"
-            : "facilityDetailsBody";
-
+    // ======================================================
+    // SELECT THE CURRENT VISIBLE FACILITY TABLE
+    // ======================================================
 
     const tableBody =
-        document.getElementById(tableBodyId);
-
+        document.getElementById(
+            planningVisible
+                ? "planningDash_facilityDetailsBody"
+                : "facilityDetailsBody"
+        );
 
     if (!tableBody) {
         alert("Facility Details table not found.");
@@ -21736,75 +21963,88 @@ function exportCurrentFacilityDetails() {
     }
 
 
-    const table =
-        tableBody.closest("table");
-
-
-    if (!table) {
-        alert("Facility Details table not found.");
-        return;
-    }
-
-
     const rows =
         Array.from(
-            table.querySelectorAll("tr")
+            tableBody.querySelectorAll("tr")
         );
 
 
-    if (rows.length <= 1) {
+    if (rows.length === 0) {
         alert("No facility data available to export.");
         return;
     }
 
 
+    // ======================================================
+    // SAME COLUMNS AS FACILITY DETAILS TABLE
+    // ======================================================
+
+    const headers = [
+        "District Name",
+        "Subdistrict Name",
+        "Format Type",
+        "Facility Type",
+        "Facility Name",
+        "Ownership",
+        "Rural/Urban",
+        "No. of Beds",
+        "Building Status",
+        "NIN",
+        "HFR ID"
+    ];
+
+
     const csvRows = [];
 
+    csvRows.push(headers);
+
+
+    // ======================================================
+    // EXPORT EXACTLY WHAT IS CURRENTLY DISPLAYED
+    // ======================================================
 
     rows.forEach(row => {
 
         const cells =
             Array.from(
-                row.querySelectorAll("th, td")
+                row.querySelectorAll("td")
             );
 
-
-        const values =
-            cells.map(cell => {
-
-                let value =
-    cell.innerText
-        .replace(/[↕▲▼]/g, "")
-        .replaceAll(
-            String.fromCharCode(10),
-            " "
-        )
-        .replaceAll(
-            String.fromCharCode(13),
-            " "
-        )
-        .trim();
-
-                // Escape double quotes for CSV
-                value =
-                    value.replace(/"/g, '""');
-
-
-                return `"${value}"`;
-
-            });
-
+        if (cells.length === 0) {
+            return;
+        }
 
         csvRows.push(
-            values.join(",")
+            cells.map(cell =>
+                cell.innerText
+                    .replaceAll(
+    String.fromCharCode(13),
+    " "
+)
+.replaceAll(
+    String.fromCharCode(10),
+    " "
+)
+                    .trim()
+            )
         );
 
     });
 
 
+    // ======================================================
+    // CREATE CSV
+    // ======================================================
+
     const csvContent =
         "﻿" +
-        csvRows.join(
+        csvRows
+            .map(row =>
+                row.map(value =>
+                    `"${String(value).replace(/"/g, '""')}"`
+                ).join(",")
+            )
+            .join(
     String.fromCharCode(13, 10)
 );
 
@@ -21813,15 +22053,13 @@ function exportCurrentFacilityDetails() {
         new Blob(
             [csvContent],
             {
-                type:
-                    "text/csv;charset=utf-8;"
+                type: "text/csv;charset=utf-8;"
             }
         );
 
 
     const url =
         URL.createObjectURL(blob);
-
 
     const link =
         document.createElement("a");
@@ -21830,20 +22068,15 @@ function exportCurrentFacilityDetails() {
     const now =
         new Date();
 
-
     const dateText =
         now.getFullYear() +
         "-" +
-        String(
-            now.getMonth() + 1
-        ).padStart(2, "0") +
+        String(now.getMonth() + 1).padStart(2, "0") +
         "-" +
-        String(
-            now.getDate()
-        ).padStart(2, "0");
+        String(now.getDate()).padStart(2, "0");
 
 
-    const fileName =
+    link.download =
         planningVisible
             ? "Planning_Facility_Details_" +
               dateText +
@@ -21855,10 +22088,6 @@ function exportCurrentFacilityDetails() {
 
     link.href = url;
 
-    link.download =
-        fileName;
-
-
     document.body.appendChild(link);
 
     link.click();
@@ -21866,10 +22095,130 @@ function exportCurrentFacilityDetails() {
     document.body.removeChild(link);
 
     URL.revokeObjectURL(url);
-
 }
 </script>
+<script>
+/* ==========================================================
+   DISTRICT USER ACCESS CONTROL
+   ========================================================== */
 
+function applyDistrictUserAccess() {
+
+    const access = window.HMIS_USER_ACCESS || {};
+
+    if (access.role !== "DISTRICT_USER") {
+        return;
+    }
+        // Hide Facility Reconciliation for District Users
+    const reconciliationTab =
+        document.getElementById(
+            "facilityReconciliationTabButton"
+        );
+
+    if (reconciliationTab) {
+        reconciliationTab.style.display = "none";
+    }
+
+    const assignedDistrict =
+        String(access.district || "").trim();
+
+    if (!assignedDistrict) {
+        return;
+    }
+
+    const districtFilters = [
+    "districtFilter",
+    "planningDash_districtFilter",
+    "hrDistrictFilter",
+    "reconDistrictFilter"
+];
+
+    districtFilters.forEach(function(filterId) {
+
+        const select =
+            document.getElementById(filterId);
+
+        if (!select) return;
+
+
+        // ------------------------------------------
+        // Keep ONLY assigned district
+        // ------------------------------------------
+
+        Array.from(select.options).forEach(function(option) {
+
+            if (option.value !== assignedDistrict) {
+                option.remove();
+            }
+
+        });
+
+
+        // If assigned district is not yet present,
+        // create it.
+        if (
+            !Array.from(select.options).some(
+                option => option.value === assignedDistrict
+            )
+        ) {
+
+            const option =
+                document.createElement("option");
+
+            option.value = assignedDistrict;
+            option.textContent = assignedDistrict;
+
+            select.appendChild(option);
+        }
+
+
+        // ------------------------------------------
+        // Select assigned district
+        // ------------------------------------------
+
+        select.value = assignedDistrict;
+
+
+        // ------------------------------------------
+        // LOCK dropdown
+        // ------------------------------------------
+
+        select.disabled = true;
+
+        select.style.cursor = "not-allowed";
+        select.style.backgroundColor = "#f1f5f9";
+
+        select.title =
+            "District access restricted to " +
+            assignedDistrict;
+
+
+        // ------------------------------------------
+        // Trigger existing dashboard filtering
+        // ------------------------------------------
+
+        select.dispatchEvent(
+            new Event("change", {
+                bubbles: true
+            })
+        );
+
+    });
+
+}
+
+
+/* Dashboard builds filters dynamically,
+   therefore apply again after initialization. */
+
+window.addEventListener("load", function() {
+
+    setTimeout(applyDistrictUserAccess, 500);
+    setTimeout(applyDistrictUserAccess, 1500);
+    setTimeout(applyDistrictUserAccess, 3000);
+
+});
+</script>
 
 </body>
 
