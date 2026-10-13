@@ -4952,7 +4952,7 @@ z-index: 10;
         </div>
 
         <div>
-            12-10-2026 09:52 PM
+            13-10-2026 05:40 PM
         </div>
 
         <div class="meta-source">
@@ -21258,12 +21258,42 @@ function showHRStaffDetails(
                 text(item["Taluk"]);
 
 
-            if (
-                itemCadre.toLowerCase() !==
-                text(cadre).toLowerCase()
-            ) {
-                return false;
-            }
+            // ------------------------------------------------------
+// MAP DASHBOARD CADRE TO HR LINE LIST DESIGNATION
+// ------------------------------------------------------
+
+const cadreMap = {
+    "mo dental": "dental health officer",
+    "general surgeon": "general surgery",
+    "physician(general medicine)": "general medicine",
+    "physician (general medicine)": "general medicine",
+
+    "obg/ gyn": "obg/gyn",
+    "anaesthetists": "anesthesia"
+};
+
+const dashboardCadre =
+    text(cadre)
+        .trim()
+        .toLowerCase();
+
+const lineListCadre =
+    itemCadre
+        .trim()
+        .toLowerCase();
+
+const expectedLineListCadre =
+    cadreMap[dashboardCadre] ||
+    dashboardCadre;
+
+
+// Compare Dashboard cadre with HR Line List designation
+if (
+    lineListCadre !==
+    expectedLineListCadre
+) {
+    return false;
+}
 
 
             // Prefer NIN
@@ -21479,52 +21509,80 @@ function showHRStaffDetails(
 
 
     // ======================================================
-    // POSITION BESIDE WORKING NUMBER
-    // ======================================================
+// POSITION DIRECTLY ABOVE WORKING NUMBER
+// ======================================================
 
-    const rect =
-        anchorElement.getBoundingClientRect();
-
-
-    const popupWidth = 390;
+const rect =
+    anchorElement.getBoundingClientRect();
 
 
-    let left =
-        rect.right + 12;
+// First place popup temporarily so that
+// its actual height can be measured
+popup.style.visibility = "hidden";
 
 
-    // If insufficient space on right,
-    // show on left
-    if (
-        left + popupWidth >
-        window.innerWidth - 15
-    ) {
+// Centre popup horizontally above
+// the clicked Working number
+const popupWidth =
+    popup.offsetWidth;
 
-        left =
-            rect.left -
-            popupWidth -
-            12;
-
-    }
+const popupHeight =
+    popup.offsetHeight;
 
 
-    // Prevent going outside left edge
-    if (left < 10) {
-        left = 10;
-    }
+let left =
+    rect.left +
+    window.scrollX +
+    (rect.width / 2) -
+    (popupWidth / 2);
 
 
-    let top =
-        rect.top +
-        window.scrollY -
-        20;
+// Keep inside left side of screen
+if (left < 10) {
+    left = 10;
+}
 
 
-    popup.style.left =
-        left + "px";
+// Keep inside right side of screen
+const maxLeft =
+    window.scrollX +
+    window.innerWidth -
+    popupWidth -
+    10;
 
-    popup.style.top =
-        top + "px";
+if (left > maxLeft) {
+    left = maxLeft;
+}
+
+
+// Position directly ABOVE Working number
+let top =
+    rect.top +
+    window.scrollY -
+    popupHeight -
+    10;
+
+
+// If there is not enough room above,
+// automatically show below
+if (top < window.scrollY + 10) {
+
+    top =
+        rect.bottom +
+        window.scrollY +
+        10;
+
+}
+
+
+popup.style.left =
+    left + "px";
+
+popup.style.top =
+    top + "px";
+
+popup.style.visibility =
+    "visible";
 
 
     // ======================================================
