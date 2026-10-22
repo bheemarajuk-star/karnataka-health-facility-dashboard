@@ -1969,6 +1969,18 @@ button {
 #planningFacilityTab .district-summary-kpi:has(#planningDash_districtMCH) .district-summary-label {
     color: #e40046;
 }
+/* PRISON — Planning */
+
+#planningFacilityTab
+#planningDash_districtPrison {
+    color: #173f73 !important;
+}
+
+#planningFacilityTab
+.district-summary-kpi:has(#planningDash_districtPrison)
+.district-summary-label {
+    color: #173f73 !important;
+}
 .population-kpi {
     margin-bottom: 16px;
     padding: 14px 20px;
@@ -3557,6 +3569,71 @@ z-index: 10;
         0 10px 22px rgba(0,0,0,.15),
         0 0 0 3px #e40046 !important;
 }
+/* PRISON */
+
+#planningFacilityTab
+.district-summary-kpi:has(#planningDash_districtPrison) {
+    cursor: pointer;
+
+    transition:
+        transform 0.20s ease,
+        box-shadow 0.20s ease,
+        border-color 0.20s ease;
+}
+
+
+#planningFacilityTab
+.district-summary-kpi:has(#planningDash_districtPrison):hover {
+
+    transform: translateY(-5px);
+
+    border: 2px solid #173f73 !important;
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,0.15),
+        0 0 0 2px #173f73 !important;
+}
+/* =========================================================
+   PRISON — MAIN DASHBOARD CLASSIFICATION
+   ========================================================= */
+
+#planningFacilityTab
+.facility-kpi-card.prison-kpi {
+    background: #e8f0f8 !important;
+    border: 2px solid #173f73 !important;
+    cursor: pointer;
+
+    transition:
+        transform 0.20s ease,
+        box-shadow 0.20s ease,
+        background 0.20s ease;
+}
+
+#planningFacilityTab
+.facility-kpi-card.prison-kpi
+.facility-kpi-name {
+    color: #173f73 !important;
+}
+
+#planningFacilityTab
+.facility-kpi-card.prison-kpi
+.facility-kpi-value {
+    color: #173f73 !important;
+}
+
+#planningFacilityTab
+.facility-kpi-card.prison-kpi:hover {
+    transform: translateY(-5px);
+
+    background: #dce9f5 !important;
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.15),
+        0 0 0 2px #173f73 !important;
+
+    position: relative;
+    z-index: 5;
+}
 /* =========================================================
    PLANNING — AAK & MCH HOVER
    Same bold effect as other main KPI cards
@@ -4892,6 +4969,521 @@ z-index: 10;
             repeat(4, minmax(0, 1fr)) !important;
     }
 }
+/* ==========================================================
+   HANGING DASHBOARD FILTER DESIGN
+   HMIS FACILITY DASHBOARD
+   ========================================================== */
+
+.hanging-filter-panel {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 18px 20px;
+    margin-bottom: 18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f5faff 0%,
+            #ffffff 100%
+        );
+
+    border: 1px solid #dbeaf7;
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 18px rgba(30, 80, 120, 0.08);
+
+    overflow: visible;
+}
+
+
+/* ----------------------------------------------------------
+   HEADER
+   ---------------------------------------------------------- */
+
+.hanging-filter-header {
+    min-height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin: 0 -18px 4px;
+    padding: 0 18px;
+
+    border-bottom: 1px solid #deebf5;
+}
+
+.hanging-filter-header .section-title {
+    margin: 0;
+    padding: 0;
+
+    color: #174f82;
+    font-size: 16px;
+    font-weight: 800;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hanging-filter-header .section-title::before {
+    content: "▼";
+
+    width: 28px;
+    height: 28px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e7f2ff;
+    color: #1976d2;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+}
+
+
+/* ----------------------------------------------------------
+   CLEAR FILTER BUTTON
+   ---------------------------------------------------------- */
+
+.hanging-clear-btn {
+    width: auto !important;
+
+    margin: 0 !important;
+    padding: 8px 15px !important;
+
+    border: none !important;
+    border-radius: 9px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff5252,
+            #e53935
+        ) !important;
+
+    color: #ffffff !important;
+
+    font-size: 12px !important;
+    font-weight: 800 !important;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 10px rgba(229, 57, 53, 0.22);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.hanging-clear-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 14px rgba(229, 57, 53, 0.30);
+}
+
+
+/* ----------------------------------------------------------
+   FILTER GRID
+   ---------------------------------------------------------- */
+
+.filters.hanging-filters {
+    width: 100%;
+
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(8, minmax(120px, 1fr)) !important;
+
+    gap: 14px !important;
+
+    padding: 10px 0 0 !important;
+    margin: 0 !important;
+
+    box-sizing: border-box;
+}
+
+
+/* ----------------------------------------------------------
+   INDIVIDUAL HANGING FILTER
+   ---------------------------------------------------------- */
+
+.hanging-filter {
+    --filter-color: #1976d2;
+    --filter-color-dark: #125da7;
+    --filter-glow: rgba(25, 118, 210, 0.20);
+
+    position: relative;
+
+    min-width: 0 !important;
+
+    padding: 26px 0 0 !important;
+    margin: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    overflow: visible;
+}
+
+
+/* hanging circle */
+
+.hanging-pin {
+    position: absolute;
+
+    top: 3px;
+    left: 50%;
+
+    width: 10px;
+    height: 10px;
+
+    transform: translateX(-50%);
+
+    background: var(--filter-color);
+
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 2px var(--filter-color),
+        0 2px 6px var(--filter-glow);
+
+    z-index: 3;
+}
+
+
+/* hanging string */
+
+.hanging-line {
+    position: absolute;
+
+    top: 13px;
+    left: 50%;
+
+    width: 2px;
+    height: 21px;
+
+    transform: translateX(-50%);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--filter-color),
+            rgba(255,255,255,0.15)
+        );
+
+    z-index: 1;
+}
+
+
+/* ----------------------------------------------------------
+   MAIN CARD
+   ---------------------------------------------------------- */
+
+.hanging-card {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 6px 15px var(--filter-glow);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.hanging-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 9px 20px var(--filter-glow);
+}
+
+
+/* ----------------------------------------------------------
+   COLOURED TOP SECTION
+   ---------------------------------------------------------- */
+
+.hanging-card-top {
+    min-height: 48px;
+
+    padding: 10px 7px 9px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--filter-color),
+            var(--filter-color-dark)
+        );
+}
+
+.hanging-card-top .hanging-icon {
+    display: none;
+}
+
+.hanging-card-top label {
+    margin: 0 !important;
+
+    color: #ffffff !important;
+
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1.2;
+
+    text-align: center;
+
+    white-space: normal;
+}
+
+
+/* ----------------------------------------------------------
+   WHITE SELECTOR SECTION
+   ---------------------------------------------------------- */
+
+.hanging-select-area {
+    position: relative;
+
+    min-height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    background: #ffffff;
+}
+
+.hanging-select-area::after {
+    content: "›";
+
+    position: absolute;
+
+    right: 10px;
+    top: 50%;
+
+    transform: translateY(-52%);
+
+    color: var(--filter-color);
+
+    font-size: 23px;
+    font-weight: 800;
+
+    pointer-events: none;
+}
+
+.hanging-select-area select {
+    width: 100% !important;
+    height: 42px !important;
+
+    margin: 0 !important;
+
+    padding:
+        0 30px
+        0 11px !important;
+
+    border: none !important;
+    outline: none !important;
+
+    background: transparent !important;
+
+    color: #31475c !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    text-overflow: ellipsis;
+}
+
+
+/* ----------------------------------------------------------
+   CARD COLOURS
+   ---------------------------------------------------------- */
+
+.hanging-blue {
+    --filter-color: #2196f3;
+    --filter-color-dark: #1976d2;
+    --filter-glow: rgba(33, 150, 243, 0.22);
+}
+
+.hanging-green {
+    --filter-color: #26b978;
+    --filter-color-dark: #15955d;
+    --filter-glow: rgba(38, 185, 120, 0.22);
+}
+
+.hanging-orange {
+    --filter-color: #ff9f43;
+    --filter-color-dark: #ef7f1a;
+    --filter-glow: rgba(255, 159, 67, 0.24);
+}
+
+.hanging-purple {
+    --filter-color: #8e62d9;
+    --filter-color-dark: #7047bd;
+    --filter-glow: rgba(142, 98, 217, 0.22);
+}
+
+.hanging-pink {
+    --filter-color: #ed5d83;
+    --filter-color-dark: #d9436c;
+    --filter-glow: rgba(237, 93, 131, 0.22);
+}
+
+.hanging-teal {
+    --filter-color: #22b8b0;
+    --filter-color-dark: #138f89;
+    --filter-glow: rgba(34, 184, 176, 0.22);
+}
+
+.hanging-indigo {
+    --filter-color: #667eea;
+    --filter-color-dark: #5368ca;
+    --filter-glow: rgba(102, 126, 234, 0.22);
+}
+
+.hanging-red {
+    --filter-color: #ef6461;
+    --filter-color-dark: #d84c49;
+    --filter-glow: rgba(239, 100, 97, 0.22);
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width: 1200px) {
+
+    .filters.hanging-filters {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 700px) {
+
+    .hanging-filter-panel {
+        padding:
+            0 10px 14px;
+    }
+
+    .hanging-filter-header {
+        margin:
+            0 -10px 3px;
+
+        padding:
+            0 10px;
+
+        min-height: 50px;
+    }
+
+    .hanging-filter-header .section-title {
+        font-size: 14px;
+    }
+
+    .hanging-clear-btn {
+        padding:
+            7px 10px !important;
+
+        font-size:
+            10px !important;
+    }
+
+
+    /* IMPORTANT:
+       overrides your old mobile
+       .filters = one-column rule */
+
+    .filters.hanging-filters {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+
+        gap:
+            13px 9px !important;
+    }
+
+    .hanging-filter {
+        padding-top:
+            23px !important;
+    }
+
+    .hanging-card-top {
+        min-height: 61px;
+        padding: 8px 5px;
+    }
+
+    .hanging-card-top .hanging-icon {
+        font-size: 17px;
+    }
+
+    .hanging-card-top label {
+        font-size:
+            10.5px !important;
+    }
+
+    .hanging-select-area,
+    .hanging-select-area select {
+        height:
+            39px !important;
+
+        min-height:
+            39px;
+    }
+
+    .hanging-select-area select {
+        font-size:
+            11px !important;
+    }
+
+}
+
+
+/* ==========================================================
+   VERY SMALL MOBILE
+   ========================================================== */
+
+@media (max-width: 360px) {
+
+    .filters.hanging-filters {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+
+}
 </style>
 
 </head>
@@ -4952,7 +5544,7 @@ z-index: 10;
         </div>
 
         <div>
-            13-10-2026 05:40 PM
+            18-10-2026 11:59 AM
         </div>
 
         <div class="meta-source">
@@ -4997,102 +5589,205 @@ z-index: 10;
 
 
 <!-- ========================================================
-     FILTERS
+     FILTERS — HANGING CARD DESIGN
      ======================================================== -->
 
-<div class="filter-panel">
+<div class="filter-panel hanging-filter-panel">
 
-    <div class="section-title">
-        Dashboard Filters
-    </div>
+    <div class="hanging-filter-header">
 
-    <div class="filters">
-
-
-        <div class="filter-box">
-
-            <label>District</label>
-
-            <select id="districtFilter"></select>
-
+        <div class="section-title">
+            Dashboard Filters
         </div>
-
-
-        <div class="filter-box">
-
-            <label>Subdistrict</label>
-
-            <select id="subdistrictFilter"></select>
-
-        </div>
-
-
-        <div class="filter-box">
-
-            <label>Health Block</label>
-
-            <select id="healthblockFilter"></select>
-
-        </div>
-
-
-        <div class="filter-box">
-
-    <label>Base Category</label>
-
-    <select id="baseCategoryFilter"></select>
-
-</div>
-
-
-<div class="filter-box">
-
-    <label>Dashboard Classification</label>
-
-    <select id="dashboardClassificationFilter"></select>
-
-</div>
-
-
-        <div class="filter-box">
-
-            <label>Ownership</label>
-
-            <select id="ownershipFilter"></select>
-
-        </div>
-
-
-        <div class="filter-box">
-
-            <label>Rural / Urban</label>
-
-            <select id="ruralUrbanFilter"></select>
-
-        </div>
-
-
-        <div class="filter-box">
-
-            <label>Facility Name</label>
-
-            <select id="facilityFilter"></select>
-
-        </div>
-
-
-    </div>
-
-
-    <div class="button-row">
 
         <button
-            class="clear-btn"
+            type="button"
+            class="clear-btn hanging-clear-btn"
             onclick="clearFilters()">
-
             Clear Filters
-
         </button>
+
+    </div>
+
+
+    <div class="filters hanging-filters">
+
+
+        <!-- DISTRICT -->
+        <div class="filter-box hanging-filter hanging-blue">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">📍</div>
+                    <label>District</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="districtFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBDISTRICT -->
+        <div class="filter-box hanging-filter hanging-green">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">▦</div>
+                    <label>Subdistrict</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="subdistrictFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HEALTH BLOCK -->
+        <div class="filter-box hanging-filter hanging-orange">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">✚</div>
+                    <label>Health Block</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="healthblockFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BASE CATEGORY -->
+        <div class="filter-box hanging-filter hanging-purple">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">▤</div>
+                    <label>Base Category</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="baseCategoryFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DASHBOARD CLASSIFICATION -->
+        <div class="filter-box hanging-filter hanging-pink">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">◈</div>
+                    <label>Dashboard Classification</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="dashboardClassificationFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- OWNERSHIP -->
+        <div class="filter-box hanging-filter hanging-teal">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">♜</div>
+                    <label>Ownership</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="ownershipFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RURAL / URBAN -->
+        <div class="filter-box hanging-filter hanging-indigo">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">⌂</div>
+                    <label>Rural / Urban</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="ruralUrbanFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FACILITY NAME -->
+        <div class="filter-box hanging-filter hanging-red">
+
+            <div class="hanging-pin"></div>
+            <div class="hanging-line"></div>
+
+            <div class="hanging-card">
+
+                <div class="hanging-card-top">
+                    <div class="hanging-icon">🏥</div>
+                    <label>Facility Name</label>
+                </div>
+
+                <div class="hanging-select-area">
+                    <select id="facilityFilter"></select>
+                </div>
+
+            </div>
+
+        </div>
+
 
     </div>
 
@@ -6274,6 +6969,37 @@ if (planningMainKpiRow) {
 
     planningMainKpiRow.appendChild(mchCard);
 
+
+// ======================================================
+// PRISON TOP KPI
+// ======================================================
+
+const prisonCard =
+    document.createElement("div");
+
+prisonCard.className =
+    "district-summary-kpi";
+
+prisonCard.innerHTML = `
+
+    <div class="district-summary-label">
+        PRISON
+    </div>
+
+    <div
+        id="planningDash_districtPrison"
+        class="district-summary-value">
+        0
+    </div>
+
+    <div class="district-summary-small">
+        Prison Facilities
+    </div>
+
+`;
+
+planningMainKpiRow.appendChild(prisonCard);
+
 }
 
     buildPlanningFacilityZeroKPIs();
@@ -6430,6 +7156,42 @@ if (planningMCHValue) {
 
     }
 }
+
+
+// ------------------------------------------------------
+// CONNECT PRISON TOP KPI CARD
+// ------------------------------------------------------
+
+const planningPrisonValue =
+    document.getElementById(
+        "planningDash_districtPrison"
+    );
+
+if (planningPrisonValue) {
+
+    const prisonCard =
+        planningPrisonValue.closest(
+            ".district-summary-kpi"
+        );
+
+    if (prisonCard) {
+
+        prisonCard.style.cursor =
+            "pointer";
+
+        prisonCard.onclick =
+            function () {
+
+                showStandalonePlanningFacilityFamilyKPIs(
+                    "PRISON"
+                );
+
+            };
+
+    }
+}
+
+
 // ------------------------------------------------------
 // CONNECT FACILITY SEARCH
 // ------------------------------------------------------
@@ -6890,6 +7652,62 @@ function getPlanningFamilyData(data, family) {
         );
     }
 
+if (family === "PRISON") {
+
+    let result =
+        Array.isArray(prisonData)
+            ? [...prisonData]
+            : [];
+
+    const selectedDistrict =
+        userDistrict ||
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value ||
+        "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value ||
+        "All";
+
+
+    result =
+        result.filter(row => {
+
+            const district =
+                text(
+                    row["District Name"] ||
+                    row["District"]
+                ).trim();
+
+            const taluk =
+                text(
+                    row["Subdistrict Name"] ||
+                    row["Taluk"]
+                ).trim();
+
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                district === selectedDistrict;
+
+            const talukMatch =
+                selectedSubdistrict === "All" ||
+                taluk === selectedSubdistrict;
+
+
+            return (
+                districtMatch &&
+                talukMatch
+            );
+
+        });
+
+
+    return result;
+}
 
     // ======================================================
     // NORMAL PLANNING MASTER DATA
@@ -6996,7 +7814,10 @@ UPHC:
     "NAMMA CLINICS — DASHBOARD CLASSIFICATION",
 
 AYUSH:
-    "AYUSH — DASHBOARD CLASSIFICATION"
+    "AYUSH — DASHBOARD CLASSIFICATION",
+
+PRISON:
+    "PRISON — DASHBOARD CLASSIFICATION"
 
 };
 
@@ -7575,6 +8396,86 @@ const selectedDistrict =
 function showStandalonePlanningFacilitiesForKPI(
     classification
 ) {
+// ======================================================
+// PRISON — SEPARATE SOURCE
+// ======================================================
+
+if (
+    selectedPlanningFacilityFamily === "ALL" &&
+    text(classification)
+        .trim()
+        .toUpperCase() === "PRISON"
+) {
+
+    const selectedDistrict =
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value || "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value || "All";
+
+
+    const filteredPrisonData =
+        prisonData.filter(row => {
+
+            const district =
+                text(
+                    row["District Name"] ||
+                    row["District"]
+                ).trim();
+
+            const taluk =
+                text(
+                    row["Subdistrict Name"] ||
+                    row["Taluk"]
+                ).trim();
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                district === selectedDistrict;
+
+            const subdistrictMatch =
+                selectedSubdistrict === "All" ||
+                taluk === selectedSubdistrict;
+
+            return (
+                districtMatch &&
+                subdistrictMatch
+            );
+
+        });
+
+
+    renderPlanningDashboardFacilityDetails(
+        filteredPrisonData
+    );
+
+
+    const facilityDetails =
+        document.getElementById(
+            "planningDash_facilityDetailsBody"
+        );
+
+    if (facilityDetails) {
+
+        facilityDetails.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    return;
+}
+
+
+// ======================================================
+// UPHC — SEPARATE SOURCE
+// ======================================================
 // ======================================================
 // UPHC — SEPARATE SOURCE
 // ======================================================
@@ -8479,6 +9380,41 @@ const filteredMCHData =
 const mchCount =
     filteredMCHData.length;
 
+
+// ======================================================
+// PRISON
+// Separate source: Prison
+// District + Subdistrict filtering
+// ======================================================
+
+const filteredPrisonData =
+    prisonData.filter(row => {
+
+        const districtMatch =
+            selectedDistrict === "All" ||
+            text(
+                row["District Name"] ||
+                row["District"]
+            ).trim() === selectedDistrict;
+
+        const talukMatch =
+            selectedSubdistrict === "All" ||
+            text(
+                row["Subdistrict Name"] ||
+                row["Taluk"]
+            ).trim() === selectedSubdistrict;
+
+        return (
+            districtMatch &&
+            talukMatch
+        );
+
+    });
+
+const prisonCount =
+    filteredPrisonData.length;
+
+
 // ======================================================
 // UPHC
 // Separate source: UPHCs
@@ -8615,7 +9551,10 @@ planningDash_districtAAK:
     aakCount,
 
 planningDash_districtMCH:
-    mchCount
+    mchCount,
+
+planningDash_districtPrison:
+    prisonCount
 
     };
 
@@ -8686,6 +9625,271 @@ renderPlanningDashboardFacilityDetails(
                 data,
                 selectedPlanningFacilityFamily
             );
+            // ======================================================
+// PRISON — DASHBOARD CLASSIFICATION
+// Separate source: Prison
+// IMPORTANT: "/" remains part of classification name
+// ======================================================
+
+if (
+    selectedPlanningFacilityFamily === "PRISON"
+) {
+
+    container.innerHTML = "";
+
+    const userDistrict =
+        getUserDistrictAccess();
+
+    const selectedDistrict =
+        userDistrict ||
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value ||
+        "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value ||
+        "All";
+
+
+    const filteredPrisonData =
+        prisonData.filter(row => {
+
+            const district =
+                text(
+                    row["District Name"] ||
+                    row["District"]
+                ).trim();
+
+            const taluk =
+                text(
+                    row["Subdistrict Name"] ||
+                    row["Taluk"]
+                ).trim();
+
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                district === selectedDistrict;
+
+            const talukMatch =
+                selectedSubdistrict === "All" ||
+                taluk === selectedSubdistrict;
+
+
+            return (
+                districtMatch &&
+                talukMatch
+            );
+
+        });
+
+
+    const counts = {};
+const hfwCounts = {};
+
+
+filteredPrisonData.forEach(row => {
+
+    const originalClassification =
+        text(
+            row["Dashboard Classification"]
+        ).trim();
+
+    if (!originalClassification) return;
+
+
+    // ==================================================
+    // PRISON CLASSIFICATION
+    // HFW becomes a sub-category
+    // ==================================================
+
+    let mainClassification =
+        originalClassification;
+
+    let isHFW = false;
+
+
+    if (
+        originalClassification
+            .toUpperCase()
+            .endsWith("/ HFW")
+    ) {
+
+        mainClassification =
+    originalClassification
+        .replace(
+            " / HFW",
+            ""
+        )
+        .trim();
+
+        isHFW = true;
+    }
+
+
+    // Main category total includes HFW
+    counts[mainClassification] =
+        (counts[mainClassification] || 0) + 1;
+
+
+    // Separate HFW sub-count
+    if (isHFW) {
+
+        hfwCounts[mainClassification] =
+            (hfwCounts[mainClassification] || 0) + 1;
+
+    }
+
+});
+
+
+    Object.keys(counts)
+        .sort((a, b) =>
+            a.localeCompare(
+                b,
+                undefined,
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
+            )
+        )
+        .forEach(classification => {
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "facility-kpi-card " +
+                "family-other " +
+                "family-highlight";
+
+
+            card.style.cursor =
+                "pointer";
+
+
+           const hfwCount =
+    hfwCounts[classification] || 0;
+
+
+card.innerHTML = `
+
+    <div class="facility-kpi-name">
+        ${classification}
+    </div>
+
+    <div class="facility-kpi-value">
+        ${formatNumber(
+            counts[classification]
+        )}
+    </div>
+
+`;
+
+
+            card.onclick =
+                function () {
+
+                    const facilityData =
+    filteredPrisonData.filter(row => {
+
+        const originalClassification =
+            text(
+                row[
+                    "Dashboard Classification"
+                ]
+            ).trim();
+
+        const mainClassification =
+            originalClassification
+                .replace(
+    " / HFW",
+    ""
+)
+.trim();
+
+
+        return (
+            mainClassification ===
+            classification
+        );
+
+    });
+
+
+                    renderPlanningDashboardFacilityDetails(
+                        facilityData
+                    );
+
+                };
+
+
+            container.appendChild(card);
+            // ==================================================
+// HFW SUB-CATEGORY CARD
+// ==================================================
+
+if (hfwCount > 0) {
+
+    const hfwCard =
+        document.createElement("div");
+
+    hfwCard.className =
+        "facility-kpi-card family-other family-highlight";
+
+    hfwCard.style.cursor = "pointer";
+
+    hfwCard.innerHTML = `
+
+        <div class="facility-kpi-name">
+            ${classification} — HFW
+        </div>
+
+        <div class="facility-kpi-value">
+            ${formatNumber(hfwCount)}
+        </div>
+
+    `;
+
+    hfwCard.onclick = function () {
+
+        const hfwFacilityData =
+            filteredPrisonData.filter(row => {
+
+                const originalClassification =
+                    text(
+                        row["Dashboard Classification"]
+                    ).trim();
+
+                return (
+                    originalClassification
+                        .toUpperCase() ===
+                    (
+                        classification +
+                        " / HFW"
+                    ).toUpperCase()
+                );
+
+            });
+
+        renderPlanningDashboardFacilityDetails(
+            hfwFacilityData
+        );
+
+    };
+
+    container.appendChild(hfwCard);
+}
+        });
+
+
+    return;
+}
             // ======================================================
 // UPHC — DASHBOARD CLASSIFICATION
 // Separate source: UPHCs
@@ -9581,6 +10785,65 @@ const selectedDistrict =
     counts["MCH"] =
         filteredMCHData.length;
 
+}
+// ======================================================
+// PRISON — ADD TO MAIN DASHBOARD CLASSIFICATION
+// ======================================================
+
+if (
+    selectedPlanningFacilityFamily === "ALL"
+) {
+
+    const userDistrict =
+        getUserDistrictAccess();
+
+    const selectedDistrict =
+        userDistrict ||
+        document.getElementById(
+            "planningDash_districtFilter"
+        )?.value ||
+        "All";
+
+    const selectedSubdistrict =
+        document.getElementById(
+            "planningDash_subdistrictFilter"
+        )?.value ||
+        "All";
+
+
+    const filteredPrisonForAll =
+        prisonData.filter(row => {
+
+            const district =
+                text(
+                    row["District Name"] ||
+                    row["District"]
+                ).trim();
+
+            const taluk =
+                text(
+                    row["Subdistrict Name"] ||
+                    row["Taluk"]
+                ).trim();
+
+            const districtMatch =
+                selectedDistrict === "All" ||
+                district === selectedDistrict;
+
+            const talukMatch =
+                selectedSubdistrict === "All" ||
+                taluk === selectedSubdistrict;
+
+            return (
+                districtMatch &&
+                talukMatch
+            );
+
+        });
+
+
+    counts["PRISON"] =
+        filteredPrisonForAll.length;
 }
 
     // ======================================================
@@ -10936,6 +12199,9 @@ let uphcData = [];
 let nammaClinicData = [];
 let ayushData = [];
 
+// Planning — Prison
+let prisonData = [];
+
 async function loadFacilityData() {
 const facilityLoadStart = performance.now();
 
@@ -10988,6 +12254,38 @@ nammaClinicData =
 ayushData =
     result.ayushData || [];
 
+// Planning — Prison
+// Normalize Prison sheet columns to Planning Dashboard columns
+prisonData =
+    (result.prisonData || [])
+        .map(row => ({
+
+            ...row,
+
+            "District Name":
+                row["District Name"] ||
+                row["District"] ||
+                "",
+
+            "Subdistrict Name":
+                row["Subdistrict Name"] ||
+                row["Taluk"] ||
+                "",
+
+            "Facility Name":
+                row["Facility Name"] ||
+                "",
+
+            "Base Category":
+                row["Base Category"] ||
+                "Prison",
+
+            "Dashboard Classification":
+                row["Dashboard Classification"] ||
+                ""
+
+        }));
+
 districtPopulation =
     result.districtPopulation || {};
     console.log(
@@ -11016,7 +12314,10 @@ console.log(
     "AYUSH records loaded:",
     ayushData.length
 );
-
+console.log(
+    "Prison records loaded:",
+    prisonData.length
+);
 console.log(
     "HMIS records:",
     facilityData.length
@@ -13829,7 +15130,12 @@ function renderPlanningFacilityDetails(data) {
 
         tr.innerHTML = `
 
-            <td>${text(row["District Name"])}</td>
+            <td>
+    ${text(
+        row["District Name"] ||
+        row["District"]
+    )}
+</td>
 
             <td>${text(row["Subdistrict Name"])}</td>
 
@@ -19764,8 +21070,8 @@ function renderTestingFacilityDetails(data) {
                 row["Facility Name"],
                 row["HFR ID"],
                 row["NIN"],
-                row["District Name"],
-                row["Subdistrict Name"],
+                row["District Name"] || row["District"],
+row["Subdistrict Name"] || row["Taluk"],
                 row["Format Type"],
                 row["Facility Type"]
 
